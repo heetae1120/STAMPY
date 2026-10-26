@@ -5,6 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 <title>스탬피 체험단</title>
+<link rel="stylesheet" href="vendor/leaflet/leaflet.css">
+<script src="vendor/leaflet/leaflet.js"></script>
+<link rel="stylesheet" href="vendor/leaflet-markercluster/MarkerCluster.css">
+<link rel="stylesheet" href="vendor/leaflet-markercluster/MarkerCluster.Default.css">
+<script src="vendor/leaflet-markercluster/leaflet.markercluster.js"></script>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -155,6 +160,49 @@ fieldset.group legend { padding: 0; font-size: 15px; font-weight: 700; float: le
 .campaign-summary { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 20px; margin-top: 14px; font-size: 15px; color: var(--fg-2); }
 .campaign-summary strong { color: var(--accent); font-size: 20px; font-variant-numeric: tabular-nums; }
 .head .summary-note { font-size: 12px; margin-top: 4px; color: var(--muted); }
+
+.map-toggle { width: 100%; margin-top: 24px; min-height: 62px; display: flex; align-items: center; justify-content: center; gap: 12px; border: 1.5px solid var(--accent); border-radius: 14px; background: var(--surface); color: var(--accent); font: inherit; font-weight: 700; cursor: pointer; }
+.map-toggle svg { width: 24px; height: 24px; }
+.map-toggle[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); }
+.map-section { margin-top: 24px; }
+.map-note { font-size: 13px; color: var(--muted); margin: 0 0 12px; }
+.map-layout { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 16px; }
+#store-map { height: 500px; border-radius: 18px; border: 1px solid var(--line); z-index: 0; background: var(--bg); }
+.store-list { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 12px; max-height: 500px; overflow-y: auto; }
+.store-item { border: 1px solid var(--line); background: var(--surface); border-radius: 14px; padding: 16px; }
+.store-item h3 { font-size: 16px; margin: 0 0 6px; }
+.store-item p { font-size: 13px; color: var(--muted); margin: 4px 0 12px; }
+.store-item .btn { width: 100%; min-height: 44px; font-size: 14px; padding: 6px 12px; }
+.store-locate { border: 0; background: none; color: var(--accent); padding: 4px 0; min-height: 44px; font: inherit; font-size: 13px; cursor: pointer; }
+.store-pin { border: 2px solid var(--accent); border-radius: 50% 50% 50% 0; transform: rotate(-45deg); background: var(--surface); color: var(--accent); width: 34px; height: 34px; display: grid; place-items: center; box-shadow: 0 4px 12px #0003; }
+.store-pin span { transform: rotate(45deg); font-weight: 700; font-size: 14px; }
+.map-popup { color: #17192e; font: 14px/1.6 var(--font-body); min-width: 180px; }
+.map-popup strong { font-size: 16px; }
+.map-popup button { display: block; width: 100%; border: 0; background: #3442d9; color: #fff; border-radius: 8px; min-height: 44px; padding: 8px 12px; cursor: pointer; margin-top: 8px; font: inherit; font-weight: 700; }
+.exchange-section { margin-top: 28px; }
+.reward-banner { padding: 28px; border: 2px dashed var(--line); border-radius: 20px; background: var(--surface); display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 24px; align-items: center; }
+.reward-banner h2 { font-family: var(--font-display); font-weight: 400; font-size: 28px; line-height: 1.3; margin: 8px 0; }
+.reward-banner p { margin: 0; color: var(--muted); font-size: 14px; }
+.reward-tag { color: var(--accent); font-weight: 700; font-size: 13px; }
+.reward-stamps { display: flex; gap: 8px; }
+.reward-stamps span { width: 56px; height: 56px; border: 2px dashed var(--line); border-radius: 50%; display: grid; place-items: center; color: var(--muted); }
+.reward-stamps span:first-child { border: 3px double var(--accent); color: var(--accent); transform: rotate(-10deg); font-weight: 700; }
+.reward-wallet { display: flex; flex-wrap: wrap; gap: 12px 28px; padding: 18px 0; font-size: 14px; color: var(--muted); }
+.reward-wallet strong { color: var(--accent); font-size: 20px; }
+.exchange-grid { list-style: none; padding: 0; margin: 8px 0 0; display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 24px; }
+.exchange-product { background: var(--surface); border: 1px solid var(--line-soft); border-radius: 18px; overflow: hidden; }
+.product-art { height: 200px; background: var(--t-cafe); display: grid; place-items: center; color: var(--fg-2); position: relative; }
+.product-art svg { width: 90px; height: 90px; }
+.product-art span { position: absolute; left: 16px; top: 14px; font-size: 12px; border-radius: 6px; padding: 2px 8px; background: var(--surface); }
+.exchange-product:nth-child(2) .product-art { background: var(--t-living); }
+.exchange-product:nth-child(3) .product-art { background: var(--t-beauty); }
+.product-info { padding: 20px; }
+.product-info p { margin: 0; color: var(--muted); font-size: 13px; }
+.product-info h3 { margin: 4px 0 14px; font-size: 18px; }
+.product-info .price { color: var(--accent); font-size: 22px; font-weight: 700; }
+.product-info .btn { margin-top: 16px; width: 100%; font-size: 14px; }
+@media(max-width: 700px) { .map-layout { grid-template-columns: minmax(0,1fr); } #store-map { height: 360px; } .store-list { max-height: 320px; } .reward-banner { grid-template-columns: minmax(0,1fr); padding: 22px; } .exchange-grid { grid-template-columns: minmax(0,1fr); } }
+
 /* head + filters */
 main { padding-block: 40px 88px; }
 .head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px 32px; }
@@ -288,11 +336,26 @@ footer .word { font-family: var(--font-display); font-size: 22px; color: var(--f
     </div>
   </div>
 
+  <button type="button" id="map-toggle" class="map-toggle" aria-pressed="false" aria-controls="map-section">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m3 5 6-2 6 2 6-2v16l-6 2-6-2-6 2V5Zm6-2v16m6-14v16"/></svg>
+    <span id="map-toggle-label">지도로 보기</span>
+  </button>
   <div class="filters">
     <div class="tabs" role="group" aria-label="카테고리" id="cats"></div>
   </div>
 
   <p class="count" aria-live="polite">모집 중 <strong id="count">12</strong>개</p>
+
+  <section id="map-section" class="map-section" aria-label="매장 지도와 방문형 캠페인" hidden>
+    <p class="map-note">방문형 체험단만 표시돼요. 현재 핀은 지역 중심의 예시 위치이며 실제 매장 주소가 아니에요.</p>
+    <p class="map-note" id="map-status" role="status"></p>
+    <div class="map-layout"><div id="store-map" role="region" aria-label="체험단 매장 지도"></div><ul class="store-list" id="store-list"></ul></div>
+  </section>
+  <section id="exchange-section" class="exchange-section" aria-label="도장과 포인트로 브랜드 상품 교환" hidden>
+    <div class="reward-banner"><div><span class="reward-tag">리뷰하고 도장 모으기 · 임시 운영안</span><h2>경험이 쌓이면,<br>마음에 드는 브랜드 상품으로</h2><p>리뷰 체험단 진행 1회당 <b id="stamps-per-review">0 도장</b> 적립 → 포인트로 브랜드 상품 교환</p><p>적립 도장 수와 포인트 전환 비율은 확정 전이에요.</p></div><div class="reward-stamps" aria-label="도장판 예시"><span>도장</span><span>2</span><span>3</span><span>4</span></div></div>
+    <div class="reward-wallet"><span>내 도장 <strong>0</strong>개</span><span>보유 포인트 <strong>0P</strong></span><span>현재는 미리보기예요. 실제 적립·차감·주문은 진행되지 않아요.</span></div>
+    <ul class="exchange-grid" id="exchange-products"></ul>
+  </section>
 
   <div class="empty" id="empty" hidden>
     <p class="t" id="empty-title">이 조건에 맞는 캠페인이 지금은 없어요.</p>
@@ -309,6 +372,8 @@ footer .word { font-family: var(--font-display); font-size: 22px; color: var(--f
     <span>[회사명]  대표 [이름]  사업자등록번호 [번호]</span>
   </div>
 </footer>
+
+<dialog id="exchange-dialog" aria-labelledby="exchange-title"><div class="d-body"><div style="display:flex;justify-content:space-between;align-items:center;gap:12px"><h2 id="exchange-title">상품 교환 안내</h2><button type="button" class="close" id="exchange-close" style="position:static" aria-label="닫기">×</button></div><div id="exchange-detail"></div><button type="button" class="btn secondary" id="exchange-confirm">확인했어요</button></div></dialog>
 
 <dialog id="detail" aria-labelledby="d-title">
   <div class="d-photo" id="d-photo">
@@ -395,6 +460,23 @@ footer .word { font-family: var(--font-display); font-size: 22px; color: var(--f
     { id: 'c11', type: '방문형', cat: '카페', title: '[망원] 핸드드립 원두 카페', offer: '드립커피 2잔과 원두 200g', channels: ['블로그'], applied: 14, quota: 4, dday: 7, visit: '수~월 10:00~20:00', mission: '원두 고르는 과정과 드립 과정 사진 포함 후기' },
     { id: 'c12', type: '배송형', cat: '디지털', title: '알루미늄 노트북 거치대', offer: '본품 1개', channels: ['블로그', '유튜브'], applied: 30, quota: 10, dday: 2, visit: '선정 후 3일 안에 발송', mission: '책상 세팅 전후 비교와 각도 조절 소개' }
   ];
+  // 운영 시 매장 등록 데이터로 교체: 실제 주소와 검증한 좌표를 함께 저장합니다.
+  // 아래는 지역 중심의 예시 좌표이며 실존 매장으로 오인하지 않도록 표시합니다.
+  var STORES = [
+    { id: 's1', campaignId: 'c1', area: '성수동 일대', lat: 37.5445, lng: 127.0557, approximate: true },
+    { id: 's2', campaignId: 'c2', area: '연남동 일대', lat: 37.5625, lng: 126.925, approximate: true },
+    { id: 's3', campaignId: 'c4', area: '강남 일대', lat: 37.4979, lng: 127.0276, approximate: true },
+    { id: 's4', campaignId: 'c7', area: '제주 애월 일대', lat: 33.462, lng: 126.329, approximate: true },
+    { id: 's5', campaignId: 'c8', area: '을지로 일대', lat: 37.566, lng: 126.991, approximate: true },
+    { id: 's6', campaignId: 'c11', area: '망원동 일대', lat: 37.556, lng: 126.901, approximate: true }
+  ];
+  var REWARD_POLICY = { stampsPerReview: 0, pointsPerStamp: null, preview: true };
+  var EXCHANGE_PRODUCTS = [
+    { id: 'mug', requiredPoints: null, stock: null, preview: true, brand: '[브랜드 A]', title: '시그니처 머그', icon: '<path d="M5 7h12v11a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3V7Zm12 2h2a3 3 0 0 1 0 6h-2M8 2v2m4-2v2"/>' },
+    { id: 'bag', requiredPoints: null, stock: null, preview: true, brand: '[브랜드 B]', title: '데일리 에코백', icon: '<path d="M4 8h16l1 13H3L4 8Zm4 0V6a4 4 0 0 1 8 0v2"/>' },
+    { id: 'care', requiredPoints: null, stock: null, preview: true, brand: '[브랜드 C]', title: '핸드케어 세트', icon: '<path d="M4 7h7l-1 14H5L4 7Zm1-4h5v4M15 10h6v11h-6V10Zm1-4h4v4M5 16h5m5-1h6"/>' }
+  ];
+  var mapInstance = null, mapMarkers = {}, mapLayer = null, lastMapSignature = '';
   var TINT = { '맛집': '--t-food', '카페': '--t-cafe', '뷰티': '--t-beauty', '숙박': '--t-stay', '식품': '--t-grocery', '생활': '--t-living', '디지털': '--t-digital' };
   var ROTS = [-8, 6, -4, 9, -10, 5, -6, 8, -3, 7, -9, 4];
   // 상단 탭: 화면에 보이는 이름과 실제 캠페인 종류
@@ -407,7 +489,7 @@ footer .word { font-family: var(--font-display); font-size: 22px; color: var(--f
     var seen = {};
     return ['전체'].concat(list.filter(function (c) { if (seen[c]) return false; seen[c] = 1; return true; }));
   }
-  var state = { type: '전체', cat: '전체', sort: 'deadline', q: '', view: 'campaigns' };
+  var state = { type: '전체', cat: '전체', sort: 'deadline', q: '', view: 'campaigns', map: false };
 
   // 등록일은 실제 데이터의 registeredAt(ISO 8601)을 사용합니다. 없는 날짜는 추정하지 않습니다.
   function koreaDay(value) {
@@ -453,10 +535,10 @@ footer .word { font-family: var(--font-display); font-size: 22px; color: var(--f
   $('types').addEventListener('click', function (e) {
     var b = e.target.closest('button');
     if (!b) return;
-    if (b.dataset.view) { state.view = b.dataset.view; state.type = '전체'; state.cat = '전체'; render(); }
+    if (b.dataset.view) { state.map = false; state.view = b.dataset.view; state.type = '전체'; state.cat = '전체'; render(); }
     else setFilter(b.dataset.v, '전체');
   });
-  function setFilter(type, cat) { state.view = 'campaigns'; state.type = type; state.cat = cat; render(); }
+  function setFilter(type, cat) { state.view = 'campaigns'; state.type = type; if (type !== '방문형') state.map = false; state.cat = cat; render(); }
   $('cats').addEventListener('click', function (e) { var b = e.target.closest('button'); if (b) { state.cat = b.dataset.v; render(); } });
 
   function render() {
@@ -469,6 +551,13 @@ footer .word { font-family: var(--font-display); font-size: 22px; color: var(--f
     var titles = { campaigns: '이번 주엔 어디서 써볼까요', new: '따끈따끈, 새로 만나는 체험단', events: '스탬피 이벤트', exchange: '함께 나누는 물물교환' };
     $('page-title').textContent = titles[state.view];
     var board = state.view === 'events' || state.view === 'exchange';
+    $('map-toggle').hidden = board || state.type === '배송형' || state.type === '기자단';
+    $('map-toggle').setAttribute('aria-pressed', String(state.map));
+    $('map-toggle-label').textContent = state.map ? '목록으로 보기' : '지도로 보기';
+    $('map-section').hidden = !state.map || board;
+    $('exchange-section').hidden = state.view !== 'exchange';
+    document.querySelector('.campaign-summary').hidden = board;
+    $('summary-note').hidden = board;
     document.querySelector('.filters').hidden = board;
     document.querySelector('.sort').hidden = board;
     document.querySelector('.count').hidden = board;
@@ -489,7 +578,10 @@ footer .word { font-family: var(--font-display); font-size: 22px; color: var(--f
       return a.dday - b.dday;
     });
     $('count').textContent = list.length;
-    $('empty').hidden = list.length !== 0;
+    $('empty').hidden = state.view === 'exchange' || list.length !== 0;
+    $('cards').hidden = state.map || board;
+    if (state.map && !board) renderStoreMap(list);
+    if (state.view === 'exchange') renderExchange();
     $('cards').innerHTML = list.map(function (d, i) {
       var cls = 'dday' + (d.dday <= 1 ? ' urgent' : '') + (d.dday === 0 ? ' today' : '');
       var applied = mine[d.id] ? 1 : 0;
@@ -757,7 +849,75 @@ footer .word { font-family: var(--font-display); font-size: 22px; color: var(--f
   $('sort').addEventListener('change', function () { state.sort = this.value; render(); });
   $('q').addEventListener('input', function () { state.q = this.value; render(); });
   $('search-form').addEventListener('submit', function (e) { e.preventDefault(); });
-  $('reset').addEventListener('click', function () { state.view = 'campaigns'; state.type = '전체'; state.cat = '전체'; state.q = ''; $('q').value = ''; render(); });
+  $('reset').addEventListener('click', function () { state.view = 'campaigns'; state.map = false; state.type = '전체'; state.cat = '전체'; state.q = ''; $('q').value = ''; render(); });
+
+
+  $('map-toggle').addEventListener('click', function () {
+    state.map = !state.map;
+    if (state.map) { state.view = 'campaigns'; state.type = '방문형'; }
+    render();
+  });
+  function renderStoreMap(campaigns) {
+    var stores = STORES.filter(function (store) {
+      return isFinite(store.lat) && isFinite(store.lng) && Math.abs(store.lat) <= 90 && Math.abs(store.lng) <= 180 && campaigns.some(function (c) { return c.type === '방문형' && c.id === store.campaignId; });
+    });
+    $('store-list').innerHTML = stores.map(function (store, index) {
+      var c = byId(store.campaignId);
+      return '<li class="store-item"><h3>' + (index + 1) + '. ' + esc(c.title) + '</h3><p>' + esc(store.area) + (store.approximate ? ' · 예시 위치' : '') + '<br>' + esc(c.offer) + '</p><button type="button" class="store-locate" data-locate="' + esc(store.id) + '">지도에서 위치 보기</button><button type="button" class="btn" data-map-apply="' + esc(c.id) + '">상세 보고 신청하기</button></li>';
+    }).join('');
+    $('map-status').textContent = stores.length ? '지도에서 ' + stores.length + '개 매장을 선택할 수 있어요.' : '이 조건에 맞는 위치 등록 매장이 없어요. 검색어나 카테고리를 바꿔 주세요.';
+    if (!window.L) { $('map-status').textContent = '지도를 불러오지 못했어요. 매장 목록에서 상세 보기와 신청을 이용해 주세요.'; return; }
+    if (!mapInstance) {
+      mapInstance = L.map('store-map', { scrollWheelZoom: false, zoomAnimation: false, fadeAnimation: false }).setView([36.1, 127.2], 7);
+      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors' }).on('tileerror', function () {
+        $('map-status').textContent = '배경 지도를 불러오지 못했어요. 매장 목록에서 상세 보기와 신청을 이용해 주세요.';
+      }).addTo(mapInstance);
+      mapLayer = (L.markerClusterGroup ? L.markerClusterGroup({ showCoverageOnHover: false, maxClusterRadius: 45, animate: false }) : L.layerGroup()).addTo(mapInstance);
+    }
+    var signature = stores.map(function (store) { return store.id; }).join(',');
+    if (signature !== lastMapSignature) {
+      mapLayer.clearLayers(); mapMarkers = {};
+      stores.forEach(function (store, index) {
+        var c = byId(store.campaignId);
+        var icon = L.divIcon({ className: '', html: '<div class="store-pin"><span>' + (index + 1) + '</span></div>', iconSize: [34, 34], iconAnchor: [17, 34] });
+        var content = document.createElement('div'); content.className = 'map-popup';
+        content.innerHTML = '<strong>' + esc(c.title) + '</strong><br>' + esc(store.area) + (store.approximate ? ' · 예시 위치' : '') + '<br>' + esc(c.offer) + '<button type="button" data-map-apply="' + esc(c.id) + '">상세 보고 신청하기</button>';
+        content.querySelector('button').addEventListener('click', function () { showDetail(c.id); });
+        mapMarkers[store.id] = L.marker([store.lat, store.lng], { icon: icon, title: c.title, alt: c.title + ' 예시 위치' }).bindPopup(content).addTo(mapLayer);
+      });
+      lastMapSignature = signature;
+      // Resize after the hidden map container becomes visible before fitting bounds.
+      mapInstance.invalidateSize();
+      if (stores.length) mapInstance.fitBounds(stores.map(function (store) { return [store.lat, store.lng]; }), { padding: [40, 40], maxZoom: 14, animate: false });
+    }
+    requestAnimationFrame(function () { mapInstance.invalidateSize(); });
+  }
+  $('store-list').addEventListener('click', function (e) {
+    var apply = e.target.closest('[data-map-apply]');
+    if (apply) { showDetail(apply.dataset.mapApply); return; }
+    var locate = e.target.closest('[data-locate]');
+    if (locate && mapInstance && mapMarkers[locate.dataset.locate]) {
+      var marker = mapMarkers[locate.dataset.locate];
+      mapInstance.setView(marker.getLatLng(), 15, { animate: false });
+      if (mapLayer.zoomToShowLayer) mapLayer.zoomToShowLayer(marker, function () { marker.openPopup(); });
+      else { mapInstance.setView(marker.getLatLng(), 14); marker.openPopup(); }
+      $('store-map').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  });
+  function renderExchange() {
+    $('stamps-per-review').textContent = REWARD_POLICY.stampsPerReview + ' 도장';
+    $('exchange-products').innerHTML = EXCHANGE_PRODUCTS.map(function (product) {
+      return '<li class="exchange-product"><div class="product-art"><span>임시 등록 상품</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + product.icon + '</svg></div><div class="product-info"><p>' + esc(product.brand) + '</p><h3>' + esc(product.title) + '</h3><p class="price">' + (product.requiredPoints === null ? '00' : num(product.requiredPoints)) + ' 포인트</p><p>교환 포인트 확정 전 · 미리보기</p><button type="button" class="btn secondary" data-exchange="' + product.id + '">교환 안내 보기</button></div></li>';
+    }).join('');
+  }
+  $('exchange-products').addEventListener('click', function (e) {
+    var button = e.target.closest('[data-exchange]'); if (!button) return;
+    var product = EXCHANGE_PRODUCTS.filter(function (p) { return p.id === button.dataset.exchange; })[0]; if (!product) return;
+    $('exchange-title').textContent = product.title + ' 교환 안내';
+    $('exchange-detail').innerHTML = '<p class="notice">임시 등록 상품이에요. 현재는 실제 교환을 신청하거나 포인트를 차감하지 않아요.</p><ol><li>리뷰 체험단 참여 후 후기 제출</li><li>후기 확인 후 도장 적립 (현재 1회당 0 도장, 임시 기준)</li><li>정해진 비율로 포인트 전환</li><li>보유 포인트로 브랜드 상품 교환</li></ol><p>필요 포인트: <strong>00 포인트 (미정)</strong></p><p>브랜드, 적립 기준, 전환 비율, 재고와 배송 안내는 운영 확정 후 제공돼요.</p>';
+    openDialog($('exchange-dialog'));
+  });
+  ['exchange-close', 'exchange-confirm'].forEach(function (id) { $(id).addEventListener('click', function () { closeDialog($('exchange-dialog')); }); });
 
   render();
 })();
