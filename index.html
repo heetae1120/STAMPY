@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="assets/fonts/pretendard.css">
 <meta name="description" content="식당, 카페, 제품을 블로그와 인스타그램 리뷰어에게 보내고 진짜 후기를 받아보세요.">
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="assets/hero-03/hero.css">
 </head>
 <body>
 
@@ -26,39 +27,19 @@
 
 <main id="top">
 
-  <section class="wrap hero">
-    <div class="hero-text">
-      <p class="kicker">식당, 카페, 제품을 위한 체험단</p>
-      <h1>손님이 먼저 써보고,<br>후기로 남겨요.</h1>
-      <p class="lead">블로그, 인스타그램, 유튜브 리뷰어가 가게에 오거나 제품을 받아 써보고 솔직한 후기를 올립니다. 사장님은 리뷰어를 고르고, 올라온 글을 확인하기만 하면 돼요.</p>
-      <div class="actions">
-        <a class="btn btn-primary" href="#contact">무료 상담 신청</a>
-        <a class="btn btn-outline" href="campaigns.html">모집 중인 캠페인 보기</a>
-      </div>
+  <section id="hero03" class="hero03" aria-labelledby="hero03-title">
+    <div class="hero03-fallback" aria-hidden="true"><img src="assets/store-1-product.svg" alt=""><img src="assets/store-2-product.svg" alt=""><img src="assets/store-3-product.svg" alt=""><img src="assets/store-6-product.svg" alt=""></div>
+    <div id="hero03-scene" class="hero03-scene" aria-hidden="true"></div>
+    <div class="hero03-content">
+      <p class="hero03-eyebrow">스탬피 · 경험이 후기로 쌓이는 곳</p>
+      <h1 id="hero03-title">손님이 먼저 써보고,<br>후기로 남겨요.</h1>
+      <p class="hero03-lead">가게의 공간부터 브랜드의 제품까지.<br>리뷰어의 새로운 경험이 사장님의 다음 이야기가 됩니다.</p>
+      <div class="hero03-actions"><button type="button" class="hero03-button" id="hero03-explore" disabled>체험 갤러리 보기</button><a class="hero03-button secondary" href="#contact">무료 상담 신청</a></div>
+      <a class="hero03-link" href="campaigns.html">모집 중인 캠페인 보기 <span aria-hidden="true">↗</span></a>
     </div>
-
-    <figure class="stamp-card">
-      <div class="card">
-        <div class="head"><strong>[가게 이름] 리뷰 도장판</strong><span class="count">7 / 10</span></div>
-        <div class="stamps" aria-label="리뷰 10개 중 7개 완료">
-          <span class="stamp done" style="--r:-8deg">블로그</span>
-          <span class="stamp done" style="--r:6deg">인스타</span>
-          <span class="stamp done" style="--r:-3deg">블로그</span>
-          <span class="stamp done" style="--r:9deg">릴스</span>
-          <span class="stamp done" style="--r:-6deg">블로그</span>
-          <span class="stamp done" style="--r:4deg">유튜브</span>
-          <span class="stamp done" style="--r:-10deg">인스타</span>
-          <span class="stamp empty"></span>
-          <span class="stamp empty"></span>
-          <span class="stamp empty"></span>
-        </div>
-        <div class="feed">
-          <div><span>블로그 후기가 올라왔어요</span><span>[리뷰어 닉네임]</span></div>
-          <div><span>인스타그램 릴스가 올라왔어요</span><span>[리뷰어 닉네임]</span></div>
-        </div>
-      </div>
-      <figcaption>체험이 끝날 때마다 후기가 도장처럼 하나씩 쌓여요.</figcaption>
-    </figure>
+    <div class="hero03-toolbar"><span>방문형 · 배송형 · 기자단</span><button type="button" class="hero03-motion" id="hero03-motion" aria-pressed="false" hidden>배경 움직임 정지</button></div>
+    <p class="sr-only" data-hero-status role="status"></p>
+    <noscript><p style="position:absolute;bottom:16px;left:24px;font-size:12px">예시 갤러리입니다. 캠페인 목록과 아래 서비스 안내를 확인해 주세요.</p></noscript>
   </section>
 
   <section id="types" class="band-white">
@@ -165,6 +146,12 @@
   </section>
 
 </main>
+<dialog id="hero03-gallery" aria-labelledby="hero03-gallery-title">
+  <div class="hero03-fallback" aria-hidden="true"><img src="assets/store-1-product.svg" alt=""><img src="assets/store-2-product.svg" alt=""><img src="assets/store-3-product.svg" alt=""><img src="assets/store-6-product.svg" alt=""></div>
+  <div id="hero03-gallery-canvas" aria-hidden="true"></div>
+  <div class="hero03-gallery-header"><div><h2 id="hero03-gallery-title">스탬피 체험 갤러리</h2><p>제품 일러스트 예시 · 누르고 있으면 더 빠르게 둘러볼 수 있어요.</p></div><div class="hero03-gallery-controls"><button type="button" class="hero03-motion" id="hero03-gallery-motion" aria-pressed="false">배경 움직임 정지</button><button type="button" class="hero03-button secondary" id="hero03-close">닫기</button></div></div>
+  <p class="hero03-gallery-status" data-hero-status role="status"></p>
+</dialog>
 
 <footer class="site-footer">
   <div class="wrap">
@@ -196,5 +183,6 @@ document.querySelectorAll('.faq-item button').forEach(function (btn) {
   });
 });
 </script>
+<script type="module" src="assets/hero-03/hero.js"></script>
 </body>
 </html>

@@ -1,0 +1,5 @@
+node_modules/
+.originkit/
+.originkit
+.env
+.env.*
