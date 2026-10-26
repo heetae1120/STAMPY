@@ -69,8 +69,9 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .gnb-row { position: relative; display: flex; align-items: center; gap: 4px 20px; border-top: 1px solid var(--line-soft); }
 .ham { flex: none; width: 44px; height: 44px; margin-left: -10px; border: 0; border-radius: 10px; background: transparent; color: var(--fg); display: flex; align-items: center; justify-content: center; cursor: pointer; }
 .ham[aria-expanded="true"] { background: var(--bg); }
-.gtabs { display: flex; gap: 2px 22px; overflow-x: auto; scrollbar-width: none; }
+.gtabs { min-width: 0; display: flex; align-items: center; gap: 2px 22px; overflow-x: auto; scrollbar-width: none; }
 .gtab { flex: none; min-height: 50px; padding: 0 2px; background: none; border: 0; border-bottom: 3px solid transparent; font: inherit; font-size: 16px; font-weight: 700; color: var(--muted); cursor: pointer; }
+.gnb-divider { flex: none; width: 1px; height: 22px; background: var(--line); margin: 0 2px; }
 .gtab[aria-pressed="true"] { color: var(--fg); border-bottom-color: var(--fg); }
 .mega { position: absolute; left: 0; top: calc(100% + 1px); z-index: 20; width: min(680px, 100%); max-height: min(560px, calc(100vh - 160px)); overflow-y: auto; background: var(--surface); color: var(--fg); border: 1px solid var(--line); border-radius: 0 0 18px 18px; box-shadow: 0 24px 48px -24px rgba(10, 11, 20, 0.45); display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); }
 .mega-col { padding: 20px 22px 22px; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
@@ -118,17 +119,17 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .rcard .cap { font-size: 13px; color: var(--muted); margin: 0 0 -6px; }
 .rc-top { display: flex; align-items: center; gap: 14px; min-width: 0; }
 .rc-top .av { width: 64px; height: 64px; border-radius: 50%; background: var(--accent); color: var(--on-accent); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 26px; flex: none; }
-.rc-name { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 20px; font-weight: 700; line-height: 1.3; }
+.rc-name { overflow-wrap: anywhere; word-break: normal; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 20px; font-weight: 700; line-height: 1.3; }
 .lv { display: inline-flex; align-items: center; gap: 3px; font-size: 13px; font-weight: 700; padding: 2px 10px; border-radius: 999px; background: var(--surface); color: var(--accent); border: 1.5px solid var(--accent); }
 .rc-meta { margin-top: 4px; display: flex; flex-wrap: wrap; gap: 2px 0; font-size: 14px; color: var(--muted); }
 .rc-meta span + span { border-left: 1.5px solid var(--line); margin-left: 10px; padding-left: 10px; }
 .rc-meta b { color: var(--fg); font-variant-numeric: tabular-nums; }
 .rc-ch { background: var(--surface); border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
-.rc-ch-h { display: flex; align-items: center; gap: 10px; font-size: 16px; font-weight: 700; min-width: 0; }
+.rc-ch-h { overflow-wrap: anywhere; word-break: normal; display: flex; align-items: center; gap: 10px; font-size: 16px; font-weight: 700; min-width: 0; }
 .rc-ch-h .ico { width: 30px; height: 30px; border-radius: 50%; background: var(--invert-bg); color: var(--invert-fg); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; flex: none; }
 .rc-ch dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 8px 20px; font-size: 14px; }
 .rc-ch dt { color: var(--muted); }
-.rc-ch dd { margin: 0; font-weight: 700; font-variant-numeric: tabular-nums; }
+.rc-ch dd { overflow-wrap: anywhere; word-break: normal; margin: 0; font-weight: 700; font-variant-numeric: tabular-nums; }
 .rc-ch dd.none, .rc-meta .none { color: var(--muted); font-weight: 400; }
 .field-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
 .stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
@@ -141,6 +142,19 @@ fieldset.group legend { padding: 0; font-size: 15px; font-weight: 700; float: le
 .mine { display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 16px; border: 1.5px solid var(--fg); border-radius: 10px; background: transparent; color: var(--fg); font: inherit; font-size: 15px; font-weight: 600; cursor: pointer; }
 .mine .n { min-width: 22px; height: 22px; padding: 0 6px; border-radius: 999px; background: var(--accent); color: var(--on-accent); font-size: 13px; display: inline-flex; align-items: center; justify-content: center; font-variant-numeric: tabular-nums; }
 
+.pop .rcard { background: transparent; padding: 0; gap: 20px; }
+.pop .rc-top { padding-bottom: 20px; border-bottom: 1px solid var(--line); }
+.pop .rc-ch { padding: 0 0 20px; border-radius: 0; border-bottom: 1px solid var(--line); }
+.pop .rc-top .av { border-radius: 50%; box-shadow: 0 0 0 5px var(--bg); }
+.pop .rc-ch-h .ico { color: var(--ok); background: var(--bg); }
+.pop .rc-meta { font-size: 13px; }
+.pop .rc-meta span + span { margin-left: 6px; padding-left: 6px; }
+.pop .rc-ch dl { grid-template-columns: auto minmax(0, 1fr); }
+.pop .linkish { min-height: 44px; }
+.pop-actions { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.campaign-summary { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 20px; margin-top: 14px; font-size: 15px; color: var(--fg-2); }
+.campaign-summary strong { color: var(--accent); font-size: 20px; font-variant-numeric: tabular-nums; }
+.head .summary-note { font-size: 12px; margin-top: 4px; color: var(--muted); }
 /* head + filters */
 main { padding-block: 40px 88px; }
 .head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px 32px; }
@@ -257,8 +271,12 @@ footer .word { font-family: var(--font-display); font-size: 22px; color: var(--f
 <main id="top" class="wrap">
   <div class="head">
     <div>
-      <h1>이번 주엔 어디서 써볼까요</h1>
-      <p>마음에 드는 캠페인에 신청하면, 사장님이 리뷰어를 골라 연락드려요.</p>
+      <h1 id="page-title">이번 주엔 어디서 써볼까요</h1>
+      <div class="campaign-summary" aria-label="체험단 등록 현황">
+        <span>오늘 등록된 신규 체험단 <strong id="today-count">집계 전</strong></span>
+        <span>누적 체험단 <strong id="total-count">12</strong>건</span>
+      </div>
+      <p class="summary-note" id="summary-note">예시 캠페인 기준 · 등록일 정보가 없어 오늘 등록 건수는 집계 전이에요.</p>
     </div>
     <div class="sort">
       <label for="sort">정렬</label>
@@ -277,8 +295,8 @@ footer .word { font-family: var(--font-display); font-size: 22px; color: var(--f
   <p class="count" aria-live="polite">모집 중 <strong id="count">12</strong>개</p>
 
   <div class="empty" id="empty" hidden>
-    <p class="t">이 조건에 맞는 캠페인이 지금은 없어요.</p>
-    <p class="s">검색어나 종류, 카테고리를 넓혀서 다시 찾아보세요.</p>
+    <p class="t" id="empty-title">이 조건에 맞는 캠페인이 지금은 없어요.</p>
+    <p class="s" id="empty-description">검색어나 종류, 카테고리를 넓혀서 다시 찾아보세요.</p>
     <p style="margin-top:18px"><button type="button" class="btn" id="reset">전체 캠페인 보기</button></p>
   </div>
 
@@ -380,7 +398,8 @@ footer .word { font-family: var(--font-display); font-size: 22px; color: var(--f
   var TINT = { '맛집': '--t-food', '카페': '--t-cafe', '뷰티': '--t-beauty', '숙박': '--t-stay', '식품': '--t-grocery', '생활': '--t-living', '디지털': '--t-digital' };
   var ROTS = [-8, 6, -4, 9, -10, 5, -6, 8, -3, 7, -9, 4];
   // 상단 탭: 화면에 보이는 이름과 실제 캠페인 종류
-  var TYPES = [['전체', '전체'], ['제품', '배송형'], ['지역', '방문형'], ['기자단', '기자단']];
+  var TYPES = [['전체', '전체'], ['제품', '배송형'], ['지역', '방문형']];
+  var VIEWS = [['따끈신상', 'new'], ['이벤트', 'events'], ['물물교환', 'exchange']];
   var PRODUCT_CATS = ['생활', '유아동', '디지털', '뷰티', '패션', '도서', '식품', '반려동물'];
   var REGION_CATS = ['맛집', '카페', '뷰티', '숙박', '문화', '배달', '테이크아웃'];
   function catsFor(type) {
@@ -388,7 +407,28 @@ footer .word { font-family: var(--font-display); font-size: 22px; color: var(--f
     var seen = {};
     return ['전체'].concat(list.filter(function (c) { if (seen[c]) return false; seen[c] = 1; return true; }));
   }
-  var state = { type: '전체', cat: '전체', sort: 'deadline', q: '' };
+  var state = { type: '전체', cat: '전체', sort: 'deadline', q: '', view: 'campaigns' };
+
+  // 등록일은 실제 데이터의 registeredAt(ISO 8601)을 사용합니다. 없는 날짜는 추정하지 않습니다.
+  function koreaDay(value) {
+    if (!value) return null;
+    var date = new Date(value);
+    if (isNaN(date.getTime())) return null;
+    return new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Seoul', year: 'numeric', month: '2-digit', day: '2-digit' }).format(date);
+  }
+  function isNewCampaign(d) {
+    if (!koreaDay(d.registeredAt)) return false;
+    var day = Date.parse(koreaDay(d.registeredAt) + 'T00:00:00+09:00');
+    var today = Date.parse(koreaDay(new Date()) + 'T00:00:00+09:00');
+    return day <= today && today - day < 7 * 86400000;
+  }
+  function renderSummary() {
+    var datesKnown = DATA.every(function (d) { return koreaDay(d.registeredAt); });
+    var today = koreaDay(new Date());
+    $('today-count').textContent = datesKnown ? DATA.filter(function (d) { return koreaDay(d.registeredAt) === today; }).length.toLocaleString('ko-KR') + '건' : '집계 전';
+    $('total-count').textContent = DATA.length.toLocaleString('ko-KR');
+    $('summary-note').textContent = '예시 캠페인 기준' + (datesKnown ? '' : ' · 등록일 정보가 없어 오늘 등록 건수는 집계 전이에요.');
+  }
 
   // 내 신청: 이 브라우저에만 저장됩니다.
   var mine = {};
@@ -410,20 +450,37 @@ footer .word { font-family: var(--font-display); font-size: 22px; color: var(--f
       return '<button type="button" class="' + cls + '" data-v="' + esc(v) + '" aria-pressed="' + (state[key] === v) + '">' + esc(v) + '</button>';
     }).join('');
   }
-  $('types').addEventListener('click', function (e) { var b = e.target.closest('button'); if (b) { setFilter(b.dataset.v, '전체'); } });
-  function setFilter(type, cat) { state.type = type; state.cat = cat; render(); }
+  $('types').addEventListener('click', function (e) {
+    var b = e.target.closest('button');
+    if (!b) return;
+    if (b.dataset.view) { state.view = b.dataset.view; state.type = '전체'; state.cat = '전체'; render(); }
+    else setFilter(b.dataset.v, '전체');
+  });
+  function setFilter(type, cat) { state.view = 'campaigns'; state.type = type; state.cat = cat; render(); }
   $('cats').addEventListener('click', function (e) { var b = e.target.closest('button'); if (b) { state.cat = b.dataset.v; render(); } });
 
   function render() {
     $('types').innerHTML = TYPES.map(function (t) {
-      return '<button type="button" class="gtab" data-v="' + t[1] + '" aria-pressed="' + (state.type === t[1]) + '">' + t[0] + '</button>';
+      return '<button type="button" class="gtab" data-v="' + t[1] + '" aria-pressed="' + (state.view === 'campaigns' && state.type === t[1]) + '">' + t[0] + '</button>';
+    }).join('') + '<span class="gnb-divider" aria-hidden="true"></span>' + VIEWS.map(function (v) {
+      return '<button type="button" class="gtab" data-view="' + v[1] + '" aria-pressed="' + (state.view === v[1]) + '">' + v[0] + '</button>';
     }).join('');
+    renderSummary();
+    var titles = { campaigns: '이번 주엔 어디서 써볼까요', new: '따끈따끈, 새로 만나는 체험단', events: '스탬피 이벤트', exchange: '함께 나누는 물물교환' };
+    $('page-title').textContent = titles[state.view];
+    var board = state.view === 'events' || state.view === 'exchange';
+    document.querySelector('.filters').hidden = board;
+    document.querySelector('.sort').hidden = board;
+    document.querySelector('.count').hidden = board;
+    $('empty-title').textContent = board ? (state.view === 'events' ? '등록된 이벤트가 아직 없어요.' : '등록된 물물교환이 아직 없어요.') : state.view === 'new' ? '이 조건에 맞는 신규 체험단이 아직 없어요.' : '이 조건에 맞는 캠페인이 지금은 없어요.';
+    $('empty-description').textContent = board ? '새 소식이 등록되면 이곳에서 확인할 수 있어요.' : state.view === 'new' ? '최근 7일 안에 등록된 체험단을 모아요. 등록일이 확인된 캠페인부터 보여드려요.' : '검색어나 종류, 카테고리를 넓혀서 다시 찾아보세요.';
     var cats = catsFor(state.type);
     if (cats.indexOf(state.cat) === -1) cats.push(state.cat);
     buttons($('cats'), cats, 'cat', 'tab');
     var q = state.q.trim().toLowerCase();
     var list = DATA.filter(function (d) {
-      return (state.type === '전체' || d.type === state.type) &&
+      return !board && (state.view !== 'new' || isNewCampaign(d)) &&
+             (state.type === '전체' || d.type === state.type) &&
              (state.cat === '전체' || d.cat === state.cat) &&
              (!q || (d.title + ' ' + d.offer + ' ' + d.cat + ' ' + d.type).toLowerCase().indexOf(q) !== -1);
     }).sort(function (a, b) {
@@ -602,22 +659,22 @@ footer .word { font-family: var(--font-display); font-size: 22px; color: var(--f
   var PF = ['name', 'phone', 'gender', 'age', 'chname', 'chcat', 'visitors', 'neighbors', 'blog', 'insta', 'yt', 'addr', 'addr2'];
   function num(v) { var n = parseInt(v, 10); return isNaN(n) ? '' : n.toLocaleString('ko-KR'); }
   function chIcon(p) { return p.blog ? 'b' : p.insta ? 'in' : p.yt ? 'yt' : '?'; }
-  function renderCard(p) {
-    var none = '<span class="none">미입력</span>';
+  function profileCardHTML(p) {
     var meta = [];
     if (p.gender) meta.push('<span>' + esc(p.gender) + '</span>');
     if (p.age) meta.push('<span>' + esc(p.age) + '</span>');
     meta.push('<span>평균 방문자수 ' + (num(p.visitors) ? '<b>' + num(p.visitors) + '명</b>' : '<span class="none">미입력</span>') + '</span>');
     var doneCount = 0;
-    $('rcard').innerHTML =
-      '<p class="cap">사장님이 리뷰어를 고를 때 이렇게 보여요</p>' +
-      '<div class="rc-top"><span class="av" aria-hidden="true">' + esc(p.name ? p.name.trim().charAt(0) : '나') + '</span>' +
+    return '<div class="rc-top"><span class="av" aria-hidden="true">' + esc(p.name ? p.name.trim().charAt(0) : '나') + '</span>' +
         '<div style="min-width:0"><div class="rc-name">' + (p.name ? esc(p.name) : '닉네임 미입력') + '<span class="lv">새 리뷰어</span></div>' +
         '<div class="rc-meta">' + meta.join('') + '</div></div></div>' +
       '<div class="rc-ch"><div class="rc-ch-h"><span class="ico" aria-hidden="true">' + chIcon(p) + '</span><span>' + (p.chname ? esc(p.chname) : '대표 채널 이름 미입력') + '</span></div>' +
         '<dl><dt>카테고리</dt><dd' + (p.chcat ? '>' + esc(p.chcat) : ' class="none">미입력') + '</dd>' +
         '<dt>이웃 수</dt><dd' + (num(p.neighbors) ? '>' + num(p.neighbors) + '명' : ' class="none">미입력') + '</dd>' +
         '<dt>후기 완료</dt><dd>' + doneCount + '건</dd></dl></div>';
+  }
+  function renderCard(p) {
+    $('rcard').innerHTML = '<p class="cap">사장님이 리뷰어를 고를 때 이렇게 보여요</p>' + profileCardHTML(p);
   }
   var profile = {};
   try { profile = JSON.parse(localStorage.getItem('stampy-profile') || '{}') || {}; } catch (e) { profile = {}; }
@@ -630,24 +687,11 @@ footer .word { font-family: var(--font-display); font-size: 22px; color: var(--f
 
   // 내 정보 드롭다운
   var pop = $('pop'), meBtn = $('me-btn');
-  var MEDIA = [['blog', '블로그'], ['insta', '인스타그램'], ['yt', '유튜브']];
   function renderPop() {
-    var who = profile.name ? esc(profile.name) + '님' : '닉네임을 정해 주세요';
-    var media = MEDIA.filter(function (m) { return profile[m[0]]; });
-    var ids = Object.keys(mine);
     pop.innerHTML =
-      '<div class="pop-hello"><span class="av" aria-hidden="true">' + esc(initial()) + '</span>' +
-        '<div><p>안녕하세요.</p><button type="button" class="linkish" data-go="profile" style="font-size:17px">' + who + chev() + '</button></div></div>' +
-      '<div class="pop-sec"><button type="button" class="linkish" data-go="profile">미디어 연결' + chev() + '</button>' +
-        (media.length
-          ? '<div class="pop-box"><ul class="pop-list">' + media.map(function (m) { return '<li><span>' + m[1] + '</span><span class="st">연결됨</span></li>'; }).join('') + '</ul></div>'
-          : '<div class="pop-box"><div class="t">연결된 미디어가 없어요</div><div class="s">캠페인에 신청하려면 블로그나 SNS 주소를 등록해 주세요.</div><button type="button" class="btn secondary" data-go="profile">미디어 연결하기</button></div>') +
-      '</div>' +
-      '<div class="pop-sec"><button type="button" class="linkish" data-go="mine">나의 캠페인' + chev() + '</button>' +
-        (ids.length
-          ? '<div class="pop-box"><ul class="pop-list">' + ids.map(function (id) { var c = byId(id); return c ? '<li><span>' + esc(c.title) + '</span><span class="st">' + ddayLabel(c.dday) + ' 결과 대기</span></li>' : ''; }).join('') + '</ul></div>'
-          : '<div class="pop-box"><div class="t">신청한 캠페인이 없어요</div><div class="s">마음에 드는 캠페인 카드를 눌러 신청해 보세요.</div><button type="button" class="btn secondary" data-go="browse">캠페인 둘러보기</button></div>') +
-      '</div>' +
+      '<div class="rcard">' + profileCardHTML(profile) + '</div>' +
+      '<div class="pop-actions"><button type="button" class="linkish" data-go="profile">내 정보 수정' + chev() + '</button>' +
+        '<button type="button" class="linkish" data-go="mine">나의 캠페인 <b>' + Object.keys(mine).length + '</b>' + chev() + '</button></div>' +
       '<div class="pop-sec"><span style="font-size:15px;font-weight:700">나의 포인트</span>' +
         '<div class="points"><div>적립 예정 포인트<b>0P</b></div><div>전체 보유 포인트<b>0P</b></div></div>' +
       '</div>';
@@ -713,7 +757,7 @@ footer .word { font-family: var(--font-display); font-size: 22px; color: var(--f
   $('sort').addEventListener('change', function () { state.sort = this.value; render(); });
   $('q').addEventListener('input', function () { state.q = this.value; render(); });
   $('search-form').addEventListener('submit', function (e) { e.preventDefault(); });
-  $('reset').addEventListener('click', function () { state.type = '전체'; state.cat = '전체'; state.q = ''; $('q').value = ''; render(); });
+  $('reset').addEventListener('click', function () { state.view = 'campaigns'; state.type = '전체'; state.cat = '전체'; state.q = ''; $('q').value = ''; render(); });
 
   render();
 })();
