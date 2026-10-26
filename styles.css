@@ -8,14 +8,14 @@
   --line-2: #E2E4EC;
   --accent: #3442D9;
   --yolk: #FFCF33;
-  --display: 'Black Han Sans', sans-serif;
+  --display: 'Pretendard', sans-serif;
 }
 * { box-sizing: border-box; }
 body {
   margin: 0;
   background: var(--paper);
   color: var(--ink);
-  font-family: 'IBM Plex Sans KR', sans-serif;
+  font-family: 'Pretendard', sans-serif;
   font-size: 17px;
   line-height: 1.7;
   word-break: keep-all;
@@ -191,3 +191,5 @@ h2.section-title { margin: 0; font-family: var(--display); font-weight: 400; fon
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; }
 }
+
+button, input, select, textarea, svg text { font-family: 'Pretendard', sans-serif; }

@@ -5,15 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 <title>스탬피 체험단</title>
+<link rel="preload" href="assets/fonts/PretendardVariable.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/fonts/pretendard.css">
 <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
 <script src="vendor/leaflet/leaflet.js"></script>
 <link rel="stylesheet" href="vendor/leaflet-markercluster/MarkerCluster.css">
 <link rel="stylesheet" href="vendor/leaflet-markercluster/MarkerCluster.Default.css">
 <script src="vendor/leaflet-markercluster/leaflet.markercluster.js"></script>
 <meta name="claude:viewport-fit-sides" content="cover">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap">
 <style>
 /* Layout: 쿠폰처럼 절취선이 있는 캠페인 카드 그리드, 마감일은 비스듬한 도장 */
 :root {
@@ -34,8 +33,8 @@
   --t-food: #FFE6D2; --t-cafe: #EEE3D5; --t-beauty: #F6E0EB; --t-stay: #DAE9F4;
   --t-grocery: #E3F0D8; --t-living: #E2E6F8; --t-digital: #E2E4EA;
   --t-ink: rgba(23, 25, 46, 0.14);
-  --font-display: 'Black Han Sans', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
-  --font-body: 'IBM Plex Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', system-ui, sans-serif;
+  --font-display: 'Pretendard', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  --font-body: 'Pretendard', 'Apple SD Gothic Neo', 'Malgun Gothic', system-ui, sans-serif;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
@@ -328,6 +327,25 @@ footer .wrap { padding-block: 32px 40px; display: flex; flex-wrap: wrap; justify
 footer .word { font-family: var(--font-display); font-size: 22px; color: var(--fg); }
 
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+
+/* Reference-style channel row: equal spacing, icon above label, no card frame. */
+.channel-options { display: grid; grid-template-columns: repeat(7,minmax(0,1fr)); gap: 16px; padding: 8px 4px; }
+.channel-option { min-width: 0; min-height: 128px; padding: 8px 2px; border: 0; border-radius: 0; background: transparent; gap: 14px; font-size: 14px; }
+.channel-option:has(input:checked) { background: transparent; box-shadow: none; }
+.channel-icon { width: 72px; height: 72px; border-radius: 24px; box-shadow: inset 0 1px 1px #ffffff70, 0 5px 14px #17192e12; }
+.channel-option:has(input:checked) .channel-icon { outline: 3px solid var(--accent); outline-offset: 4px; }
+.channel-option input { top: 66px; right: calc(50% - 40px); z-index: 1; border-radius: 4px; }
+.channel-icon svg, .channel-icon img { width: 36px; height: 36px; transition: transform 180ms ease; transform-origin: center; }
+.channel-icon img { display: block; filter: brightness(0) invert(1); }
+.channel-option:has(input[value="instagram"]) .channel-icon { background: linear-gradient(145deg, #f7a84a, #cf3186 55%, #7259c8); }
+.channel-option:has(input[value="all"]) .channel-icon { background: linear-gradient(145deg, #6975f4, #3442d9); }
+.channel-option:focus-within .channel-icon img, .channel-option:focus-within .channel-icon svg { transform: scale(1.18); }
+@media(hover:hover) { .channel-option:hover .channel-icon img, .channel-option:hover .channel-icon svg { transform: scale(1.18); } }
+@media(max-width: 700px) { .channel-options { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 108px; overflow-x: auto; gap: 12px; padding: 10px 6px; scroll-snap-type: x proximity; } .channel-option { scroll-snap-align: start; min-height: 132px; padding: 8px 2px; } }
+@media(prefers-reduced-motion: reduce) { .channel-icon svg, .channel-icon img { transition: none; transform: none !important; } }
+button, input, select, textarea, .leaflet-container, .leaflet-control, .leaflet-tooltip, .leaflet-popup, .marker-cluster, .marker-cluster div, .leaflet-container *, svg text { font-family: var(--font-body); }
+.logo, .banner-slide h2, .head h1 { font-weight: 800; }
+
 </style>
 
 </head>
@@ -530,6 +548,7 @@ footer .word { font-family: var(--font-display); font-size: 22px; color: var(--f
     { id: 'bag', requiredPoints: null, stock: null, preview: true, brand: '[브랜드 B]', title: '데일리 에코백', icon: '<path d="M4 8h16l1 13H3L4 8Zm4 0V6a4 4 0 0 1 8 0v2"/>' },
     { id: 'care', requiredPoints: null, stock: null, preview: true, brand: '[브랜드 C]', title: '핸드케어 세트', icon: '<path d="M4 7h7l-1 14H5L4 7Zm1-4h5v4M15 10h6v11h-6V10Zm1-4h4v4M5 16h5m5-1h6"/>' }
   ];
+  var KOREA_BOUNDS = [[32.5, 124.3], [39.2, 132.0]];
   var mapInstance = null, mapMarkers = {}, mapLayer = null, lastMapSignature = '';
   var TINT = { '맛집': '--t-food', '카페': '--t-cafe', '뷰티': '--t-beauty', '숙박': '--t-stay', '식품': '--t-grocery', '생활': '--t-living', '디지털': '--t-digital' };
   var ROTS = [-8, 6, -4, 9, -10, 5, -6, 8, -3, 7, -9, 4];
@@ -538,10 +557,10 @@ footer .word { font-family: var(--font-display); font-size: 22px; color: var(--f
   var VIEWS = [['따끈신상', 'new'], ['이벤트', 'events'], ['물물교환', 'exchange']];
   var CHANNEL_FILTERS = [
     { id: 'all', label: '모두', color: '#3442d9', icon: '<path d="m5 12 4 4L19 6"/>' },
-    { id: 'blog', label: '네이버블로그', color: '#178449', icon: '<path d="M5 4h14v13H9l-4 3V4Z"/><path d="M9 8h6m-6 4h4"/>' },
-    { id: 'instagram', label: '인스타', color: '#b03f85', icon: '<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17" cy="7" r="1" fill="currentColor" stroke="none"/>' },
-    { id: 'youtube', label: '유튜브', color: '#c73535', icon: '<rect x="2" y="5" width="20" height="14" rx="5"/><path d="m10 9 5 3-5 3V9Z" fill="currentColor" stroke="none"/>' },
-    { id: 'short', label: '숏폼', color: '#5d4bc2', icon: '<rect x="6" y="2" width="12" height="20" rx="3"/><path d="m10 8 5 4-5 4V8Z" fill="currentColor" stroke="none"/>' },
+    { id: 'blog', label: '네이버블로그', color: '#03a955', brandIcon: 'naver', icon: '<path d="M5 4h14v13H9l-4 3V4Z"/><path d="M9 8h6m-6 4h4"/>' },
+    { id: 'instagram', label: '인스타', color: '#b03f85', brandIcon: 'instagram', icon: '<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17" cy="7" r="1" fill="currentColor" stroke="none"/>' },
+    { id: 'youtube', label: '유튜브', color: '#ff0000', brandIcon: 'youtube', icon: '<rect x="2" y="5" width="20" height="14" rx="5"/><path d="m10 9 5 3-5 3V9Z" fill="currentColor" stroke="none"/>' },
+    { id: 'short', label: '숏폼', color: '#202024', brandIcon: 'youtubeshorts', icon: '<rect x="6" y="2" width="12" height="20" rx="3"/><path d="m10 8 5 4-5 4V8Z" fill="currentColor" stroke="none"/>' },
     { id: 'store', label: '스토어', color: '#236ca7', icon: '<path d="M3 9h18l-2-6H5L3 9Zm2 0v12h14V9M9 21v-7h6v7M3 9c0 4 4 4 5 0 1 4 7 4 8 0 1 4 5 4 5 0"/>' },
     { id: 'purchase', label: '플랫폼 구매리뷰', color: '#97650b', icon: '<path d="M4 4h2l2 11h10l3-8H7M9 21h.01M18 21h.01M11 10h5"/>' }
   ];
@@ -560,7 +579,7 @@ footer .word { font-family: var(--font-display); font-size: 22px; color: var(--f
   function renderChannels() {
     $('channel-options').innerHTML = CHANNEL_FILTERS.map(function (channel) {
       var checked = channel.id === 'all' ? state.channels === null : state.channels !== null && state.channels.indexOf(channel.id) !== -1;
-      return '<label class="channel-option"><input type="checkbox" value="' + channel.id + '"' + (checked ? ' checked' : '') + '><span class="channel-icon" style="--channel-color:' + channel.color + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + channel.icon + '</svg></span><span>' + channel.label + '</span></label>';
+      return '<label class="channel-option"><input type="checkbox" value="' + channel.id + '"' + (checked ? ' checked' : '') + '><span class="channel-icon" style="--channel-color:' + channel.color + '">' + (channel.brandIcon ? '<img src="assets/icons/' + channel.brandIcon + '.svg" alt="" aria-hidden="true">' : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + channel.icon + '</svg>') + '</span><span>' + channel.label + '</span></label>';
     }).join('');
   }
   var PRODUCT_CATS = ['생활', '유아동', '디지털', '뷰티', '패션', '도서', '식품', '반려동물'];
@@ -956,7 +975,7 @@ footer .word { font-family: var(--font-display); font-size: 22px; color: var(--f
     $('map-status').textContent = stores.length ? '지도에서 ' + stores.length + '개 매장을 선택할 수 있어요.' : '이 조건에 맞는 위치 등록 매장이 없어요. 검색어나 카테고리를 바꿔 주세요.';
     if (!window.L) { $('map-status').textContent = '지도를 불러오지 못했어요. 매장 목록에서 상세 보기와 신청을 이용해 주세요.'; return; }
     if (!mapInstance) {
-      mapInstance = L.map('store-map', { scrollWheelZoom: false, zoomAnimation: false, fadeAnimation: false }).setView([36.1, 127.2], 7);
+      mapInstance = L.map('store-map', { scrollWheelZoom: true, minZoom: 7, maxZoom: 19, maxBounds: KOREA_BOUNDS, maxBoundsViscosity: 1, zoomAnimation: false, fadeAnimation: false }).setView([36.0, 127.7], 7);
       L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors' }).on('tileerror', function () {
         $('map-status').textContent = '배경 지도를 불러오지 못했어요. 매장 목록에서 상세 보기와 신청을 이용해 주세요.';
       }).addTo(mapInstance);
