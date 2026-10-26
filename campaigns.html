@@ -203,6 +203,45 @@ fieldset.group legend { padding: 0; font-size: 15px; font-weight: 700; float: le
 .product-info .btn { margin-top: 16px; width: 100%; font-size: 14px; }
 @media(max-width: 700px) { .map-layout { grid-template-columns: minmax(0,1fr); } #store-map { height: 360px; } .store-list { max-height: 320px; } .reward-banner { grid-template-columns: minmax(0,1fr); padding: 22px; } .exchange-grid { grid-template-columns: minmax(0,1fr); } }
 
+
+.head .sort { margin-left: auto; }
+.campaign-heading { flex: 1 1 520px; min-width: 0; }
+.hero-banner { position: relative; overflow: hidden; border-radius: 20px; margin-bottom: 24px; }
+.banner-slide { position: relative; min-height: 260px; padding: 36px 40% 72px 36px; background: #f3e4ce; color: #382718; }
+.banner-slide.event { background: #e3e7ff; color: #202754; }
+.banner-slide .eyebrow { display: inline-block; border: 1px solid currentColor; border-radius: 999px; padding: 3px 12px; font-size: 12px; font-weight: 700; }
+.banner-slide h2 { font-family: var(--font-display); font-size: clamp(26px, 4vw, 40px); font-weight: 400; line-height: 1.25; margin: 16px 0 10px; }
+.banner-slide p { font-size: 14px; margin: 0; color: inherit; }
+.banner-art { position: absolute; right: 5%; top: 20px; width: 28%; height: 205px; }
+.banner-controls { position: absolute; bottom: 14px; left: 24px; right: 24px; display: flex; align-items: center; gap: 4px; }
+.banner-controls button { min-width: 44px; min-height: 44px; border: 0; border-radius: 50%; background: #fff; color: #252c51; font: inherit; font-weight: 700; cursor: pointer; }
+.banner-controls .banner-dot { min-width: 44px; background: transparent; }
+.banner-dot::after { content: ''; display: block; width: 8px; height: 8px; margin: auto; border-radius: 50%; background: #555a75; }
+.banner-dot[aria-current="true"]::after { width: 24px; border-radius: 8px; background: #252c51; }
+.banner-progress { margin-left: auto; font-size: 13px; color: #252c51; font-variant-numeric: tabular-nums; }
+.channel-filters { border: 0; padding: 0; margin: 0 0 18px; min-width: 0; }
+.channel-filters legend { margin-bottom: 12px; font-size: 14px; font-weight: 700; }
+.channel-options { display: flex; flex-wrap: wrap; gap: 12px; }
+.channel-option { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; min-width: 96px; min-height: 124px; padding: 12px; border: 1.5px solid var(--line); border-radius: 16px; background: var(--surface); color: var(--fg); font-size: 13px; font-weight: 600; cursor: pointer; }
+.channel-option:has(input:checked) { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); background: var(--bg); }
+.channel-option:has(input:focus-visible) { outline: 3px solid var(--accent); outline-offset: 3px; }
+.channel-option input { position: absolute; top: 8px; right: 8px; width: 17px; height: 17px; margin: 0; accent-color: var(--accent); cursor: pointer; }
+.channel-icon { width: 56px; height: 56px; border-radius: 50%; background: var(--channel-color); color: #fff; display: grid; place-items: center; flex: none; }
+.channel-icon svg { width: 30px; height: 30px; }
+.channel-hint { margin: 10px 0 0; font-size: 12px; color: var(--muted); }
+.map-popup { width: 260px; max-width: 100%; }
+.map-popup .store-head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+.store-logo { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 1px solid #d5d8e2; flex: none; }
+.store-logo-fallback { display: grid; place-items: center; background: #f4f5f8; color: #3442d9; font-size: 11px; text-align: center; }
+.store-product { width: 100%; aspect-ratio: 16/9; object-fit: cover; background: #f3e4ce; border-radius: 10px; display: block; }
+.map-popup .store-caption { font-size: 11px; color: #5b5f73; margin: 4px 0 10px; }
+.map-popup dl { display: grid; grid-template-columns: auto minmax(0,1fr); gap: 5px 10px; margin: 12px 0; font-size: 12px; }
+.map-popup dt { color: #5b5f73; }
+.map-popup dd { margin: 0; overflow-wrap: anywhere; }
+.map-popup .store-social { display: flex; align-items: center; justify-content: center; min-height: 44px; border: 1px solid #d5d8e2; border-radius: 8px; color: #3442d9; text-decoration: none; font-weight: 600; }
+.map-popup .store-social.empty { margin: 8px 0 0; padding: 8px; color: #5b5f73; background: #f4f5f8; }
+@media(max-width: 560px) { .banner-slide { padding: 24px 26px 140px; min-height: 330px; } .banner-art { width: 100px; height: 100px; right: 24px; top: auto; bottom: 54px; } .banner-controls { left: 14px; right: 14px; } .channel-options { gap: 8px; display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); } .channel-option { min-width: 0; padding: 10px 6px; min-height: 124px; } .map-popup { width: 230px; } }
+
 /* head + filters */
 main { padding-block: 40px 88px; }
 .head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px 32px; }
@@ -317,9 +356,23 @@ footer .word { font-family: var(--font-display); font-size: 22px; color: var(--f
 </header>
 
 <main id="top" class="wrap">
+      <section id="hero-banner" class="hero-banner" aria-roledescription="carousel" aria-label="계절 및 이벤트 배너">
+        <div id="banner-slides">
+          <article class="banner-slide" role="group" aria-roledescription="slide" aria-label="1 / 2 계절 배너">
+            <span class="eyebrow">SEASON · 계절 배너 예시</span><h2>가을 한 장,<br>새로운 경험 한 칸</h2><p>선선한 계절에 만나고 싶은 체험을 담을 자리예요.</p>
+            <svg class="banner-art" viewBox="0 0 240 220" fill="none" aria-hidden="true"><rect x="48" y="40" width="150" height="150" rx="20" fill="#fff9ee" transform="rotate(10 120 110)"/><circle cx="125" cy="110" r="56" stroke="#b67538" stroke-width="3" stroke-dasharray="6 5"/><path d="M123 150c-48-10-44-62 10-82 17 42 15 67-10 82Z" fill="#d98b4b"/><path d="m122 150 14-65M122 121l-18-13m22 1 17-10" stroke="#73431f" stroke-width="3"/><path d="M40 42c-10 22-8 37 14 44 12-19 7-34-14-44Z" fill="#bdc889"/></svg>
+          </article>
+          <article class="banner-slide event" role="group" aria-roledescription="slide" aria-label="2 / 2 이벤트 배너" hidden>
+            <span class="eyebrow">EVENT · 이벤트 배너 예시</span><h2>새로운 즐거움에<br>도장을 찍어요</h2><p>이벤트 일정과 혜택을 소개할 자리예요. 내용은 준비 중이에요.</p>
+            <svg class="banner-art" viewBox="0 0 240 220" fill="none" aria-hidden="true"><rect x="28" y="40" width="184" height="142" rx="18" fill="#fff" transform="rotate(-8 120 110)"/><path d="M46 94h148M46 132h148" stroke="#c6ccf1" stroke-width="2" stroke-dasharray="5 5"/><circle cx="120" cy="110" r="50" fill="#ffcf33" stroke="#3442d9" stroke-width="4"/><path d="m97 111 16 17 31-37" stroke="#3442d9" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><path d="m201 33 5 12 13 1-10 8 3 13-11-7-11 7 3-13-10-8 13-1Z" fill="#8995f1"/></svg>
+          </article>
+        </div>
+        <div class="banner-controls"><button type="button" id="banner-prev" aria-label="이전 배너">‹</button><button type="button" class="banner-dot" data-slide="0" aria-label="계절 배너 보기" aria-current="true"></button><button type="button" class="banner-dot" data-slide="1" aria-label="이벤트 배너 보기" aria-current="false"></button><button type="button" id="banner-next" aria-label="다음 배너">›</button><span class="banner-progress" id="banner-progress">1 / 2</span><button type="button" id="banner-pause" aria-label="배너 자동 재생 정지">Ⅱ</button></div>
+      </section>
   <div class="head">
-    <div>
-      <h1 id="page-title">이번 주엔 어디서 써볼까요</h1>
+    <div class="campaign-heading">
+      <h1 id="page-title" class="sr-only">체험단 캠페인</h1>
+
       <div class="campaign-summary" aria-label="체험단 등록 현황">
         <span>오늘 등록된 신규 체험단 <strong id="today-count">집계 전</strong></span>
         <span>누적 체험단 <strong id="total-count">12</strong>건</span>
@@ -341,6 +394,7 @@ footer .word { font-family: var(--font-display); font-size: 22px; color: var(--f
     <span id="map-toggle-label">지도로 보기</span>
   </button>
   <div class="filters">
+    <fieldset class="channel-filters"><legend>리뷰 채널</legend><div class="channel-options" id="channel-options"></div><p class="channel-hint">여러 개를 체크하면 선택한 채널 중 하나라도 포함된 캠페인을 보여드려요.</p></fieldset>
     <div class="tabs" role="group" aria-label="카테고리" id="cats"></div>
   </div>
 
@@ -463,12 +517,12 @@ footer .word { font-family: var(--font-display); font-size: 22px; color: var(--f
   // 운영 시 매장 등록 데이터로 교체: 실제 주소와 검증한 좌표를 함께 저장합니다.
   // 아래는 지역 중심의 예시 좌표이며 실존 매장으로 오인하지 않도록 표시합니다.
   var STORES = [
-    { id: 's1', campaignId: 'c1', area: '성수동 일대', lat: 37.5445, lng: 127.0557, approximate: true },
-    { id: 's2', campaignId: 'c2', area: '연남동 일대', lat: 37.5625, lng: 126.925, approximate: true },
-    { id: 's3', campaignId: 'c4', area: '강남 일대', lat: 37.4979, lng: 127.0276, approximate: true },
-    { id: 's4', campaignId: 'c7', area: '제주 애월 일대', lat: 33.462, lng: 126.329, approximate: true },
-    { id: 's5', campaignId: 'c8', area: '을지로 일대', lat: 37.566, lng: 126.991, approximate: true },
-    { id: 's6', campaignId: 'c11', area: '망원동 일대', lat: 37.556, lng: 126.901, approximate: true }
+    { id: 's1', campaignId: 'c1', area: '성수동 일대', lat: 37.5445, lng: 127.0557, approximate: true, instagramUrl: 'https://www.instagram.com/', instagramIsExample: true, assetsAreExamples: true, logoUrl: 'assets/store-1-logo.svg', productImageUrl: 'assets/store-1-product.svg' },
+    { id: 's2', campaignId: 'c2', area: '연남동 일대', lat: 37.5625, lng: 126.925, approximate: true, instagramUrl: 'https://www.instagram.com/', instagramIsExample: true, assetsAreExamples: true, logoUrl: 'assets/store-2-logo.svg', productImageUrl: 'assets/store-2-product.svg' },
+    { id: 's3', campaignId: 'c4', area: '강남 일대', lat: 37.4979, lng: 127.0276, approximate: true, instagramUrl: 'https://www.instagram.com/', instagramIsExample: true, assetsAreExamples: true, logoUrl: 'assets/store-3-logo.svg', productImageUrl: 'assets/store-3-product.svg' },
+    { id: 's4', campaignId: 'c7', area: '제주 애월 일대', lat: 33.462, lng: 126.329, approximate: true, instagramUrl: 'https://www.instagram.com/', instagramIsExample: true, assetsAreExamples: true, logoUrl: 'assets/store-4-logo.svg', productImageUrl: 'assets/store-4-product.svg' },
+    { id: 's5', campaignId: 'c8', area: '을지로 일대', lat: 37.566, lng: 126.991, approximate: true, instagramUrl: 'https://www.instagram.com/', instagramIsExample: true, assetsAreExamples: true, logoUrl: 'assets/store-5-logo.svg', productImageUrl: 'assets/store-5-product.svg' },
+    { id: 's6', campaignId: 'c11', area: '망원동 일대', lat: 37.556, lng: 126.901, approximate: true, instagramUrl: 'https://www.instagram.com/', instagramIsExample: true, assetsAreExamples: true, logoUrl: 'assets/store-6-logo.svg', productImageUrl: 'assets/store-6-product.svg' }
   ];
   var REWARD_POLICY = { stampsPerReview: 0, pointsPerStamp: null, preview: true };
   var EXCHANGE_PRODUCTS = [
@@ -482,6 +536,33 @@ footer .word { font-family: var(--font-display); font-size: 22px; color: var(--f
   // 상단 탭: 화면에 보이는 이름과 실제 캠페인 종류
   var TYPES = [['전체', '전체'], ['제품', '배송형'], ['지역', '방문형']];
   var VIEWS = [['따끈신상', 'new'], ['이벤트', 'events'], ['물물교환', 'exchange']];
+  var CHANNEL_FILTERS = [
+    { id: 'all', label: '모두', color: '#3442d9', icon: '<path d="m5 12 4 4L19 6"/>' },
+    { id: 'blog', label: '네이버블로그', color: '#178449', icon: '<path d="M5 4h14v13H9l-4 3V4Z"/><path d="M9 8h6m-6 4h4"/>' },
+    { id: 'instagram', label: '인스타', color: '#b03f85', icon: '<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17" cy="7" r="1" fill="currentColor" stroke="none"/>' },
+    { id: 'youtube', label: '유튜브', color: '#c73535', icon: '<rect x="2" y="5" width="20" height="14" rx="5"/><path d="m10 9 5 3-5 3V9Z" fill="currentColor" stroke="none"/>' },
+    { id: 'short', label: '숏폼', color: '#5d4bc2', icon: '<rect x="6" y="2" width="12" height="20" rx="3"/><path d="m10 8 5 4-5 4V8Z" fill="currentColor" stroke="none"/>' },
+    { id: 'store', label: '스토어', color: '#236ca7', icon: '<path d="M3 9h18l-2-6H5L3 9Zm2 0v12h14V9M9 21v-7h6v7M3 9c0 4 4 4 5 0 1 4 7 4 8 0 1 4 5 4 5 0"/>' },
+    { id: 'purchase', label: '플랫폼 구매리뷰', color: '#97650b', icon: '<path d="M4 4h2l2 11h10l3-8H7M9 21h.01M18 21h.01M11 10h5"/>' }
+  ];
+  function channelKey(channel) {
+    if (['블로그', '네이버블로그'].indexOf(channel) !== -1) return 'blog';
+    if (['인스타', '인스타그램'].indexOf(channel) !== -1) return 'instagram';
+    if (channel === '유튜브') return 'youtube';
+    if (['릴스', '숏폼', '쇼츠', '틱톡'].indexOf(channel) !== -1) return 'short';
+    if (['스토어', '스마트스토어'].indexOf(channel) !== -1) return 'store';
+    if (channel === '플랫폼 구매리뷰') return 'purchase';
+    return null;
+  }
+  function matchesChannels(campaign) {
+    return state.channels === null || campaign.channels.some(function (channel) { return state.channels.indexOf(channelKey(channel)) !== -1; });
+  }
+  function renderChannels() {
+    $('channel-options').innerHTML = CHANNEL_FILTERS.map(function (channel) {
+      var checked = channel.id === 'all' ? state.channels === null : state.channels !== null && state.channels.indexOf(channel.id) !== -1;
+      return '<label class="channel-option"><input type="checkbox" value="' + channel.id + '"' + (checked ? ' checked' : '') + '><span class="channel-icon" style="--channel-color:' + channel.color + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + channel.icon + '</svg></span><span>' + channel.label + '</span></label>';
+    }).join('');
+  }
   var PRODUCT_CATS = ['생활', '유아동', '디지털', '뷰티', '패션', '도서', '식품', '반려동물'];
   var REGION_CATS = ['맛집', '카페', '뷰티', '숙박', '문화', '배달', '테이크아웃'];
   function catsFor(type) {
@@ -489,7 +570,7 @@ footer .word { font-family: var(--font-display); font-size: 22px; color: var(--f
     var seen = {};
     return ['전체'].concat(list.filter(function (c) { if (seen[c]) return false; seen[c] = 1; return true; }));
   }
-  var state = { type: '전체', cat: '전체', sort: 'deadline', q: '', view: 'campaigns', map: false };
+  var state = { type: '전체', cat: '전체', sort: 'deadline', q: '', view: 'campaigns', map: false, channels: null };
 
   // 등록일은 실제 데이터의 registeredAt(ISO 8601)을 사용합니다. 없는 날짜는 추정하지 않습니다.
   function koreaDay(value) {
@@ -549,7 +630,9 @@ footer .word { font-family: var(--font-display); font-size: 22px; color: var(--f
     }).join('');
     renderSummary();
     var titles = { campaigns: '이번 주엔 어디서 써볼까요', new: '따끈따끈, 새로 만나는 체험단', events: '스탬피 이벤트', exchange: '함께 나누는 물물교환' };
-    $('page-title').textContent = titles[state.view];
+    $('page-title').textContent = state.view === 'campaigns' ? '체험단 캠페인' : titles[state.view];
+    $('page-title').classList.toggle('sr-only', state.view === 'campaigns' || state.view === 'new');
+    $('hero-banner').hidden = state.view === 'events' || state.view === 'exchange';
     var board = state.view === 'events' || state.view === 'exchange';
     $('map-toggle').hidden = board || state.type === '배송형' || state.type === '기자단';
     $('map-toggle').setAttribute('aria-pressed', String(state.map));
@@ -563,12 +646,13 @@ footer .word { font-family: var(--font-display); font-size: 22px; color: var(--f
     document.querySelector('.count').hidden = board;
     $('empty-title').textContent = board ? (state.view === 'events' ? '등록된 이벤트가 아직 없어요.' : '등록된 물물교환이 아직 없어요.') : state.view === 'new' ? '이 조건에 맞는 신규 체험단이 아직 없어요.' : '이 조건에 맞는 캠페인이 지금은 없어요.';
     $('empty-description').textContent = board ? '새 소식이 등록되면 이곳에서 확인할 수 있어요.' : state.view === 'new' ? '최근 7일 안에 등록된 체험단을 모아요. 등록일이 확인된 캠페인부터 보여드려요.' : '검색어나 종류, 카테고리를 넓혀서 다시 찾아보세요.';
+    renderChannels();
     var cats = catsFor(state.type);
     if (cats.indexOf(state.cat) === -1) cats.push(state.cat);
     buttons($('cats'), cats, 'cat', 'tab');
     var q = state.q.trim().toLowerCase();
     var list = DATA.filter(function (d) {
-      return !board && (state.view !== 'new' || isNewCampaign(d)) &&
+      return !board && matchesChannels(d) && (state.view !== 'new' || isNewCampaign(d)) &&
              (state.type === '전체' || d.type === state.type) &&
              (state.cat === '전체' || d.cat === state.cat) &&
              (!q || (d.title + ' ' + d.offer + ' ' + d.cat + ' ' + d.type).toLowerCase().indexOf(q) !== -1);
@@ -605,6 +689,7 @@ footer .word { font-family: var(--font-display); font-size: 22px; color: var(--f
       '</li>';
     }).join('');
     $('mine-n').textContent = Object.keys(mine).length;
+    scheduleBanner();
   }
 
   // 상세 + 신청
@@ -628,6 +713,8 @@ footer .word { font-family: var(--font-display); font-size: 22px; color: var(--f
         '<dt>모집 현황</dt><dd>신청 ' + (c.applied + (done ? 1 : 0)) + '명 / 모집 ' + c.quota + '명, ' + ddayLabel(c.dday) + '</dd>' +
       '</dl>' +
       '<p class="notice">후기 첫머리에 업체로부터 제공받아 작성했다는 문구를 꼭 넣어 주세요.</p>';
+    var store = STORES.filter(function (item) { return item.campaignId === c.id; })[0];
+    if (store) html = '<div class="map-popup" style="width:100%">' + storeMediaHTML(store, c) + '</div>' + html;
     if (done) {
       html += doneBlock(c, done);
     } else {
@@ -643,6 +730,7 @@ footer .word { font-family: var(--font-display); font-size: 22px; color: var(--f
         '</form>';
     }
     $('d-body').innerHTML = html;
+    bindStoreImages($('d-body'));
     var form = $('apply');
     if (form) form.addEventListener('submit', function (e) { e.preventDefault(); submit(c, form); });
     if (!dlg.open) openDialog(dlg);
@@ -849,7 +937,7 @@ footer .word { font-family: var(--font-display); font-size: 22px; color: var(--f
   $('sort').addEventListener('change', function () { state.sort = this.value; render(); });
   $('q').addEventListener('input', function () { state.q = this.value; render(); });
   $('search-form').addEventListener('submit', function (e) { e.preventDefault(); });
-  $('reset').addEventListener('click', function () { state.view = 'campaigns'; state.map = false; state.type = '전체'; state.cat = '전체'; state.q = ''; $('q').value = ''; render(); });
+  $('reset').addEventListener('click', function () { state.view = 'campaigns'; state.map = false; state.type = '전체'; state.cat = '전체'; state.q = ''; state.channels = null; $('q').value = ''; render(); });
 
 
   $('map-toggle').addEventListener('click', function () {
@@ -881,9 +969,10 @@ footer .word { font-family: var(--font-display); font-size: 22px; color: var(--f
         var c = byId(store.campaignId);
         var icon = L.divIcon({ className: '', html: '<div class="store-pin"><span>' + (index + 1) + '</span></div>', iconSize: [34, 34], iconAnchor: [17, 34] });
         var content = document.createElement('div'); content.className = 'map-popup';
-        content.innerHTML = '<strong>' + esc(c.title) + '</strong><br>' + esc(store.area) + (store.approximate ? ' · 예시 위치' : '') + '<br>' + esc(c.offer) + '<button type="button" data-map-apply="' + esc(c.id) + '">상세 보고 신청하기</button>';
-        content.querySelector('button').addEventListener('click', function () { showDetail(c.id); });
-        mapMarkers[store.id] = L.marker([store.lat, store.lng], { icon: icon, title: c.title, alt: c.title + ' 예시 위치' }).bindPopup(content).addTo(mapLayer);
+        content.innerHTML = storePopupHTML(store, c);
+        content.querySelector('[data-map-apply]').addEventListener('click', function () { showDetail(c.id); });
+        bindStoreImages(content);
+        mapMarkers[store.id] = L.marker([store.lat, store.lng], { icon: icon, title: c.title, alt: c.title + ' 예시 위치' }).bindPopup(content, { maxWidth: 300, maxHeight: 380 }).addTo(mapLayer);
       });
       lastMapSignature = signature;
       // Resize after the hidden map container becomes visible before fitting bounds.
@@ -919,7 +1008,64 @@ footer .word { font-family: var(--font-display); font-size: 22px; color: var(--f
   });
   ['exchange-close', 'exchange-confirm'].forEach(function (id) { $(id).addEventListener('click', function () { closeDialog($('exchange-dialog')); }); });
 
+
+  function bindStoreImages(container) {
+    container.querySelectorAll('img[data-fallback]').forEach(function (img) {
+      img.addEventListener('error', function () { img.src = img.dataset.fallback; }, { once: true });
+    });
+  }
+  function safeInstagram(value) {
+    try { var url = new URL(value); return url.protocol === 'https:' && (url.hostname === 'instagram.com' || url.hostname === 'www.instagram.com') && !url.username && !url.password ? url.href : ''; } catch (e) { return ''; }
+  }
+  function safeImage(value, fallback) {
+    if (!value) return fallback;
+    try { var url = new URL(value, location.href); return url.protocol === 'https:' || (url.origin === location.origin && url.protocol === location.protocol) ? url.href : fallback; } catch (e) { return fallback; }
+  }
+  function storeMediaHTML(store, campaign) {
+    var image = safeImage(store.productImageUrl, 'assets/store-product-placeholder.svg');
+    var instagram = safeInstagram(store.instagramUrl);
+    return '<div class="store-head">' + (store.logoUrl ? '<img class="store-logo" src="' + esc(safeImage(store.logoUrl, 'assets/store-logo-placeholder.svg')) + '" alt="' + (store.assetsAreExamples ? '예시 매장 로고' : '매장 로고') + '" data-fallback="assets/store-logo-placeholder.svg">' : '<span class="store-logo store-logo-fallback">로고<br>미등록</span>') + '<strong>' + esc(campaign.title) + '</strong></div>' +
+      '<img class="store-product" src="' + esc(image) + '" alt="' + (store.productImageUrl && !store.assetsAreExamples ? esc(campaign.title) + ' 체험 제품' : '체험 제품 이미지 예시') + '" data-fallback="assets/store-product-placeholder.svg"><p class="store-caption">' + (store.productImageUrl && !store.assetsAreExamples ? '체험 제품 이미지' : '예시 로고·제품 일러스트 · 실제 매장 자료 등록 전') + '</p>' +
+      (instagram ? '<a class="store-social" href="' + esc(instagram) + '" target="_blank" rel="noopener noreferrer">' + (store.instagramIsExample ? '인스타그램 보기 · 예시 링크 ↗' : '매장 인스타그램 보기 ↗') + '</a>' + (store.instagramIsExample ? '<p class="store-caption">예시 링크는 Instagram 홈으로 이동해요.</p>' : '') : '<p class="store-social empty">인스타그램 주소 미등록</p>');
+  }
+  function storePopupHTML(store, campaign) {
+    return storeMediaHTML(store, campaign) + '<p class="store-caption">' + esc(store.area) + (store.approximate ? ' · 예시 위치' : '') + '</p><dl><dt>체험 제공</dt><dd>' + esc(campaign.offer) + '</dd><dt>방문 안내</dt><dd>' + esc(campaign.visit) + '</dd><dt>리뷰 미션</dt><dd>' + esc(campaign.mission) + '</dd></dl><button type="button" data-map-apply="' + esc(campaign.id) + '">상세 보고 신청하기</button>';
+  }
+  $('channel-options').addEventListener('change', function (e) {
+    var input = e.target.closest('input[type="checkbox"]'); if (!input) return;
+    if (input.value === 'all') state.channels = input.checked ? null : [];
+    else {
+      var selected = state.channels === null ? [] : state.channels.slice();
+      state.channels = input.checked ? selected.concat(input.value) : selected.filter(function (id) { return id !== input.value; });
+    }
+    var value = input.value; render();
+    var replacement = $('channel-options').querySelector('input[value="' + value + '"]'); if (replacement) replacement.focus({ preventScroll: true });
+  });
+  var bannerIndex = 0, bannerTimer = null, bannerPaused = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function showBanner(index) {
+    bannerIndex = (index + 2) % 2;
+    Array.prototype.forEach.call($('banner-slides').children, function (slide, i) { slide.hidden = i !== bannerIndex; });
+    document.querySelectorAll('[data-slide]').forEach(function (dot, i) { dot.setAttribute('aria-current', String(i === bannerIndex)); });
+    $('banner-progress').textContent = (bannerIndex + 1) + ' / 2';
+  }
+  function scheduleBanner() {
+    clearInterval(bannerTimer);
+    if (!bannerPaused && !document.hidden && !$('hero-banner').hidden && !$('hero-banner').matches(':hover') && !$('hero-banner').contains(document.activeElement)) bannerTimer = setInterval(function () { showBanner(bannerIndex + 1); }, 6000);
+    $('banner-pause').textContent = bannerPaused ? '▶' : 'Ⅱ';
+    $('banner-pause').setAttribute('aria-label', bannerPaused ? '배너 자동 재생 시작' : '배너 자동 재생 정지');
+  }
+  $('banner-prev').addEventListener('click', function () { showBanner(bannerIndex - 1); scheduleBanner(); });
+  $('banner-next').addEventListener('click', function () { showBanner(bannerIndex + 1); scheduleBanner(); });
+  document.querySelectorAll('[data-slide]').forEach(function (dot) { dot.addEventListener('click', function () { showBanner(Number(dot.dataset.slide)); scheduleBanner(); }); });
+  $('banner-pause').addEventListener('click', function () { bannerPaused = !bannerPaused; scheduleBanner(); });
+  $('hero-banner').addEventListener('mouseenter', function () { clearInterval(bannerTimer); });
+  $('hero-banner').addEventListener('mouseleave', scheduleBanner);
+  $('hero-banner').addEventListener('focusin', function () { clearInterval(bannerTimer); });
+  $('hero-banner').addEventListener('focusout', function () { requestAnimationFrame(scheduleBanner); });
+  document.addEventListener('visibilitychange', scheduleBanner);
+
   render();
+  scheduleBanner();
 })();
 </script>
 
