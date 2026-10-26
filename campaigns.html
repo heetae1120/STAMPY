@@ -12,6 +12,8 @@
 <link rel="stylesheet" href="vendor/leaflet-markercluster/MarkerCluster.css">
 <link rel="stylesheet" href="vendor/leaflet-markercluster/MarkerCluster.Default.css">
 <script src="vendor/leaflet-markercluster/leaflet.markercluster.js"></script>
+<script src="assets/map-config.js"></script>
+<script src="assets/naver-map.js"></script>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
 /* Layout: 쿠폰처럼 절취선이 있는 캠페인 카드 그리드, 마감일은 비스듬한 도장 */
@@ -328,13 +330,18 @@ footer .word { font-family: var(--font-display); font-size: 22px; color: var(--f
 
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
 
+.naver-store-cluster { width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; background: var(--accent); color: var(--on-accent); border: 3px solid var(--surface); font-weight: 750; box-shadow: 0 3px 12px #0002; }
+.naver-store-info { overflow-y: auto; position: relative; padding: 16px; border-radius: 14px; background: #fff; color: #17192e; font-family: var(--font-body); box-shadow: 0 8px 30px #17192e25; }
+.naver-store-close { position: sticky; top: 0; display: block; margin-left: auto; min-width: 44px; min-height: 44px; border: 0; background: #fff; color: #17192e; font: inherit; font-size: 24px; border-radius: 50%; cursor: pointer; }
 /* Reference-style channel row: equal spacing, icon above label, no card frame. */
 .channel-options { display: grid; grid-template-columns: repeat(7,minmax(0,1fr)); gap: 16px; padding: 8px 4px; }
-.channel-option { min-width: 0; min-height: 128px; padding: 8px 2px; border: 0; border-radius: 0; background: transparent; gap: 14px; font-size: 14px; }
-.channel-option:has(input:checked) { background: transparent; box-shadow: none; }
-.channel-icon { width: 72px; height: 72px; border-radius: 24px; box-shadow: inset 0 1px 1px #ffffff70, 0 5px 14px #17192e12; }
-.channel-option:has(input:checked) .channel-icon { outline: 3px solid var(--accent); outline-offset: 4px; }
-.channel-option input { top: 66px; right: calc(50% - 40px); z-index: 1; border-radius: 4px; }
+.channel-option { min-width: 0; min-height: 128px; padding: 12px 4px; border: 0; border-radius: 20px; background: transparent; gap: 12px; font-size: 14px; color: var(--muted); transition: background-color 180ms ease, color 180ms ease; }
+.channel-option:has(input:checked) { background: color-mix(in srgb, var(--accent) 8%, var(--surface)); color: var(--accent); box-shadow: none; }
+.channel-icon { width: 64px; height: 64px; border-radius: 20px; box-shadow: none; }
+.channel-option:has(input:checked) .channel-icon { outline: none; }
+.channel-option:has(input:checked) > span:last-child { font-weight: 750; }
+.channel-option:has(input:focus-visible) { outline: 2px solid var(--accent); outline-offset: 3px; }
+.channel-option input { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); clip-path: inset(50%); white-space: nowrap; border: 0; }
 .channel-icon svg, .channel-icon img { width: 36px; height: 36px; transition: transform 180ms ease; transform-origin: center; }
 .channel-icon img { display: block; filter: brightness(0) invert(1); }
 .channel-option:has(input[value="instagram"]) .channel-icon { background: linear-gradient(145deg, #f7a84a, #cf3186 55%, #7259c8); }
@@ -412,7 +419,7 @@ button, input, select, textarea, .leaflet-container, .leaflet-control, .leaflet-
     <span id="map-toggle-label">지도로 보기</span>
   </button>
   <div class="filters">
-    <fieldset class="channel-filters"><legend>리뷰 채널</legend><div class="channel-options" id="channel-options"></div><p class="channel-hint">여러 개를 체크하면 선택한 채널 중 하나라도 포함된 캠페인을 보여드려요.</p></fieldset>
+    <fieldset class="channel-filters"><legend>리뷰 채널</legend><div class="channel-options" id="channel-options"></div><p class="channel-hint">원하는 채널을 눌러보세요. 여러 채널을 함께 선택할 수 있어요.</p></fieldset>
     <div class="tabs" role="group" aria-label="카테고리" id="cats"></div>
   </div>
 
@@ -550,6 +557,7 @@ button, input, select, textarea, .leaflet-container, .leaflet-control, .leaflet-
   ];
   var KOREA_BOUNDS = [[32.5, 124.3], [39.2, 132.0]];
   var mapInstance = null, mapMarkers = {}, mapLayer = null, lastMapSignature = '';
+  var naverAdapter = null, naverLoad = null, naverFailed = false, latestNaverStores = [];
   var TINT = { '맛집': '--t-food', '카페': '--t-cafe', '뷰티': '--t-beauty', '숙박': '--t-stay', '식품': '--t-grocery', '생활': '--t-living', '디지털': '--t-digital' };
   var ROTS = [-8, 6, -4, 9, -10, 5, -6, 8, -3, 7, -9, 4];
   // 상단 탭: 화면에 보이는 이름과 실제 캠페인 종류
@@ -964,6 +972,30 @@ button, input, select, textarea, .leaflet-container, .leaflet-control, .leaflet-
     if (state.map) { state.view = 'campaigns'; state.type = '방문형'; }
     render();
   });
+  function makeStorePopup(store) {
+    var content = document.createElement('div'); content.className = 'map-popup';
+    content.innerHTML = storePopupHTML(store, byId(store.campaignId));
+    content.querySelector('[data-map-apply]').addEventListener('click', function () { showDetail(store.campaignId); });
+    bindStoreImages(content);
+    return content;
+  }
+  function renderNaverMap(stores) {
+    latestNaverStores = stores;
+    if (naverFailed) { $('map-status').textContent = '지도를 불러오지 못했어요. 매장 목록에서 상세 보기와 신청을 이용해 주세요.'; return; }
+    if (naverAdapter) { naverAdapter.setStores(stores); naverAdapter.resize(); return; }
+    if (naverLoad) return;
+    if (!window.StampyNaverMap) { naverFailed = true; $('map-status').textContent = '지도를 불러오지 못했어요. 매장 목록에서 신청해 주세요.'; return; }
+    $('map-status').textContent = '지도를 불러오는 중이에요.';
+    naverLoad = window.StampyNaverMap.create({
+      container: $('store-map'), keyId: window.STAMPY_MAP_CONFIG.naverKeyId,
+      bounds: KOREA_BOUNDS, popupContent: makeStorePopup,
+      title: function (store) { return byId(store.campaignId).title; },
+      onError: function () { naverFailed = true; $('map-status').textContent = '지도를 불러오지 못했어요. 매장 목록에서 상세 보기와 신청을 이용해 주세요.'; }
+    }).then(function (adapter) {
+      naverAdapter = adapter; adapter.setStores(latestNaverStores); adapter.resize();
+      $('map-status').textContent = '지도에서 ' + latestNaverStores.length + '개 매장을 선택할 수 있어요.';
+    }).catch(function () { naverFailed = true; $('map-status').textContent = '지도를 불러오지 못했어요. 매장 목록에서 상세 보기와 신청을 이용해 주세요.'; });
+  }
   function renderStoreMap(campaigns) {
     var stores = STORES.filter(function (store) {
       return isFinite(store.lat) && isFinite(store.lng) && Math.abs(store.lat) <= 90 && Math.abs(store.lng) <= 180 && campaigns.some(function (c) { return c.type === '방문형' && c.id === store.campaignId; });
@@ -973,6 +1005,7 @@ button, input, select, textarea, .leaflet-container, .leaflet-control, .leaflet-
       return '<li class="store-item"><h3>' + (index + 1) + '. ' + esc(c.title) + '</h3><p>' + esc(store.area) + (store.approximate ? ' · 예시 위치' : '') + '<br>' + esc(c.offer) + '</p><button type="button" class="store-locate" data-locate="' + esc(store.id) + '">지도에서 위치 보기</button><button type="button" class="btn" data-map-apply="' + esc(c.id) + '">상세 보고 신청하기</button></li>';
     }).join('');
     $('map-status').textContent = stores.length ? '지도에서 ' + stores.length + '개 매장을 선택할 수 있어요.' : '이 조건에 맞는 위치 등록 매장이 없어요. 검색어나 카테고리를 바꿔 주세요.';
+    if (window.STAMPY_MAP_CONFIG && window.STAMPY_MAP_CONFIG.naverKeyId) { renderNaverMap(stores); return; }
     if (!window.L) { $('map-status').textContent = '지도를 불러오지 못했어요. 매장 목록에서 상세 보기와 신청을 이용해 주세요.'; return; }
     if (!mapInstance) {
       mapInstance = L.map('store-map', { scrollWheelZoom: true, minZoom: 7, maxZoom: 19, maxBounds: KOREA_BOUNDS, maxBoundsViscosity: 1, zoomAnimation: false, fadeAnimation: false }).setView([36.0, 127.7], 7);
@@ -1008,6 +1041,7 @@ button, input, select, textarea, .leaflet-container, .leaflet-control, .leaflet-
     var apply = e.target.closest('[data-map-apply]');
     if (apply) { showDetail(apply.dataset.mapApply); return; }
     var locate = e.target.closest('[data-locate]');
+    if (locate && naverAdapter) { naverAdapter.focusStore(locate.dataset.locate); $('store-map').scrollIntoView({ behavior: 'smooth', block: 'center' }); return; }
     if (locate && mapInstance && mapMarkers[locate.dataset.locate]) {
       var marker = mapMarkers[locate.dataset.locate];
       mapInstance.setView(marker.getLatLng(), 15, { animate: false });
