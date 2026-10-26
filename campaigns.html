@@ -960,6 +960,10 @@ footer .word { font-family: var(--font-display); font-size: 22px; color: var(--f
       L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors' }).on('tileerror', function () {
         $('map-status').textContent = '배경 지도를 불러오지 못했어요. 매장 목록에서 상세 보기와 신청을 이용해 주세요.';
       }).addTo(mapInstance);
+      mapInstance.on('popupopen', function (event) {
+        event.popup.options.maxHeight = Math.min(380, Math.max(180, $('store-map').clientHeight - 90));
+        event.popup.update();
+      });
       mapLayer = (L.markerClusterGroup ? L.markerClusterGroup({ showCoverageOnHover: false, maxClusterRadius: 45, animate: false }) : L.layerGroup()).addTo(mapInstance);
     }
     var signature = stores.map(function (store) { return store.id; }).join(',');
