@@ -368,6 +368,41 @@ button, input, select, textarea, .leaflet-container, .leaflet-control, .leaflet-
 .profile-data-note { margin: 8px 0 0; color: var(--muted); font-size: 13px; line-height: 1.6; }
 .blog-status { display: inline-flex; align-items: center; gap: 5px; margin-top: 10px; padding: 5px 9px; border-radius: 999px; background: var(--bg); color: var(--muted); font-size: 12px; font-weight: 600; }
 
+/* Stampy demo collection: original product posters and editorial carousel. */
+.collection-banner { min-height: 382px; padding: 38px 46% 78px 42px; background: #f1e9db; color: #34382a; }
+.collection-banner.home { background: #e7eddf; color: #294b3c; }
+.collection-banner.guide { background: #e8e7ff; color: #35306a; }
+.collection-banner .eyebrow { border: 0; padding: 0; font-size: 11px; letter-spacing: .14em; }
+.collection-banner h2 { font-size: clamp(28px,3vw,43px); line-height: 1.22; letter-spacing: -.055em; margin: 18px 0 14px; font-weight: 800; }
+.collection-banner p { font-size: 14px; line-height: 1.7; opacity: .85; }
+.banner-cta { display: inline-flex; gap: 22px; align-items: center; margin-top: 20px; padding: 11px 17px; min-height: 44px; border: 1px solid currentColor; border-radius: 999px; background: transparent; color: inherit; font: inherit; font-size: 13px; font-weight: 650; cursor: pointer; }
+.banner-cta:hover { background: #ffffff70; }
+.banner-collage { position: absolute; width: 44%; right: 3%; top: 35px; bottom: 60px; }
+.collage-card { position: absolute; width: 61%; padding: 9px 9px 0; background: #fffdf7; box-shadow: 0 12px 25px #3b30251a; }
+.collage-card img { display: block; width: 100%; aspect-ratio: 4/3; object-fit: cover; }
+.collage-card > span { display: block; font-size: 7px; font-weight: 700; color: #5c5b54; letter-spacing: .08em; padding: 12px 2px; }
+.collage-card.back { right: 0; top: 0; transform: rotate(10deg); }
+.collage-card.front { left: 0; bottom: 0; transform: rotate(-10deg); }
+.collage-sticker { position: absolute; right: 2%; bottom: 1%; display: grid; align-content: center; width: 106px; height: 106px; border-radius: 50%; background: #f8d754; color: #423b28; border: 1px dashed #423b28; outline: 5px solid #f8d754; text-align: center; transform: rotate(12deg); font-size: 11px; line-height: 1.7; }
+.collage-sticker b { font-size: 12px; letter-spacing: .06em; }
+.hero-banner .banner-controls { left: 34px; right: 30px; bottom: 15px; }
+.hero-banner .banner-controls > button:not(.banner-dot) { min-width: 36px; min-height: 36px; }
+.photo { padding: 0; overflow: hidden; }
+.campaign-art { display: block; width: 100%; height: 100%; object-fit: cover; aspect-ratio: 4/3; transition: transform 300ms ease; }
+.photo .ph { left: 12px; top: auto; bottom: 12px; font-size: 10px; letter-spacing: .05em; opacity: 1; color: #46453f; background: #fffdf3e6; }
+.photo .dday { width: 48px; height: 48px; right: 10px; top: 10px; border-width: 2px; font-size: 16px; }
+.photo .dday.today { font-size: 11px; }
+.coupon { transition: transform 200ms ease, box-shadow 200ms ease; }
+.coupon .brand-name { margin: 0; font-size: 10px; letter-spacing: .1em; color: var(--muted); font-weight: 700; }
+.coupon h2 { font-size: 16px; letter-spacing: -.025em; }
+.coupon .meta { font-size: 12px; flex-wrap: wrap; gap: 5px; }
+.d-photo { overflow: hidden; padding: 0; }
+.d-photo .campaign-art { width: 100%; height: 100%; object-fit: cover; }
+.demo-note { display: inline-block; border-radius: 6px; padding: 3px 7px; margin-right: 4px; font-size: 11px; background: var(--bg); color: var(--muted); }
+@media(hover:hover) { .coupon:hover { transform: translateY(-4px); box-shadow: 0 12px 30px #20223b0c; } .coupon:hover .campaign-art { transform: scale(1.035); } }
+@media(max-width:700px) { .collection-banner { padding: 28px 26px 270px; min-height: 560px; } .collection-banner h2 { font-size: 32px; } .banner-collage { top: auto; bottom: 64px; width: 68%; height: 185px; right: 10%; max-width: 310px; } .collage-card { width: 60%; } .collage-card > span { padding: 8px 0; font-size: 5px; } .collage-sticker { width: 74px; height: 74px; font-size: 8px; } .collage-sticker b { font-size: 9px; } .hero-banner .banner-controls { left: 16px; right: 16px; } }
+@media(prefers-reduced-motion:reduce) { .coupon, .campaign-art { transition: none; } .coupon:hover, .coupon:hover .campaign-art { transform: none; } }
+
 </style>
 
 </head>
@@ -398,16 +433,20 @@ button, input, select, textarea, .leaflet-container, .leaflet-control, .leaflet-
 <main id="top" class="wrap">
       <section id="hero-banner" class="hero-banner" aria-roledescription="carousel" aria-label="계절 및 이벤트 배너">
         <div id="banner-slides">
-          <article class="banner-slide" role="group" aria-roledescription="slide" aria-label="1 / 2 계절 배너">
-            <span class="eyebrow">SEASON · 계절 배너 예시</span><h2>가을 한 장,<br>새로운 경험 한 칸</h2><p>선선한 계절에 만나고 싶은 체험을 담을 자리예요.</p>
-            <svg class="banner-art" viewBox="0 0 240 220" fill="none" aria-hidden="true"><rect x="48" y="40" width="150" height="150" rx="20" fill="#fff9ee" transform="rotate(10 120 110)"/><circle cx="125" cy="110" r="56" stroke="#b67538" stroke-width="3" stroke-dasharray="6 5"/><path d="M123 150c-48-10-44-62 10-82 17 42 15 67-10 82Z" fill="#d98b4b"/><path d="m122 150 14-65M122 121l-18-13m22 1 17-10" stroke="#73431f" stroke-width="3"/><path d="M40 42c-10 22-8 37 14 44 12-19 7-34-14-44Z" fill="#bdc889"/></svg>
+          <article class="banner-slide collection-banner season" role="group" aria-roledescription="slide" aria-label="1 / 3">
+            <div class="banner-copy"><span class="eyebrow">AUTUMN EDIT · 01</span><h2>취향이 머무는 동네,<br>이번 가을엔 여기.</h2><p>따뜻한 커피 한 잔부터 느긋한 하루의 쉼까지.<br>나만의 동네 경험을 발견해 보세요.</p><button type="button" class="banner-cta" data-banner-action="region">동네 체험 둘러보기 <span aria-hidden="true">↗</span></button></div>
+            <div class="banner-collage" aria-hidden="true"><div class="collage-card back"><img src="assets/campaigns/c7.svg" alt=""><span>FIND YOUR NEXT FAVORITE</span></div><div class="collage-card front"><img src="assets/campaigns/c11.svg" alt=""><span>A LITTLE EXPERIENCE, A GOOD DAY.</span></div><span class="collage-sticker">가을의 작은 발견<br><b>STAMPY ✳</b></span></div>
           </article>
-          <article class="banner-slide event" role="group" aria-roledescription="slide" aria-label="2 / 2 이벤트 배너" hidden>
-            <span class="eyebrow">EVENT · 이벤트 배너 예시</span><h2>새로운 즐거움에<br>도장을 찍어요</h2><p>이벤트 일정과 혜택을 소개할 자리예요. 내용은 준비 중이에요.</p>
-            <svg class="banner-art" viewBox="0 0 240 220" fill="none" aria-hidden="true"><rect x="28" y="40" width="184" height="142" rx="18" fill="#fff" transform="rotate(-8 120 110)"/><path d="M46 94h148M46 132h148" stroke="#c6ccf1" stroke-width="2" stroke-dasharray="5 5"/><circle cx="120" cy="110" r="50" fill="#ffcf33" stroke="#3442d9" stroke-width="4"/><path d="m97 111 16 17 31-37" stroke="#3442d9" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><path d="m201 33 5 12 13 1-10 8 3 13-11-7-11 7 3-13-10-8 13-1Z" fill="#8995f1"/></svg>
+          <article class="banner-slide collection-banner home" role="group" aria-roledescription="slide" aria-label="2 / 3" hidden>
+            <div class="banner-copy"><span class="eyebrow">HOME COLLECTION · 02</span><h2>일상에 들이는<br>작지만 좋은 변화.</h2><p>매일 쓰는 것일수록, 내 취향에 맞게.<br>집에서 만나보는 새로운 브랜드를 모았어요.</p><button type="button" class="banner-cta" data-banner-action="product">제품 체험 둘러보기 <span aria-hidden="true">↗</span></button></div>
+            <div class="banner-collage" aria-hidden="true"><div class="collage-card back"><img src="assets/campaigns/c3.svg" alt=""><span>FIND YOUR NEXT FAVORITE</span></div><div class="collage-card front"><img src="assets/campaigns/c9.svg" alt=""><span>A LITTLE EXPERIENCE, A GOOD DAY.</span></div><span class="collage-sticker">오늘의 취향 수집<br><b>STAMPY ✳</b></span></div>
+          </article>
+          <article class="banner-slide collection-banner guide" role="group" aria-roledescription="slide" aria-label="3 / 3" hidden>
+            <div class="banner-copy"><span class="eyebrow">HELLO, REVIEWER · 03</span><h2>첫 체험의 설렘,<br>스탬피와 함께해요.</h2><p>마음에 드는 체험을 고르고, 나의 이야기를 남겨요.<br>작은 경험이 차곡차곡 쌓이는 곳.</p><button type="button" class="banner-cta" data-banner-action="guide">처음이라면, 이용 가이드 <span aria-hidden="true">↗</span></button></div>
+            <div class="banner-collage" aria-hidden="true"><div class="collage-card back"><img src="assets/campaigns/c4.svg" alt=""><span>FIND YOUR NEXT FAVORITE</span></div><div class="collage-card front"><img src="assets/campaigns/c1.svg" alt=""><span>A LITTLE EXPERIENCE, A GOOD DAY.</span></div><span class="collage-sticker">경험에 도장을 콕<br><b>STAMPY ✳</b></span></div>
           </article>
         </div>
-        <div class="banner-controls"><button type="button" id="banner-prev" aria-label="이전 배너">‹</button><button type="button" class="banner-dot" data-slide="0" aria-label="계절 배너 보기" aria-current="true"></button><button type="button" class="banner-dot" data-slide="1" aria-label="이벤트 배너 보기" aria-current="false"></button><button type="button" id="banner-next" aria-label="다음 배너">›</button><span class="banner-progress" id="banner-progress">1 / 2</span><button type="button" id="banner-pause" aria-label="배너 자동 재생 정지">Ⅱ</button></div>
+        <div class="banner-controls"><button type="button" id="banner-prev" aria-label="이전 배너">‹</button><button type="button" class="banner-dot" data-slide="0" aria-label="가을 동네 탐방 배너 보기" aria-current="true"></button><button type="button" class="banner-dot" data-slide="1" aria-label="제품 체험 배너 보기" aria-current="false"></button><button type="button" class="banner-dot" data-slide="2" aria-label="첫 체험 가이드 배너 보기" aria-current="false"></button><button type="button" id="banner-next" aria-label="다음 배너">›</button><span class="banner-progress" id="banner-progress">1 / 3</span><button type="button" id="banner-pause" aria-label="배너 자동 재생 정지">Ⅱ</button></div>
       </section>
   <div class="head">
     <div class="campaign-heading">
@@ -477,6 +516,7 @@ button, input, select, textarea, .leaflet-container, .leaflet-control, .leaflet-
   <div class="d-body" id="d-body"></div>
 </dialog>
 
+<dialog id="reviewer-guide" aria-labelledby="guide-title"><div class="d-body"><div style="display:flex;align-items:center;justify-content:space-between;gap:16px"><h2 id="guide-title">첫 체험, 이렇게 시작해요</h2><button type="button" class="close" id="guide-close" aria-label="가이드 닫기" style="position:static">×</button></div><ol style="padding-left:22px;line-height:1.9"><li><b>나에게 맞는 체험 찾기</b><br>지역·제품과 리뷰 채널, 카테고리를 골라보세요.</li><li><b>내용을 확인하고 신청하기</b><br>제공 내역, 방문 일정, 리뷰 미션을 확인해 주세요.</li><li><b>경험을 솔직한 후기로 남기기</b><br>선정 후 안내에 따라 체험하고 광고 표시 문구를 꼭 넣어 주세요.</li></ol><p class="notice">지금은 둘러보기용 예시 사이트예요. 모든 브랜드·모집 인원·신청 수는 데모이며, 신청은 이 브라우저에만 저장돼요. 실제 매장 예약·배송·선정은 진행되지 않아요.</p></div></dialog>
 <dialog id="me" aria-labelledby="p-title">
   <form class="d-body" id="profile-form" novalidate>
     <div style="display:flex;justify-content:space-between;align-items:center;gap:12px">
@@ -548,15 +588,19 @@ button, input, select, textarea, .leaflet-container, .leaflet-control, .leaflet-
     { id: 'c3', type: '배송형', cat: '식품', title: '저당 그래놀라 3종 세트', offer: '그래놀라 3종 (3만원 상당)', channels: ['블로그'], applied: 112, quota: 20, dday: 1, visit: '선정 후 3일 안에 발송', mission: '3종 모두 먹어본 비교 후기, 사진 8장 이상' },
     { id: 'c4', type: '방문형', cat: '뷰티', title: '[강남] 젤네일 원컬러 시술', offer: '원컬러 젤네일 1회', channels: ['블로그', '인스타'], applied: 17, quota: 3, dday: 6, visit: '화~토 10:00~19:00, 예약 필수', mission: '시술 전후 사진과 컬러 고르는 과정 소개' },
     { id: 'c5', type: '배송형', cat: '생활', title: '대용량 섬유유연제 2입', offer: '2L 2개', channels: ['블로그'], applied: 64, quota: 30, dday: 3, visit: '선정 후 3일 안에 발송', mission: '세탁 전후 향 지속력 후기, 사진 5장 이상' },
-    { id: 'c6', type: '기자단', cat: '디지털', title: '무선 청소기 고르는 법 정보 글', offer: '원고료 [금액]', channels: ['블로그'], applied: 9, quota: 10, dday: 8, visit: '제품 제공 없음, 자료 제공', mission: '제공 자료를 바탕으로 한 정보성 글 1,500자 이상' },
+    { id: 'c6', type: '기자단', cat: '디지털', title: '무선 청소기 고르는 법 정보 글', offer: '원고료 20,000원 (예시)', channels: ['블로그'], applied: 9, quota: 10, dday: 8, visit: '제품 제공 없음, 자료 제공', mission: '제공 자료를 바탕으로 한 정보성 글 1,500자 이상' },
     { id: 'c7', type: '방문형', cat: '숙박', title: '[제주 애월] 바다 앞 독채 스테이', offer: '1박 숙박권 (2인)', channels: ['블로그', '유튜브'], applied: 45, quota: 2, dday: 10, visit: '일~목 체크인 가능', mission: '객실, 뷰, 주변 산책길을 담은 후기 또는 3분 이상 영상' },
     { id: 'c8', type: '방문형', cat: '맛집', title: '[을지로] 40년 된 감자탕집', offer: '2인 식사 (감자탕 중자)', channels: ['블로그'], applied: 52, quota: 6, dday: 0, visit: '매일 11:00~22:00', mission: '메뉴, 가게 외관, 골목 위치 안내를 포함한 후기' },
     { id: 'c9', type: '배송형', cat: '뷰티', title: '비건 무기자차 선크림', offer: '본품 50ml 1개', channels: ['릴스'], applied: 88, quota: 15, dday: 4, visit: '선정 후 3일 안에 발송', mission: '바르는 모습이 담긴 15초 이상 릴스 1개' },
-    { id: 'c10', type: '기자단', cat: '생활', title: '이사 준비 체크리스트 정보 글', offer: '원고료 [금액]', channels: ['블로그'], applied: 6, quota: 8, dday: 12, visit: '제품 제공 없음, 자료 제공', mission: '이사 전 확인할 항목 정리 글 1,500자 이상' },
+    { id: 'c10', type: '기자단', cat: '생활', title: '이사 준비 체크리스트 정보 글', offer: '원고료 20,000원 (예시)', channels: ['블로그'], applied: 6, quota: 8, dday: 12, visit: '제품 제공 없음, 자료 제공', mission: '이사 전 확인할 항목 정리 글 1,500자 이상' },
     { id: 'c11', type: '방문형', cat: '카페', title: '[망원] 핸드드립 원두 카페', offer: '드립커피 2잔과 원두 200g', channels: ['블로그'], applied: 14, quota: 4, dday: 7, visit: '수~월 10:00~20:00', mission: '원두 고르는 과정과 드립 과정 사진 포함 후기' },
     { id: 'c12', type: '배송형', cat: '디지털', title: '알루미늄 노트북 거치대', offer: '본품 1개', channels: ['블로그', '유튜브'], applied: 30, quota: 10, dday: 2, visit: '선정 후 3일 안에 발송', mission: '책상 세팅 전후 비교와 각도 조절 소개' }
   ];
   // 운영 시 매장 등록 데이터로 교체: 실제 주소와 검증한 좌표를 함께 저장합니다.
+  // 임시 브랜드·일러스트이며 실제 제휴 및 모집 공고가 아닙니다.
+  var DEMO_BRANDS = ["OVEN & TABLE", "ROOF & CRUMB", "GRAIN DAY", "MOOD NAIL", "SOFT SUNDAY", "DESK JOURNAL", "STAY SLOW", "골목의 식탁", "BARE LEAF", "ROOM NOTE", "SLOW POUR", "FORM / DESK"];
+  DATA.forEach(function (campaign, i) { campaign.brand = DEMO_BRANDS[i]; campaign.image = "assets/campaigns/" + campaign.id + ".svg"; });
+
   // 아래는 지역 중심의 예시 좌표이며 실존 매장으로 오인하지 않도록 표시합니다.
   var STORES = [
     { id: 's1', campaignId: 'c1', area: '성수동 일대', lat: 37.5445, lng: 127.0557, approximate: true, instagramUrl: 'https://www.instagram.com/', instagramIsExample: true, assetsAreExamples: true, logoUrl: 'assets/store-1-logo.svg', productImageUrl: 'assets/store-1-product.svg' },
@@ -566,6 +610,7 @@ button, input, select, textarea, .leaflet-container, .leaflet-control, .leaflet-
     { id: 's5', campaignId: 'c8', area: '을지로 일대', lat: 37.566, lng: 126.991, approximate: true, instagramUrl: 'https://www.instagram.com/', instagramIsExample: true, assetsAreExamples: true, logoUrl: 'assets/store-5-logo.svg', productImageUrl: 'assets/store-5-product.svg' },
     { id: 's6', campaignId: 'c11', area: '망원동 일대', lat: 37.556, lng: 126.901, approximate: true, instagramUrl: 'https://www.instagram.com/', instagramIsExample: true, assetsAreExamples: true, logoUrl: 'assets/store-6-logo.svg', productImageUrl: 'assets/store-6-product.svg' }
   ];
+  STORES.forEach(function (store) { store.logoUrl = 'assets/campaigns/' + store.campaignId + '-logo.svg'; store.productImageUrl = 'assets/campaigns/' + store.campaignId + '.svg'; });
   var REWARD_POLICY = { stampsPerReview: 0, pointsPerStamp: null, preview: true };
   var EXCHANGE_PRODUCTS = [
     { id: 'mug', requiredPoints: null, stock: null, preview: true, brand: '[브랜드 A]', title: '시그니처 머그', icon: '<path d="M5 7h12v11a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3V7Zm12 2h2a3 3 0 0 1 0 6h-2M8 2v2m4-2v2"/>' },
@@ -641,7 +686,7 @@ button, input, select, textarea, .leaflet-container, .leaflet-control, .leaflet-
     var today = koreaDay(new Date());
     $('today-count').textContent = datesKnown ? DATA.filter(function (d) { return koreaDay(d.registeredAt) === today; }).length.toLocaleString('ko-KR') + '건' : '집계 전';
     $('total-count').textContent = DATA.length.toLocaleString('ko-KR');
-    $('summary-note').textContent = '예시 캠페인 기준' + (datesKnown ? '' : ' · 등록일 정보가 없어 오늘 등록 건수는 집계 전이에요.');
+    $('summary-note').textContent = 'DEMO · 브랜드·캠페인·신청 수는 예시이며 실제 모집이 아니에요.';
   }
 
   // 내 신청: 이 브라우저에만 저장됩니다.
@@ -723,8 +768,8 @@ button, input, select, textarea, .leaflet-container, .leaflet-control, .leaflet-
       return '<li class="coupon">' +
         '<button type="button" class="hit" data-id="' + d.id + '"><span class="sr-only">' + esc(d.title) + ' 자세히 보기</span></button>' +
         '<div class="photo" style="background:var(' + TINT[d.cat] + ')">' +
-          '<span class="cat" aria-hidden="true">' + esc(d.cat) + '</span>' +
-          '<span class="ph">업체 사진</span>' +
+          '<img class="campaign-art" src="' + esc(d.image) + '" alt="' + esc(d.brand) + ' 체험 일러스트" loading="lazy" width="640" height="480">' +
+          '<span class="ph">DEMO COLLECTION</span>' +
           '<span class="' + cls + '" style="--r:' + ROTS[i % ROTS.length] + 'deg">' + ddayLabel(d.dday) + '</span>' +
           (applied ? '<span class="applied-stamp">신청완료</span>' : '') +
         '</div>' +
@@ -733,7 +778,7 @@ button, input, select, textarea, .leaflet-container, .leaflet-control, .leaflet-
           '<div class="chips"><span class="chip type">' + esc(d.type) + '</span>' +
             d.channels.map(function (c) { return '<span class="chip">' + esc(c) + '</span>'; }).join('') +
           '</div>' +
-          '<h2>' + esc(d.title) + '</h2>' +
+          '<p class="brand-name">' + esc(d.brand) + '</p><h2>' + esc(d.title) + '</h2>' +
           '<p class="offer">' + esc(d.offer) + '</p>' +
           '<div class="meta"><span>신청 <strong>' + (d.applied + applied) + '</strong>명 / 모집 ' + d.quota + '명</span><span class="ratio">' + ratioLabel(d) + '</span></div>' +
         '</div>' +
@@ -753,10 +798,13 @@ button, input, select, textarea, .leaflet-container, .leaflet-control, .leaflet-
     if (!c) return;
     $('d-photo').style.background = 'var(' + TINT[c.cat] + ')';
     $('d-cat').textContent = c.cat;
+    var previousArt = $('d-photo').querySelector('.campaign-art'); if (previousArt) previousArt.remove();
+    var art = document.createElement('img'); art.className = 'campaign-art'; art.src = c.image; art.alt = c.brand + ' 체험 일러스트'; $('d-photo').prepend(art);
+    $('d-cat').hidden = true;
     var done = mine[c.id];
     var html =
       '<div class="chips"><span class="chip type">' + esc(c.type) + '</span>' + c.channels.map(function (x) { return '<span class="chip">' + esc(x) + '</span>'; }).join('') + '</div>' +
-      '<h2 id="d-title">' + esc(c.title) + '</h2>' +
+      '<span class="demo-note">예시 캠페인 · 실제 모집 아님</span><h2 id="d-title">' + esc(c.title) + '</h2>' +
       '<dl class="facts">' +
         '<dt>제공 내역</dt><dd>' + esc(c.offer) + '</dd>' +
         '<dt>' + (c.type === '방문형' ? '방문 가능' : '진행 방식') + '</dt><dd>' + esc(c.visit) + '</dd>' +
@@ -1109,7 +1157,7 @@ button, input, select, textarea, .leaflet-container, .leaflet-control, .leaflet-
     try { var url = new URL(value, location.href); return url.protocol === 'https:' || (url.origin === location.origin && url.protocol === location.protocol) ? url.href : fallback; } catch (e) { return fallback; }
   }
   function storeMediaHTML(store, campaign) {
-    var image = safeImage(store.productImageUrl, 'assets/store-product-placeholder.svg');
+    var image = safeImage(campaign.image || store.productImageUrl, 'assets/store-product-placeholder.svg');
     var instagram = safeInstagram(store.instagramUrl);
     return '<div class="store-head">' + (store.logoUrl ? '<img class="store-logo" src="' + esc(safeImage(store.logoUrl, 'assets/store-logo-placeholder.svg')) + '" alt="' + (store.assetsAreExamples ? '예시 매장 로고' : '매장 로고') + '" data-fallback="assets/store-logo-placeholder.svg">' : '<span class="store-logo store-logo-fallback">로고<br>미등록</span>') + '<strong>' + esc(campaign.title) + '</strong></div>' +
       '<img class="store-product" src="' + esc(image) + '" alt="' + (store.productImageUrl && !store.assetsAreExamples ? esc(campaign.title) + ' 체험 제품' : '체험 제품 이미지 예시') + '" data-fallback="assets/store-product-placeholder.svg"><p class="store-caption">' + (store.productImageUrl && !store.assetsAreExamples ? '체험 제품 이미지' : '예시 로고·제품 일러스트 · 실제 매장 자료 등록 전') + '</p>' +
@@ -1130,10 +1178,11 @@ button, input, select, textarea, .leaflet-container, .leaflet-control, .leaflet-
   });
   var bannerIndex = 0, bannerTimer = null, bannerPaused = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   function showBanner(index) {
-    bannerIndex = (index + 2) % 2;
+    var slideCount = $('banner-slides').children.length;
+    bannerIndex = (index + slideCount) % slideCount;
     Array.prototype.forEach.call($('banner-slides').children, function (slide, i) { slide.hidden = i !== bannerIndex; });
     document.querySelectorAll('[data-slide]').forEach(function (dot, i) { dot.setAttribute('aria-current', String(i === bannerIndex)); });
-    $('banner-progress').textContent = (bannerIndex + 1) + ' / 2';
+    $('banner-progress').textContent = (bannerIndex + 1) + ' / ' + slideCount;
   }
   function scheduleBanner() {
     clearInterval(bannerTimer);
@@ -1141,6 +1190,15 @@ button, input, select, textarea, .leaflet-container, .leaflet-control, .leaflet-
     $('banner-pause').textContent = bannerPaused ? '▶' : 'Ⅱ';
     $('banner-pause').setAttribute('aria-label', bannerPaused ? '배너 자동 재생 시작' : '배너 자동 재생 정지');
   }
+  $('banner-slides').addEventListener('click', function (e) {
+    var button = e.target.closest('[data-banner-action]'); if (!button) return;
+    if (button.dataset.bannerAction === 'guide') { openDialog($('reviewer-guide')); return; }
+    state.channels = null; state.q = ''; $('q').value = '';
+    setFilter(button.dataset.bannerAction === 'region' ? '방문형' : '배송형', '전체');
+    $('cats').scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'center' });
+  });
+  $('guide-close').addEventListener('click', function () { closeDialog($('reviewer-guide')); });
+  $('reviewer-guide').addEventListener('click', function (e) { if (e.target === $('reviewer-guide')) closeDialog($('reviewer-guide')); });
   $('banner-prev').addEventListener('click', function () { showBanner(bannerIndex - 1); scheduleBanner(); });
   $('banner-next').addEventListener('click', function () { showBanner(bannerIndex + 1); scheduleBanner(); });
   document.querySelectorAll('[data-slide]').forEach(function (dot) { dot.addEventListener('click', function () { showBanner(Number(dot.dataset.slide)); scheduleBanner(); }); });
