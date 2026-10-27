@@ -353,6 +353,21 @@ footer .word { font-family: var(--font-display); font-size: 22px; color: var(--f
 button, input, select, textarea, .leaflet-container, .leaflet-control, .leaflet-tooltip, .leaflet-popup, .marker-cluster, .marker-cluster div, .leaflet-container *, svg text { font-family: var(--font-body); }
 .logo, .banner-slide h2, .head h1 { font-weight: 800; }
 
+/* Category buttons share the channel row's icon/label layout. */
+#cats { display: grid; grid-template-columns: repeat(auto-fit,minmax(96px,1fr)); gap: 12px; padding: 8px 4px; border: 0; overflow: visible; }
+#cats .tab { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; min-width: 0; min-height: 128px; padding: 12px 4px; margin: 0; border: 0; border-radius: 20px; color: var(--muted); font-size: 14px; transition: background-color 180ms ease, color 180ms ease; }
+#cats .tab[aria-pressed="true"] { background: color-mix(in srgb, var(--accent) 8%, var(--surface)); color: var(--accent); font-weight: 750; }
+.category-icon { display: grid; place-items: center; width: 64px; height: 64px; border-radius: 20px; color: var(--category-color); background: color-mix(in srgb, var(--category-color) 12%, var(--surface)); }
+.category-icon svg { width: 34px; height: 34px; transition: transform 180ms ease; }
+#cats .tab[aria-pressed="true"] .category-icon { background: var(--accent); color: var(--on-accent); }
+#cats .tab:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+#cats .tab:focus-visible svg { transform: scale(1.18); }
+@media(hover:hover) { #cats .tab:hover svg { transform: scale(1.18); } }
+@media(max-width:700px) { #cats { display: grid; grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 108px; overflow-x: auto; gap: 12px; padding: 10px 6px; scroll-snap-type: x proximity; } #cats .tab { scroll-snap-align: start; min-height: 132px; } }
+@media(prefers-reduced-motion:reduce) { .category-icon svg { transition: none; transform: none !important; } }
+.profile-data-note { margin: 8px 0 0; color: var(--muted); font-size: 13px; line-height: 1.6; }
+.blog-status { display: inline-flex; align-items: center; gap: 5px; margin-top: 10px; padding: 5px 9px; border-radius: 999px; background: var(--bg); color: var(--muted); font-size: 12px; font-weight: 600; }
+
 </style>
 
 </head>
@@ -488,13 +503,15 @@ button, input, select, textarea, .leaflet-container, .leaflet-control, .leaflet-
       <div class="field"><label for="p-chname">채널 이름</label><input id="p-chname" placeholder="예: 서아의 뷰티노트"></div>
       <div class="field"><label for="p-chcat">주 카테고리</label><select id="p-chcat"><option value="">선택 안 함</option><option>맛집</option><option>카페</option><option>뷰티</option><option>숙박</option><option>여행</option><option>육아</option><option>리빙</option><option>패션</option><option>디지털</option><option>반려동물</option></select></div>
       <div class="field-row">
-        <div class="field"><label for="p-visitors">평균 방문자 수 (하루)</label><input id="p-visitors" type="number" inputmode="numeric" min="0" placeholder="0"></div>
-        <div class="field"><label for="p-neighbors">이웃 또는 팔로워 수</label><input id="p-neighbors" type="number" inputmode="numeric" min="0" placeholder="0"></div>
+        <div class="field"><label for="p-visitors">평균 방문자 수 (하루)</label><input id="p-visitors" aria-describedby="profile-stats-note" type="number" inputmode="numeric" min="0" placeholder="0"></div>
+        <div class="field"><label for="p-neighbors">이웃 또는 팔로워 수</label><input id="p-neighbors" aria-describedby="profile-stats-note" type="number" inputmode="numeric" min="0" placeholder="0"></div>
       </div>
+      <p class="profile-data-note" id="profile-stats-note">방문자·이웃 수는 직접 입력한 정보이며, 자동으로 수집하거나 검증하지 않아요.</p>
     </fieldset>
     <fieldset class="group">
       <legend>미디어 연결</legend>
-      <div class="field"><label for="p-blog">블로그 주소</label><input id="p-blog" type="url" inputmode="url" placeholder="https://blog.naver.com/아이디"></div>
+      <div class="field"><label for="p-blog">블로그 주소</label><input id="p-blog" aria-describedby="blog-connection-status" type="url" inputmode="url" placeholder="https://blog.naver.com/아이디"></div>
+      <p class="profile-data-note" id="blog-connection-status" role="status"></p>
       <div class="field"><label for="p-insta">인스타그램 주소</label><input id="p-insta" type="url" inputmode="url" placeholder="https://instagram.com/아이디"></div>
       <div class="field"><label for="p-yt">유튜브 주소</label><input id="p-yt" type="url" inputmode="url" placeholder="https://youtube.com/@아이디"></div>
     </fieldset>
@@ -590,6 +607,13 @@ button, input, select, textarea, .leaflet-container, .leaflet-control, .leaflet-
       return '<label class="channel-option"><input type="checkbox" value="' + channel.id + '"' + (checked ? ' checked' : '') + '><span class="channel-icon" style="--channel-color:' + channel.color + '">' + (channel.brandIcon ? '<img src="assets/icons/' + channel.brandIcon + '.svg" alt="" aria-hidden="true">' : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + channel.icon + '</svg>') + '</span><span>' + channel.label + '</span></label>';
     }).join('');
   }
+  var CATEGORY_ICONS = {"전체": ["#4654db", "<rect x=\"3\" y=\"3\" width=\"7\" height=\"7\" rx=\"2\"/><rect x=\"14\" y=\"3\" width=\"7\" height=\"7\" rx=\"2\"/><rect x=\"3\" y=\"14\" width=\"7\" height=\"7\" rx=\"2\"/><rect x=\"14\" y=\"14\" width=\"7\" height=\"7\" rx=\"2\"/>"], "맛집": ["#b96c23", "<path d=\"M4 3v6a3 3 0 0 0 6 0V3M7 3v18M20 21V3c-4 2-5 7-4 10h4\"/>"], "카페": ["#936b46", "<path d=\"M4 8h13v7a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V8Zm13 1h2a3 3 0 0 1 0 6h-2M7 3v2m5-2v2M2 22h18\"/>"], "뷰티": ["#bd447e", "<path d=\"M8 12h8v9H8zM9 12V5l6-3v10M7 21h10\"/>"], "숙박": ["#327fad", "<path d=\"M3 21V3h14v18M2 21h20M7 7h1m4 0h1M7 11h1m4 0h1M8 21v-6h4v6M17 10h4v11\"/>"], "문화": ["#7852b2", "<path d=\"M3 5h18v5a2 2 0 0 0 0 4v5H3v-5a2 2 0 0 0 0-4V5Zm13 0v3m0 3v2m0 3v3\"/>"], "배달": ["#377c63", "<path d=\"M3 5h11v12H3zM14 9h4l3 4v4h-7M18 9v4h3M1 9h6M1 13h4\"/><circle cx=\"6\" cy=\"19\" r=\"2\"/><circle cx=\"18\" cy=\"19\" r=\"2\"/>"], "테이크아웃": ["#a47926", "<path d=\"M4 7h16l1 14H3L4 7Zm4 0V6a4 4 0 0 1 8 0v1M9 12h6\"/>"], "생활": ["#536fa6", "<path d=\"m3 10 9-7 9 7v11h-7v-7h-4v7H3V10Z\"/>"], "유아동": ["#b56b3f", "<circle cx=\"12\" cy=\"13\" r=\"8\"/><path d=\"M8 12h.01M16 12h.01M9 16q3 3 6 0M12 5c4-4-3-5-2-1\"/>"], "디지털": ["#576675", "<rect x=\"3\" y=\"3\" width=\"18\" height=\"13\" rx=\"2\"/><path d=\"M12 16v5m-5 0h10\"/>"], "패션": ["#a05689", "<path d=\"m8 3-6 4 3 5 3-2v11h8V10l3 2 3-5-6-4a4 4 0 0 1-8 0Z\"/>"], "도서": ["#4a7e82", "<path d=\"M12 5C8 2 4 3 2 4v16c3-1 7-1 10 1 3-2 7-2 10-1V4c-2-1-6-2-10 1Zm0 0v16\"/>"], "식품": ["#588338", "<path d=\"M12 7C3 2 0 12 7 20c2 2 3 0 5 0s3 2 5 0c7-8 4-18-5-13Zm0 0V3m0 1c2-3 5-3 6-2-1 3-3 4-6 2Z\"/>"], "반려동물": ["#9c743d", "<path d=\"M6 16c-3 6 2 7 6 4 4 3 9 2 6-4l-3-4a4 4 0 0 0-6 0l-3 4Z\"/><ellipse cx=\"4\" cy=\"9\" rx=\"2\" ry=\"3\"/><ellipse cx=\"9\" cy=\"5\" rx=\"2\" ry=\"3\"/><ellipse cx=\"15\" cy=\"5\" rx=\"2\" ry=\"3\"/><ellipse cx=\"20\" cy=\"9\" rx=\"2\" ry=\"3\"/>"]};
+  function renderCategories(cats) {
+    $('cats').innerHTML = cats.map(function (cat) {
+      var icon = CATEGORY_ICONS[cat] || CATEGORY_ICONS['전체'];
+      return '<button type="button" class="tab" data-v="' + esc(cat) + '" aria-pressed="' + (state.cat === cat) + '"><span class="category-icon" style="--category-color:' + icon[0] + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + icon[1] + '</svg></span><span>' + esc(cat) + '</span></button>';
+    }).join('');
+  }
   var PRODUCT_CATS = ['생활', '유아동', '디지털', '뷰티', '패션', '도서', '식품', '반려동물'];
   var REGION_CATS = ['맛집', '카페', '뷰티', '숙박', '문화', '배달', '테이크아웃'];
   function catsFor(type) {
@@ -647,7 +671,7 @@ button, input, select, textarea, .leaflet-container, .leaflet-control, .leaflet-
     else setFilter(b.dataset.v, '전체');
   });
   function setFilter(type, cat) { state.view = 'campaigns'; state.type = type; if (type !== '방문형') state.map = false; state.cat = cat; render(); }
-  $('cats').addEventListener('click', function (e) { var b = e.target.closest('button'); if (b) { state.cat = b.dataset.v; render(); } });
+  $('cats').addEventListener('click', function (e) { var b = e.target.closest('button'); if (b) { state.cat = b.dataset.v; render(); var selected = $('cats').querySelector('[aria-pressed="true"]'); if (selected) selected.focus({ preventScroll: true }); } });
 
   function render() {
     $('types').innerHTML = TYPES.map(function (t) {
@@ -676,7 +700,7 @@ button, input, select, textarea, .leaflet-container, .leaflet-control, .leaflet-
     renderChannels();
     var cats = catsFor(state.type);
     if (cats.indexOf(state.cat) === -1) cats.push(state.cat);
-    buttons($('cats'), cats, 'cat', 'tab');
+    renderCategories(cats);
     var q = state.q.trim().toLowerCase();
     var list = DATA.filter(function (d) {
       return !board && matchesChannels(d) && (state.view !== 'new' || isNewCampaign(d)) &&
@@ -878,7 +902,8 @@ button, input, select, textarea, .leaflet-container, .leaflet-control, .leaflet-
       '<div class="rc-ch"><div class="rc-ch-h"><span class="ico" aria-hidden="true">' + chIcon(p) + '</span><span>' + (p.chname ? esc(p.chname) : '대표 채널 이름 미입력') + '</span></div>' +
         '<dl><dt>카테고리</dt><dd' + (p.chcat ? '>' + esc(p.chcat) : ' class="none">미입력') + '</dd>' +
         '<dt>이웃 수</dt><dd' + (num(p.neighbors) ? '>' + num(p.neighbors) + '명' : ' class="none">미입력') + '</dd>' +
-        '<dt>후기 완료</dt><dd>' + doneCount + '건</dd></dl></div>';
+        '<dt>후기 완료</dt><dd>' + doneCount + '건</dd></dl>' +
+        '<p class="profile-data-note">통계: 직접 입력 · 미검증</p>' + (p.blog ? '<span class="blog-status">블로그 주소 등록 · 미인증</span>' : '') + '</div>';
   }
   function renderCard(p) {
     $('rcard').innerHTML = '<p class="cap">사장님이 리뷰어를 고를 때 이렇게 보여요</p>' + profileCardHTML(p);
@@ -921,10 +946,14 @@ button, input, select, textarea, .leaflet-container, .leaflet-control, .leaflet-
     else document.getElementById('top').scrollIntoView({ behavior: 'smooth' });
   });
 
+  function paintBlogStatus(value) {
+    $('blog-connection-status').textContent = value.trim() ? '주소 입력 · 미인증. 블로그 소유 확인과 통계 자동 연동은 아직 지원하지 않아요.' : '블로그 주소를 등록할 수 있어요. 주소 등록은 소유 인증이 아니에요.';
+  }
   function openProfile() {
     PF.forEach(function (k) { $('p-' + k).value = profile[k] || ''; });
     $('p-notify').checked = !!profile.notify;
     renderCard(profile);
+    paintBlogStatus(profile.blog || '');
     $('s-applied').textContent = Object.keys(mine).length;
     $('p-saved').hidden = true;
     openDialog(pdlg);
@@ -943,6 +972,7 @@ button, input, select, textarea, .leaflet-container, .leaflet-control, .leaflet-
     var draft = {};
     PF.forEach(function (k) { draft[k] = $('p-' + k).value.trim(); });
     renderCard(draft);
+    paintBlogStatus(draft.blog || '');
     $('p-saved').hidden = true;
   });
   $('p-close').addEventListener('click', function () { closeDialog(pdlg); });
