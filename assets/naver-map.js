@@ -19,9 +19,13 @@
         if (typeof previousAuthFailure === 'function') previousAuthFailure();
       };
       window.__stampyNaverReady = function () {
-        if (settled) return;
-        if (!window.naver || !window.naver.maps || !window.naver.maps.Map) { fail(); return; }
-        settled = true; clearTimeout(timer); resolve(window.naver.maps);
+        // The SDK can invoke its callback before the rest of its script finishes.
+        // Wait until the current script has completed before inspecting Map.
+        setTimeout(function () {
+          if (settled) return;
+          if (!window.naver || !window.naver.maps || !window.naver.maps.Map) { fail(); return; }
+          settled = true; clearTimeout(timer); resolve(window.naver.maps);
+        }, 0);
       };
       script.async = true;
       script.src = 'https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=' + encodeURIComponent(keyId) + '&callback=__stampyNaverReady';
