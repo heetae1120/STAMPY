@@ -2,6 +2,8 @@
 
 식당, 카페, 제품 체험단 플랫폼 스탬피의 웹사이트입니다.
 
+**사이트 주소:** [https://heetae1120.github.io/STAMPY/](https://heetae1120.github.io/STAMPY/)
+
 - `index.html`: 업체소개 메인페이지. Originkit Hero 03 기반 원근 갤러리와 기존 서비스 안내.
 - `campaigns.html`: 리뷰어 캠페인 페이지.
 - `styles.css`: 업체소개 페이지 스타일. 리뷰어 스타일은 해당 HTML 안에 있습니다.
