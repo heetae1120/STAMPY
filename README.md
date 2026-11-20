@@ -4,7 +4,7 @@
 
 **사이트 주소:** [https://heetae1120.github.io/STAMPY/](https://heetae1120.github.io/STAMPY/)
 
-- `index.html`: 업체소개 메인페이지. 음식·제품 사진을 넣은 Originkit Hero 03 원근 배경과 캠페인 유형 안내.
+- `index.html`: 업체소개 메인페이지. 열매를 선택해 예시 후기를 읽는 후기 나무와 캠페인 유형 안내.
 - `campaigns.html`: 리뷰어 캠페인 페이지.
 - `styles.css`: 업체소개 페이지 스타일. 리뷰어 스타일은 해당 HTML 안에 있습니다.
 
@@ -19,9 +19,9 @@ npm run build
 python -m http.server 8000 --bind 127.0.0.1
 ```
 
-`npm run build`는 `src/hero-03.tsx` 및 Originkit에서 가져온 터널 렌더러를 `assets/hero-03/hero.js`로 묶습니다. 빌드 결과도 Git에 포함하므로 GitHub Pages는 루트 정적 파일을 그대로 배포합니다. 런타임 서버나 Originkit API 키가 필요하지 않습니다.
+`npm run build`는 `src/review-tree.ts`와 `src/review-data.ts`를 `assets/review-tree/tree.js`로 묶습니다. GitHub Pages는 저장소에 포함된 빌드 결과와 로컬 WebP 이미지를 그대로 배포합니다.
 
-Hero 03의 3D 터널/반응형 크기 소스는 `components/originkit/ui/hero-03`에 있습니다. 정적 HTML 사이트에 맞게 메인 페이지에는 움직이는 3D 사진 배경을 표시하고, 캠페인 버튼은 캠페인 목록으로 이동합니다. 별도의 Tailwind/Next.js 앱을 도입하지 않았습니다. 상세한 가져오기·변경·검증 기록은 `HERO_03_INTEGRATION.md`를 참고하세요.
+실제 후기를 연결할 때는 데이터의 제목·본문·이미지·열매 위치와 `reviewUrl`, `sample`을 수정하세요. 링크를 생략하면 내장 상세 보기가 열립니다. 이전 터널 통합 기록은 `HERO_03_INTEGRATION.md`에 보관되어 있습니다.
 
 수정 후 `npm run build`를 실행하고 소스와 빌드 결과를 함께 커밋하세요. 지도 표시용 공개 Key ID는 설정 파일에 포함되며 Client Secret은 저장소에 넣지 않습니다.
 

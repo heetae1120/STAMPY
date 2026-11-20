@@ -1,7 +1,7 @@
 import { build } from 'esbuild';
 await build({
-  entryPoints: ['src/hero-03.tsx'],
-  outfile: 'assets/hero-03/hero.js',
+  entryPoints: ['src/review-tree.ts'],
+  outfile: 'assets/review-tree/tree.js',
   bundle: true,
   minify: true,
   format: 'esm',
@@ -12,5 +12,5 @@ await build({
   metafile: true,
 }).then(({ metafile }) => {
   const bytes = Object.values(metafile.outputs).reduce((total, file) => total + file.bytes, 0);
-  console.log(`Built Hero 03: ${Math.round(bytes / 1024)} KiB, static GitHub Pages asset.`);
+  console.log(`Built review tree: ${Math.round(bytes / 1024)} KiB, static GitHub Pages asset.`);
 });

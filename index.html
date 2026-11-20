@@ -8,7 +8,7 @@
 <link rel="stylesheet" href="assets/fonts/pretendard.css">
 <meta name="description" content="식당, 카페, 제품을 블로그와 인스타그램 리뷰어에게 보내고 진짜 후기를 받아보세요.">
 <link rel="stylesheet" href="styles.css?v=pale-plum">
-<link rel="stylesheet" href="assets/hero-03/hero.css?v=yellow-motion">
+<link rel="stylesheet" href="assets/review-tree/tree.css">
 </head>
 <body>
 
@@ -27,15 +27,29 @@
 
 <main id="top">
 
-  <section id="hero03" class="hero03" aria-labelledby="hero03-title">
-    <div class="hero03-fallback" aria-hidden="true"><img src="assets/hero-03/food.jpg" alt="" width="560" height="560"><img src="assets/hero-03/cafe.jpg" alt="" width="560" height="560"><img src="assets/hero-03/skincare.jpg" alt="" width="560" height="560"><img src="assets/hero-03/package.jpg" alt="" width="560" height="560"></div>
-    <div id="hero03-scene" class="hero03-scene"></div>
-    <div class="hero03-content">
-      <p class="hero03-eyebrow">스탬피 · 경험이 후기로 쌓이는 곳</p>
-      <h1 id="hero03-title">손님이 먼저 써보고,<br>후기로 남겨요.</h1>
-      <p class="hero03-lead">가게의 공간부터 브랜드의 제품까지.<br>리뷰어의 새로운 경험이 사장님의 다음 이야기가 됩니다.</p>
-      <div class="hero03-actions"><a class="hero03-button" href="campaigns.html">캠페인 보러가기</a><a class="hero03-button secondary" href="#contact">무료 상담 신청</a></div>
+  <section class="orchard" id="hero03" aria-labelledby="orchard-title">
+    <div class="orchard-layout">
+      <div class="orchard-copy">
+        <p class="orchard-eyebrow">스탬피 · 경험이 후기로 쌓이는 곳</p>
+        <h1 id="orchard-title">손님이 먼저 써보고,<br>후기로 남겨요.</h1>
+        <p class="orchard-lead">가게의 공간부터 브랜드의 제품까지.<br>리뷰어의 새로운 경험이 사장님의 다음 이야기가 됩니다.</p>
+        <div class="orchard-actions"><a href="campaigns.html">캠페인 보러가기 <span aria-hidden="true">↗</span></a><a href="#contact">무료 상담 신청</a></div>
+      </div>
+      <div class="orchard-view" aria-label="후기 나무">
+        <div class="orchard-frame">
+          <div class="orchard-sun" aria-hidden="true"></div>
+          <div class="orchard-ground" aria-hidden="true"></div>
+          <div class="orchard-layer wood" aria-hidden="true"><img class="orchard-tree" src="assets/review-tree/tree.webp" alt="" width="900" height="900" fetchpriority="high"></div>
+          <div class="orchard-layer foliage" aria-hidden="true"><img class="bough bough-left" src="assets/review-tree/leaves.webp" alt=""><img class="bough bough-right" src="assets/review-tree/leaves.webp" alt=""></div>
+          <div class="orchard-layer fruit-layer" role="group" aria-label="후기 열매"></div>
+          <div class="orchard-dust" aria-hidden="true"></div>
+        </div>
+        <div class="orchard-panel" hidden></div>
+        <p class="orchard-caption" hidden><span aria-hidden="true">✧</span> 열매를 눌러 예시 후기를 만나보세요</p>
+        <noscript><details class="orchard-static"><summary>카페 예시 후기 읽기</summary>창가에서 즐기는 라테와 페이스트리 · 따뜻한 페이스트리와 우유의 고소함을 담은 예시 후기입니다.</details></noscript>
+      </div>
     </div>
+    <dialog class="orchard-detail" aria-labelledby="review-detail-title"><form method="dialog"><button aria-label="후기 닫기">×</button></form><img alt=""><div><small></small><h2 id="review-detail-title"></h2><p></p></div></dialog>
   </section>
 
   <section id="types" class="band-white">
@@ -180,6 +194,6 @@ document.querySelectorAll('.faq-item button').forEach(function (btn) {
   });
 });
 </script>
-<script type="module" src="assets/hero-03/hero.js?v=yellow-motion"></script>
+<script type="module" src="assets/review-tree/tree.js"></script>
 </body>
 </html>
