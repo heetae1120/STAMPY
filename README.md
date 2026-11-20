@@ -21,7 +21,7 @@ python -m http.server 8000 --bind 127.0.0.1
 
 `npm run build`는 `src/hero-03.tsx` 및 Originkit에서 가져온 터널 렌더러를 `assets/hero-03/hero.js`로 묶습니다. 빌드 결과도 Git에 포함하므로 GitHub Pages는 루트 정적 파일을 그대로 배포합니다. 런타임 서버나 Originkit API 키가 필요하지 않습니다.
 
-Hero 03의 3D 터널/반응형 크기 소스는 `components/originkit/ui/hero-03`에 있습니다. 정적 HTML 사이트에 맞게 메인 페이지에는 정적인 3D 사진 배경을 표시하고, 캠페인 버튼은 캠페인 목록으로 이동합니다. 별도의 Tailwind/Next.js 앱을 도입하지 않았습니다. 상세한 가져오기·변경·검증 기록은 `HERO_03_INTEGRATION.md`를 참고하세요.
+Hero 03의 3D 터널/반응형 크기 소스는 `components/originkit/ui/hero-03`에 있습니다. 정적 HTML 사이트에 맞게 메인 페이지에는 움직이는 3D 사진 배경을 표시하고, 캠페인 버튼은 캠페인 목록으로 이동합니다. 별도의 Tailwind/Next.js 앱을 도입하지 않았습니다. 상세한 가져오기·변경·검증 기록은 `HERO_03_INTEGRATION.md`를 참고하세요.
 
 수정 후 `npm run build`를 실행하고 소스와 빌드 결과를 함께 커밋하세요. 지도 표시용 공개 Key ID는 설정 파일에 포함되며 Client Secret은 저장소에 넣지 않습니다.
 

@@ -1,4 +1,4 @@
-import { Component, type ReactNode } from 'react';
+import { Component, useEffect, useState, type ReactNode } from 'react';
 import { createRoot } from 'react-dom/client';
 import GalleryTunnel from '../components/originkit/ui/hero-03/gallery-tunnel';
 import { useTunnelConfig } from '../components/originkit/ui/hero-03/use-tunnel-size';
@@ -16,12 +16,33 @@ class CanvasBoundary extends Component<{ children: ReactNode }, { failed: boolea
 
 function HeroScene() {
   const { tunnelSize, fade } = useTunnelConfig();
+  const [reducedMotion, setReducedMotion] = useState(() => matchMedia('(prefers-reduced-motion: reduce)').matches);
+  const [paused, setPaused] = useState(false);
+
+  useEffect(() => {
+    const media = matchMedia('(prefers-reduced-motion: reduce)');
+    const update = () => setReducedMotion(media.matches);
+    media.addEventListener('change', update);
+    return () => media.removeEventListener('change', update);
+  }, []);
+
   return (
     <CanvasBoundary>
       <GalleryTunnel
-        background="#dcefb8" lineColor="#a4c573" lineOpacity={54} grid={4}
-        tunnelSize={tunnelSize} speed={0} boost={0} fade={fade} label={false} images={images}
+        background="#fffbe1" lineColor="#d7cfa4" lineOpacity={50} grid={4}
+        tunnelSize={tunnelSize} speed={reducedMotion || paused ? 0 : 9}
+        boost={0} fade={fade} label={false} images={images}
       />
+      {!reducedMotion && (
+        <button
+          className="hero03-pause"
+          type="button"
+          aria-label={paused ? '배경 움직임 재생' : '배경 움직임 정지'}
+          onClick={() => setPaused((value) => !value)}
+        >
+          <span aria-hidden="true">{paused ? '▶' : 'Ⅱ'}</span>
+        </button>
+      )}
     </CanvasBoundary>
   );
 }
