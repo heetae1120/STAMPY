@@ -71,13 +71,13 @@ export const reviews: Review[] = [
     id: 'food-10', category: '음식', title: '오븐에서 나온 채소 한 접시',
     excerpt: '서로 다른 채소가 구워지며 달라진 향과 식감을 담아요.', thumbnail: 'assets/review-tree/review-10.webp',
     body: '구운 채소를 접시에 펼쳐 각 재료의 표면을 살펴봅니다. 노릇한 가장자리와 촉촉한 속을 함께 보여주는 예시예요.',
-    fruitPosition: [64, 54], sample: true,
+    fruitPosition: [68, 56], sample: true,
   },
   {
     id: 'beauty-11', category: '뷰티', title: '가방 속 작은 핸드크림',
     excerpt: '튜브를 여닫는 방법부터 외출 중 발라 본 느낌까지 살펴봐요.', thumbnail: 'assets/review-tree/review-11.webp',
     body: '작은 가방에서 튜브를 꺼내 한 손으로 뚜껑을 열어봅니다. 필요한 양을 덜고 다시 수납하는 흐름을 기록했어요.',
-    fruitPosition: [39, 57], sample: true,
+    fruitPosition: [35, 56], sample: true,
   },
   {
     id: 'living-12', category: '생활용품', title: '책상 위의 작은 나무 트레이',
@@ -113,7 +113,7 @@ export const reviews: Review[] = [
     id: 'cafe-17', category: '카페', title: '핸드드립 커피가 완성되는 시간',
     excerpt: '물이 천천히 내려가는 모습과 잔에 남는 향을 기록해요.', thumbnail: 'assets/review-tree/review-17.webp',
     body: '드리퍼에 물을 나누어 붓고 잔에 커피가 모이는 장면을 담습니다. 내려 마시는 과정을 한 잔의 기록으로 구성했어요.',
-    fruitPosition: [55, 63], sample: true,
+    fruitPosition: [52, 52], sample: true,
   },
   {
     id: 'food-18', category: '음식', title: '단면이 다채로운 채소 샌드위치',

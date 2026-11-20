@@ -14,7 +14,7 @@ function mountOrchard(hero: HTMLElement) {
   const timers: number[] = [];
   let selected: HTMLButtonElement | null = null;
   let cardAnimations: Animation[] = [];
-  const introKey = 'stampy.orchard.intro.v1';
+  const introKey = 'stampy.orchard.intro.3d';
   let seenIntro = false;
   try { seenIntro = sessionStorage.getItem(introKey) === 'seen'; } catch { /* Storage is optional. */ }
 
@@ -106,7 +106,7 @@ function mountOrchard(hero: HTMLElement) {
     button.setAttribute('aria-expanded', 'false');
     button.style.left = review.fruitPosition[0] + '%';
     button.style.top = review.fruitPosition[1] + '%';
-    button.style.setProperty('--diameter', (review.featured ? 9 : 5.8 + i % 3 * .65) + '%');
+    button.style.setProperty('--diameter', (review.featured ? 6.5 : 4.4 + i % 3 * .45) + '%');
     button.style.setProperty('--bud', (.24 + i * .038) + 's');
     button.style.setProperty('--ripen', (3.5 + i * .072) + 's');
     button.style.setProperty('--wind', -(i % 7) + 's');

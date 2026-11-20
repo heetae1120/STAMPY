@@ -1,38 +1,44 @@
 .orchard {
   --ink: #253824; --moss: #4d633f; --paper: #fbf8ed; --rule: #d8d9c4;
   position: relative; isolation: isolate; overflow: clip; color: var(--ink);
-  background: radial-gradient(ellipse at 76% 37%, #fff9df 0%, transparent 48%), var(--paper);
+  background: radial-gradient(ellipse at 50% 34%, #f4f3d8 0%, transparent 62%), var(--paper);
   border-bottom: 1px solid var(--rule);
 }
 .orchard [hidden] { display: none !important; }
-.orchard-layout { max-width: 1500px; min-height: min(780px,82svh); margin: auto; padding: 28px clamp(24px,5.4vw,84px) 40px; display: grid; grid-template-columns: minmax(0,0.86fr) minmax(0,1.14fr); align-items: center; gap: 12px; }
-.orchard-copy { position: relative; z-index: 3; }
-.orchard-eyebrow { display: flex; align-items: center; gap: 12px; margin: 0 0 24px; font-size: 13px; font-weight: 650; color: var(--moss); }
+.orchard-layout { position: relative; max-width: 1580px; margin: auto; padding: 20px clamp(24px,4.5vw,70px) 25px; }
+.orchard-copy { position: absolute; left: clamp(24px,4.5vw,70px); bottom: clamp(32px,4vw,65px); width: min(29vw,410px); z-index: 3; pointer-events: none; }
+.orchard-copy a { pointer-events: auto; }
+@media(min-width:1001px) {
+  .orchard-copy { isolation: isolate; }
+  .orchard-copy::before { content: ''; position: absolute; inset: -32px -30px -18px -70px; z-index: -1; background: radial-gradient(ellipse at 40% 62%, var(--paper) 47%, #fbf8edf2 60%, transparent 80%); }
+}
+
+.orchard-eyebrow { display: flex; align-items: center; gap: 12px; margin: 0 0 12px; font-size: 13px; font-weight: 650; color: var(--moss); }
 .orchard-eyebrow::before { content: ''; width: 29px; height: 1px; background: currentColor; }
-.orchard h1 { margin: 0; font-size: clamp(39px,4.4vw,69px); font-weight: 710; line-height: 1.16; letter-spacing: -.067em; }
-.orchard-lead { margin: 23px 0 0; font-size: clamp(15px,1.18vw,18px); color: #52604b; line-height: 1.8; }
-.orchard-actions { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 30px; }
+.orchard h1 { margin: 0; font-size: clamp(36px,3.45vw,55px); font-weight: 710; line-height: 1.16; letter-spacing: -.067em; }
+.orchard-lead { margin: 14px 0 0; font-size: clamp(15px,1.18vw,18px); color: #52604b; line-height: 1.8; }
+.orchard-actions { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 19px; }
 .orchard-actions a { display: inline-flex; align-items: center; gap: 13px; min-height: 48px; padding: 10px 20px; border-radius: 999px; border: 1px solid #abb69a; color: var(--ink); font-size: 15px; font-weight: 650; text-decoration: none; }
 .orchard-actions a:first-child { background: var(--ink); color: #fbf9e9; border-color: var(--ink); }
 .orchard-actions a:hover { box-shadow: 0 3px 12px #344b2426; }
-.orchard-view { position: relative; width: 100%; justify-self: center; max-width: 730px; padding-bottom: 30px; }
-.orchard-frame { width: 96%; margin: auto; aspect-ratio: 1; position: relative; isolation: isolate; }
+.orchard-view { position: relative; width: 100%; padding-bottom: 31px; }
+.orchard-frame { width: min(80vw, 1140px, 106svh); margin: auto; aspect-ratio: 5 / 4; position: relative; isolation: isolate; }
 .orchard-sun { position: absolute; width: 86%; height: 85%; top: 3%; left: 6%; border-radius: 50%; background: radial-gradient(circle at 30% 28%,#f4e8ae55,#eee9cd45 64%,#eee8ca00 72%); }
 .orchard-ground { position: absolute; left: 16%; right: 16%; bottom: 3%; height: 8%; background: radial-gradient(ellipse,#77815139,transparent 68%); }
 .orchard-layer { position: absolute; inset: 0; transform-origin: var(--focus-x, 56%) var(--focus-y, 32%); pointer-events: none; transition: transform 1s cubic-bezier(.22,.68,.22,1); }
 .orchard-tree { display: block; width: 100%; height: 100%; object-fit: contain; transform-origin: 46% 95%; }
-.bough { position: absolute; width: 23%; transform-origin: 94% 53%; animation: orchard-breeze 7s ease-in-out infinite alternate; }
-.bough-left { top: 30%; left: 7%; rotate: 12deg; }
-.bough-right { top: 37%; right: 6%; transform-origin: center; scale: -1 1; rotate: -10deg; animation-delay: -3s; width: 20%; }
+.bough { position: absolute; width: 9%; transform-origin: 94% 53%; animation: orchard-breeze 7s ease-in-out infinite alternate; }
+.bough-left { top: 29%; left: 12%; rotate: 12deg; }
+.bough-right { top: 42%; right: 14%; transform-origin: center; scale: -1 1; rotate: -10deg; animation-delay: -3s; width: 8%; }
 @keyframes orchard-breeze { from { transform: rotate(-2deg); } to { transform: rotate(2deg); } }
 .orchard[data-intro] .orchard-tree { animation: tree-grow 1.45s cubic-bezier(.22,.68,.25,1) both; }
 @keyframes tree-grow { from { opacity: 0; transform: translateY(5%) scale(.83,.58); } }
 .orchard[data-intro] .orchard-copy h1 { animation: orchard-copy .55s 1s both; }
 @keyframes orchard-copy { from { opacity: 0; transform: translateY(8px); } }
 .orchard[data-intro] .bough { animation: tree-grow 1s .4s both, orchard-breeze 7s 1.4s infinite alternate ease-in-out; }
-.orchard[data-zoom] .wood { transform: translate(-1%,4%) scale(1.13); }
-.orchard[data-zoom] .foliage { transform: translate(-2%,6%) scale(1.27); }
-.orchard[data-zoom] .fruit-layer { transform: translate(-1.5%,5%) scale(1.20); }
+.orchard[data-zoom] .wood { transform: translate(-1%,8%) scale(1.33); }
+.orchard[data-zoom] .foliage { transform: translate(-2%,10%) scale(1.44); }
+.orchard[data-zoom] .fruit-layer { transform: translate(-1.3%,8.4%) scale(1.36); }
 .orchard[data-zoom] .orchard-layer { transition-duration: 2s; }
 .fruit { --diameter: 7%; appearance: none; position: absolute; pointer-events: auto; width: var(--diameter); min-width: 25px; aspect-ratio: 1; transform: translate(-50%,-50%); border: 0; border-radius: 50%; padding: 0; background: transparent; color: var(--ink); cursor: pointer; }
 .fruit::before { content: ''; position: absolute; width: 2px; height: 28%; background: #73763d; left: 50%; bottom: 95%; rotate: 12deg; transform-origin: bottom; }
@@ -66,25 +72,25 @@
 .orchard-detail img { width: 100%; height: min(32svh,235px); object-fit: cover; display: block; }
 .orchard-detail div { padding: 22px; }
 .orchard-detail h2 { margin: 7px 0 12px; line-height: 1.3; font-size: 25px; }
-@media(max-width:900px) {
- .orchard-layout { display: flex; flex-direction: column; padding: 33px 18px 22px; gap: 8px; }
- .orchard-copy { text-align: center; }
+@media(max-width:1000px) {
+ .orchard-layout { display: flex; flex-direction: column; padding: 16px 12px 32px; gap: 18px; align-items: center; }
+ .orchard-copy { position: static; order: 1; width: 100%; text-align: center; pointer-events: auto; }
  .orchard-eyebrow,.orchard-actions { justify-content: center; }
  .orchard-eyebrow { margin-bottom: 12px; }
  .orchard h1 { font-size: clamp(37px,7.5vw,52px); }
  .orchard-lead { margin-top: 13px; line-height: 1.55; }
  .orchard-actions { margin-top: 16px; }
  .orchard-actions a { min-height: 44px; padding: 8px 15px; font-size: 14px; }
- .orchard-view { max-width: 490px; padding-bottom: 28px; }
- .orchard-frame { width: 94%; }
+ .orchard-view { max-width: 680px; padding-bottom: 26px; }
+ .orchard-frame { width: 100%; }
  .orchard-panel { width: min(300px,98%); bottom: 34px; right: 1%; }
  .orchard-panel-photo { position: absolute; inset: 0 auto 0 0; width: 27%; height: 100%; }
  .orchard-panel-body { margin-left: 27%; padding: 13px 14px; }
  .orchard-panel h2 { font-size: 16px; }
  .orchard-panel p { font-size: 13px; }
  .orchard-close { right: auto; left: 5px; top: 5px; }
- .orchard[data-zoom] .wood { transform: translateY(1.5%) scale(1.04); }
- .orchard[data-zoom] .fruit-layer { transform: translateY(2%) scale(1.07); }
- .orchard[data-zoom] .foliage { transform: translateY(3%) scale(1.12); }
+ .orchard[data-zoom] .wood { transform: translateY(4%) scale(1.13); }
+ .orchard[data-zoom] .fruit-layer { transform: translateY(4.5%) scale(1.15); }
+ .orchard[data-zoom] .foliage { transform: translateY(5%) scale(1.21); }
 }
 @media(prefers-reduced-motion:reduce) { .orchard *, .orchard *::before { animation: none !important; transition: none !important; } }
