@@ -3,9 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "node scripts/build-hero.mjs",
-    "build:hero": "node scripts/build-hero.mjs",
-    "typecheck": "tsc --noEmit"
+    "build": "node scripts/build-app.mjs && node scripts/build-hero.mjs",
+    "build:app": "node scripts/build-app.mjs",
+    "build:classic": "node scripts/build-hero.mjs",
+    "serve": "node scripts/serve.mjs",
+    "typecheck": "tsc --noEmit",
+    "test": "node --test tests/demo-rules.test.mjs"
   },
   "dependencies": {
     "gsap": "3.15.1",
