@@ -4,9 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
-<title>스탬피 체험단</title>
+<title>스탬핑 체험단</title>
 <link rel="preload" href="assets/fonts/PretendardVariable.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/fonts/pretendard.css">
+<link rel="stylesheet" href="assets/brand.css?v=stamping">
 <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
 <script src="vendor/leaflet/leaflet.js"></script>
 <link rel="stylesheet" href="vendor/leaflet-markercluster/MarkerCluster.css">
@@ -18,8 +19,8 @@
 <style>
 /* Layout: 쿠폰처럼 절취선이 있는 캠페인 카드 그리드, 마감일은 비스듬한 도장 */
 :root {
-  --bg: #f3f5dc;
-  --surface: #fcfdf5;
+  --bg: #f5f9ef;
+  --surface: #fff;
   --fg: #222e17;
   --fg-2: #3d4a30;
   --muted: #536246;
@@ -27,7 +28,7 @@
   --line-soft: #dce7c9;
   --accent: #405e21;
   --on-accent: #fcfff6;
-  --yolk: #f3f5dc;
+  --yolk: var(--brand-accent);
   --on-yolk: #222e17;
   --invert-bg: #222e17;
   --invert-fg: #fcfff6;
@@ -41,8 +42,8 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --bg: #17200f; --surface: #222e17; --fg: #f0f8e4; --fg-2: #d4e3bd; --muted: #aec39a;
-    --line: #3f5231; --line-soft: #304125; --accent: #f3f5dc; --on-accent: #17200f;
-    --yolk: #f3f5dc; --on-yolk: #222e17; --invert-bg: #f0f8e4; --invert-fg: #17200f; --ok: #b6e285;
+    --line: #3f5231; --line-soft: #304125; --accent: var(--brand-accent); --on-accent: #17200f;
+    --yolk: var(--brand-accent); --on-yolk: #222e17; --invert-bg: #f0f8e4; --invert-fg: #17200f; --ok: #b6e285;
     --t-food: #303d20; --t-cafe: #303f24; --t-beauty: #334124; --t-stay: #2a3c22;
     --t-grocery: #293c20; --t-living: #303e26; --t-digital: #2d3b24; --t-ink: rgba(240, 248, 228, 0.12);
     color-scheme: dark;
@@ -50,8 +51,8 @@
 }
 :root[data-theme="dark"] {
   --bg: #17200f; --surface: #222e17; --fg: #f0f8e4; --fg-2: #d4e3bd; --muted: #aec39a;
-  --line: #3f5231; --line-soft: #304125; --accent: #f3f5dc; --on-accent: #17200f;
-  --yolk: #f3f5dc; --on-yolk: #222e17; --invert-bg: #f0f8e4; --invert-fg: #17200f; --ok: #b6e285;
+  --line: #3f5231; --line-soft: #304125; --accent: var(--brand-accent); --on-accent: #17200f;
+  --yolk: var(--brand-accent); --on-yolk: #222e17; --invert-bg: #f0f8e4; --invert-fg: #17200f; --ok: #b6e285;
   --t-food: #303d20; --t-cafe: #303f24; --t-beauty: #334124; --t-stay: #2a3c22;
   --t-grocery: #293c20; --t-living: #303e26; --t-digital: #2d3b24; --t-ink: rgba(240, 248, 228, 0.12);
   color-scheme: dark;
@@ -68,10 +69,9 @@ h1, h2, h3 { text-wrap: balance; }
 body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--surface); }
 .top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--surface); border-bottom: 1px solid var(--line-soft); }
 .top nav { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 24px; padding-block: 12px; }
-.logo { font-family: var(--font-display); font-size: 28px; line-height: 1; color: var(--accent); text-decoration: none; }
 .search { flex: 1 1 260px; max-width: 460px; position: relative; margin: 0; }
 .search input { width: 100%; height: 46px; border: 1.5px solid var(--line); border-radius: 12px; padding: 0 16px 0 44px; font: inherit; font-size: 15px; background: var(--bg); color: var(--fg); }
-.search svg { position: absolute; left: 16px; top: 14px; color: var(--muted); }
+.search svg { position: absolute; left: 16px; top: 14px; color: var(--accent); }
 .gnb-row { position: relative; display: flex; align-items: center; gap: 4px 20px; border-top: 1px solid var(--line-soft); }
 .ham { flex: none; width: 44px; height: 44px; margin-left: -10px; border: 0; border-radius: 10px; background: transparent; color: var(--fg); display: flex; align-items: center; justify-content: center; cursor: pointer; }
 .ham[aria-expanded="true"] { background: var(--bg); }
@@ -164,7 +164,7 @@ fieldset.group legend { padding: 0; font-size: 15px; font-weight: 700; float: le
 
 .map-toggle { width: 100%; margin-top: 24px; min-height: 62px; display: flex; align-items: center; justify-content: center; gap: 12px; border: 1.5px solid var(--accent); border-radius: 14px; background: var(--surface); color: var(--accent); font: inherit; font-weight: 700; cursor: pointer; }
 .map-toggle svg { width: 24px; height: 24px; }
-.map-toggle[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); }
+.map-toggle[aria-pressed="true"] { background: var(--brand-accent); color: #222e17; }
 .map-section { margin-top: 24px; }
 .map-note { font-size: 13px; color: var(--muted); margin: 0 0 12px; }
 .map-layout { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 16px; }
@@ -179,7 +179,7 @@ fieldset.group legend { padding: 0; font-size: 15px; font-weight: 700; float: le
 .store-pin span { transform: rotate(45deg); font-weight: 700; font-size: 14px; }
 .map-popup { color: #222e17; font: 14px/1.6 var(--font-body); min-width: 180px; }
 .map-popup strong { font-size: 16px; }
-.map-popup button { display: block; width: 100%; border: 0; background: #405e21; color: #fcfff6; border-radius: 8px; min-height: 44px; padding: 8px 12px; cursor: pointer; margin-top: 8px; font: inherit; font-weight: 700; }
+.map-popup button { display: block; width: 100%; border: 0; background: var(--brand-accent); color: #222e17; border-radius: 8px; min-height: 44px; padding: 8px 12px; cursor: pointer; margin-top: 8px; font: inherit; font-weight: 700; }
 .exchange-section { margin-top: 28px; }
 .reward-banner { padding: 28px; border: 2px dashed var(--line); border-radius: 20px; background: var(--surface); display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 24px; align-items: center; }
 .reward-banner h2 { font-family: var(--font-display); font-weight: 400; font-size: 28px; line-height: 1.3; margin: 8px 0; }
@@ -195,8 +195,11 @@ fieldset.group legend { padding: 0; font-size: 15px; font-weight: 700; float: le
 .product-art { height: 200px; background: var(--t-cafe); display: grid; place-items: center; color: var(--fg-2); position: relative; }
 .product-art svg { width: 90px; height: 90px; }
 .product-art span { position: absolute; left: 16px; top: 14px; font-size: 12px; border-radius: 6px; padding: 2px 8px; background: var(--surface); }
+.product-art svg { color: #a35d31; }
 .exchange-product:nth-child(2) .product-art { background: var(--t-living); }
+.exchange-product:nth-child(2) .product-art svg { color: #22856b; }
 .exchange-product:nth-child(3) .product-art { background: var(--t-beauty); }
+.exchange-product:nth-child(3) .product-art svg { color: #b0527e; }
 .product-info { padding: 20px; }
 .product-info p { margin: 0; color: var(--muted); font-size: 13px; }
 .product-info h3 { margin: 4px 0 14px; font-size: 18px; }
@@ -227,7 +230,7 @@ fieldset.group legend { padding: 0; font-size: 15px; font-weight: 700; float: le
 .channel-option:has(input:checked) { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); background: var(--bg); }
 .channel-option:has(input:focus-visible) { outline: 3px solid var(--accent); outline-offset: 3px; }
 .channel-option input { position: absolute; top: 8px; right: 8px; width: 17px; height: 17px; margin: 0; accent-color: var(--accent); cursor: pointer; }
-.channel-icon { width: 56px; height: 56px; border-radius: 50%; background: var(--channel-color); color: #fcfff6; display: grid; place-items: center; flex: none; }
+.channel-icon { display: grid; place-items: center; flex: none; }
 .channel-icon svg { width: 30px; height: 30px; }
 .channel-hint { margin: 10px 0 0; font-size: 12px; color: var(--muted); }
 .map-popup { width: 260px; max-width: 100%; }
@@ -314,7 +317,7 @@ form.apply { display: flex; flex-direction: column; gap: 14px; border-top: 2px d
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .field .err { color: #d8ec93; } }
 .check { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; color: var(--fg-2); }
 .check input { width: 20px; height: 20px; margin: 2px 0 0; accent-color: var(--accent); flex: none; }
-.btn { min-height: 50px; padding: 0 24px; border-radius: 12px; border: 0; background: var(--accent); color: var(--on-accent); font: inherit; font-size: 16px; font-weight: 700; cursor: pointer; }
+.btn { min-height: 50px; padding: 0 24px; border-radius: 12px; border: 0; background: var(--brand-accent); color: #222e17; font: inherit; font-size: 16px; font-weight: 700; cursor: pointer; }
 .btn.secondary { background: transparent; color: var(--fg); border: 1.5px solid var(--fg); }
 .done { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 10px; padding-top: 6px; }
 .done .big { width: 96px; height: 96px; border-radius: 50%; border: 4px solid var(--ok); color: var(--ok); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 22px; rotate: -10deg; box-shadow: inset 0 0 0 4px var(--surface), inset 0 0 0 6px var(--ok); }
@@ -338,30 +341,30 @@ footer .word { font-family: var(--font-display); font-size: 22px; color: var(--f
 /* Reference-style channel row: equal spacing, icon above label, no card frame. */
 .channel-options { display: grid; grid-template-columns: repeat(7,minmax(0,1fr)); gap: 16px; padding: 8px 4px; }
 .channel-option { min-width: 0; min-height: 128px; padding: 12px 4px; border: 0; border-radius: 20px; background: transparent; gap: 12px; font-size: 14px; color: var(--muted); transition: background-color 180ms ease, color 180ms ease; }
-.channel-option:has(input:checked) { background: color-mix(in srgb, var(--accent) 8%, var(--surface)); color: var(--accent); box-shadow: none; }
-.channel-icon { width: 64px; height: 64px; border-radius: 20px; box-shadow: none; }
+.channel-option:has(input:checked) { background: color-mix(in srgb, var(--brand-accent) 38%, var(--surface)); color: var(--accent); box-shadow: none; }
+.channel-icon { width: 64px; height: 64px; border-radius: 20px; }
 .channel-option:has(input:checked) .channel-icon { outline: none; }
 .channel-option:has(input:checked) > span:last-child { font-weight: 750; }
 .channel-option:has(input:focus-visible) { outline: 2px solid var(--accent); outline-offset: 3px; }
 .channel-option input { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); clip-path: inset(50%); white-space: nowrap; border: 0; }
-.channel-icon svg, .channel-icon img { width: 36px; height: 36px; transition: transform 180ms ease; transform-origin: center; }
-.channel-icon img { display: block; filter: brightness(0) invert(1); }
-.channel-option:has(input[value="instagram"]) .channel-icon { background: linear-gradient(145deg, #64883e, #53743a 55%, #344d25); }
-.channel-option:has(input[value="all"]) .channel-icon { background: linear-gradient(145deg, #688846, #405e21); }
-.channel-option:focus-within .channel-icon img, .channel-option:focus-within .channel-icon svg { transform: scale(1.18); }
-@media(hover:hover) { .channel-option:hover .channel-icon img, .channel-option:hover .channel-icon svg { transform: scale(1.18); } }
+.channel-icon svg, .channel-icon .channel-brand { width: 36px; height: 36px; transition: transform 180ms ease; transform-origin: center; }
+.channel-icon { color: var(--channel-color); background: color-mix(in srgb, var(--channel-color) 12%, white); }
+.channel-icon .channel-brand { display: block; background: var(--channel-color); mask: var(--channel-logo) center / contain no-repeat; }
+.channel-option:has(input[value="instagram"]) .channel-brand { background: linear-gradient(145deg,#f69a26 8%,#d62976 50%,#633ac4 90%); }
+.channel-option:focus-within .channel-icon .channel-brand, .channel-option:focus-within .channel-icon svg { transform: scale(1.18); }
+@media(hover:hover) { .channel-option:hover .channel-icon .channel-brand, .channel-option:hover .channel-icon svg { transform: scale(1.18); } }
 @media(max-width: 700px) { .channel-options { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 108px; overflow-x: auto; gap: 12px; padding: 10px 6px; scroll-snap-type: x proximity; } .channel-option { scroll-snap-align: start; min-height: 132px; padding: 8px 2px; } }
-@media(prefers-reduced-motion: reduce) { .channel-icon svg, .channel-icon img { transition: none; transform: none !important; } }
+@media(prefers-reduced-motion: reduce) { .channel-icon svg, .channel-icon .channel-brand { transition: none; transform: none !important; } }
 button, input, select, textarea, .leaflet-container, .leaflet-control, .leaflet-tooltip, .leaflet-popup, .marker-cluster, .marker-cluster div, .leaflet-container *, svg text { font-family: var(--font-body); }
-.logo, .banner-slide h2, .head h1 { font-weight: 800; }
+.banner-slide h2, .head h1 { font-weight: 800; }
 
 /* Category buttons share the channel row's icon/label layout. */
 #cats { display: grid; grid-template-columns: repeat(auto-fit,minmax(96px,1fr)); gap: 12px; padding: 8px 4px; border: 0; overflow: visible; }
 #cats .tab { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; min-width: 0; min-height: 128px; padding: 12px 4px; margin: 0; border: 0; border-radius: 20px; color: var(--muted); font-size: 14px; transition: background-color 180ms ease, color 180ms ease; }
-#cats .tab[aria-pressed="true"] { background: color-mix(in srgb, var(--accent) 8%, var(--surface)); color: var(--accent); font-weight: 750; }
-.category-icon { display: grid; place-items: center; width: 64px; height: 64px; border-radius: 20px; color: var(--category-color); background: color-mix(in srgb, var(--category-color) 12%, var(--surface)); }
+#cats .tab[aria-pressed="true"] { background: color-mix(in srgb, var(--brand-accent) 38%, var(--surface)); color: var(--accent); font-weight: 750; }
+.category-icon { display: grid; place-items: center; width: 64px; height: 64px; border-radius: 20px; color: var(--category-color); background: color-mix(in srgb, var(--category-color) 12%, white); }
 .category-icon svg { width: 34px; height: 34px; transition: transform 180ms ease; }
-#cats .tab[aria-pressed="true"] .category-icon { background: var(--accent); color: var(--on-accent); }
+#cats .tab[aria-pressed="true"] .category-icon { background: var(--category-color); color: white; }
 #cats .tab:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 #cats .tab:focus-visible svg { transform: scale(1.18); }
 @media(hover:hover) { #cats .tab:hover svg { transform: scale(1.18); } }
@@ -411,7 +414,7 @@ button, input, select, textarea, .leaflet-container, .leaflet-control, .leaflet-
 <body>
 <header class="top">
   <nav class="wrap" aria-label="주 메뉴">
-    <a class="logo" href="#top">스탬피</a>
+    <a class="logo" href="#top"><span>스탬핑</span><span class="brand-english" lang="en">STAMPING</span></a>
     <form class="search" role="search" id="search-form">
       <label for="q" class="sr-only">캠페인 검색</label>
       <input id="q" type="search" placeholder="가게, 동네, 제품 이름으로 찾기" autocomplete="off">
@@ -437,15 +440,15 @@ button, input, select, textarea, .leaflet-container, .leaflet-control, .leaflet-
         <div id="banner-slides">
           <article class="banner-slide collection-banner season" role="group" aria-roledescription="slide" aria-label="1 / 3">
             <div class="banner-copy"><span class="eyebrow">AUTUMN EDIT · 01</span><h2>취향이 머무는 동네,<br>이번 가을엔 여기.</h2><p>따뜻한 커피 한 잔부터 느긋한 하루의 쉼까지.<br>나만의 동네 경험을 발견해 보세요.</p><button type="button" class="banner-cta" data-banner-action="region">동네 체험 둘러보기 <span aria-hidden="true">↗</span></button></div>
-            <div class="banner-collage" aria-hidden="true"><div class="collage-card back"><img src="assets/campaigns/c7.svg" alt=""><span>FIND YOUR NEXT FAVORITE</span></div><div class="collage-card front"><img src="assets/campaigns/c11.svg" alt=""><span>A LITTLE EXPERIENCE, A GOOD DAY.</span></div><span class="collage-sticker">가을의 작은 발견<br><b>STAMPY ✳</b></span></div>
+            <div class="banner-collage" aria-hidden="true"><div class="collage-card back"><img src="assets/campaigns/c7.svg" alt=""><span>FIND YOUR NEXT FAVORITE</span></div><div class="collage-card front"><img src="assets/campaigns/c11.svg" alt=""><span>A LITTLE EXPERIENCE, A GOOD DAY.</span></div><span class="collage-sticker">가을의 작은 발견<br><b>STAMPING ✳</b></span></div>
           </article>
           <article class="banner-slide collection-banner home" role="group" aria-roledescription="slide" aria-label="2 / 3" hidden>
             <div class="banner-copy"><span class="eyebrow">HOME COLLECTION · 02</span><h2>일상에 들이는<br>작지만 좋은 변화.</h2><p>매일 쓰는 것일수록, 내 취향에 맞게.<br>집에서 만나보는 새로운 브랜드를 모았어요.</p><button type="button" class="banner-cta" data-banner-action="product">제품 체험 둘러보기 <span aria-hidden="true">↗</span></button></div>
-            <div class="banner-collage" aria-hidden="true"><div class="collage-card back"><img src="assets/campaigns/c3.svg" alt=""><span>FIND YOUR NEXT FAVORITE</span></div><div class="collage-card front"><img src="assets/campaigns/c9.svg" alt=""><span>A LITTLE EXPERIENCE, A GOOD DAY.</span></div><span class="collage-sticker">오늘의 취향 수집<br><b>STAMPY ✳</b></span></div>
+            <div class="banner-collage" aria-hidden="true"><div class="collage-card back"><img src="assets/campaigns/c3.svg" alt=""><span>FIND YOUR NEXT FAVORITE</span></div><div class="collage-card front"><img src="assets/campaigns/c9.svg" alt=""><span>A LITTLE EXPERIENCE, A GOOD DAY.</span></div><span class="collage-sticker">오늘의 취향 수집<br><b>STAMPING ✳</b></span></div>
           </article>
           <article class="banner-slide collection-banner guide" role="group" aria-roledescription="slide" aria-label="3 / 3" hidden>
-            <div class="banner-copy"><span class="eyebrow">HELLO, REVIEWER · 03</span><h2>첫 체험의 설렘,<br>스탬피와 함께해요.</h2><p>마음에 드는 체험을 고르고, 나의 이야기를 남겨요.<br>작은 경험이 차곡차곡 쌓이는 곳.</p><button type="button" class="banner-cta" data-banner-action="guide">처음이라면, 이용 가이드 <span aria-hidden="true">↗</span></button></div>
-            <div class="banner-collage" aria-hidden="true"><div class="collage-card back"><img src="assets/campaigns/c4.svg" alt=""><span>FIND YOUR NEXT FAVORITE</span></div><div class="collage-card front"><img src="assets/campaigns/c1.svg" alt=""><span>A LITTLE EXPERIENCE, A GOOD DAY.</span></div><span class="collage-sticker">경험에 도장을 콕<br><b>STAMPY ✳</b></span></div>
+            <div class="banner-copy"><span class="eyebrow">HELLO, REVIEWER · 03</span><h2>첫 체험의 설렘,<br>스탬핑와 함께해요.</h2><p>마음에 드는 체험을 고르고, 나의 이야기를 남겨요.<br>작은 경험이 차곡차곡 쌓이는 곳.</p><button type="button" class="banner-cta" data-banner-action="guide">처음이라면, 이용 가이드 <span aria-hidden="true">↗</span></button></div>
+            <div class="banner-collage" aria-hidden="true"><div class="collage-card back"><img src="assets/campaigns/c4.svg" alt=""><span>FIND YOUR NEXT FAVORITE</span></div><div class="collage-card front"><img src="assets/campaigns/c1.svg" alt=""><span>A LITTLE EXPERIENCE, A GOOD DAY.</span></div><span class="collage-sticker">경험에 도장을 콕<br><b>STAMPING ✳</b></span></div>
           </article>
         </div>
         <div class="banner-controls"><button type="button" id="banner-prev" aria-label="이전 배너">‹</button><button type="button" class="banner-dot" data-slide="0" aria-label="가을 동네 탐방 배너 보기" aria-current="true"></button><button type="button" class="banner-dot" data-slide="1" aria-label="제품 체험 배너 보기" aria-current="false"></button><button type="button" class="banner-dot" data-slide="2" aria-label="첫 체험 가이드 배너 보기" aria-current="false"></button><button type="button" id="banner-next" aria-label="다음 배너">›</button><span class="banner-progress" id="banner-progress">1 / 3</span><button type="button" id="banner-pause" aria-label="배너 자동 재생 정지">Ⅱ</button></div>
@@ -503,7 +506,7 @@ button, input, select, textarea, .leaflet-container, .leaflet-control, .leaflet-
 
 <footer>
   <div class="wrap">
-    <span class="word">스탬피</span>
+    <span class="word brand-lockup"><span>스탬핑</span><span class="brand-english" lang="en">STAMPING</span></span>
     <span>[회사명]  대표 [이름]  사업자등록번호 [번호]</span>
   </div>
 </footer>
@@ -629,12 +632,12 @@ button, input, select, textarea, .leaflet-container, .leaflet-control, .leaflet-
   var VIEWS = [['따끈신상', 'new'], ['이벤트', 'events'], ['물물교환', 'exchange']];
   var CHANNEL_FILTERS = [
     { id: 'all', label: '모두', color: '#405e21', icon: '<path d="m5 12 4 4L19 6"/>' },
-    { id: 'blog', label: '네이버블로그', color: '#416b27', brandIcon: 'naver', icon: '<path d="M5 4h14v13H9l-4 3V4Z"/><path d="M9 8h6m-6 4h4"/>' },
-    { id: 'instagram', label: '인스타', color: '#53783b', brandIcon: 'instagram', icon: '<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17" cy="7" r="1" fill="currentColor" stroke="none"/>' },
-    { id: 'youtube', label: '유튜브', color: '#456831', brandIcon: 'youtube', icon: '<rect x="2" y="5" width="20" height="14" rx="5"/><path d="m10 9 5 3-5 3V9Z" fill="currentColor" stroke="none"/>' },
-    { id: 'short', label: '숏폼', color: '#2f4725', brandIcon: 'youtubeshorts', icon: '<rect x="6" y="2" width="12" height="20" rx="3"/><path d="m10 8 5 4-5 4V8Z" fill="currentColor" stroke="none"/>' },
-    { id: 'store', label: '스토어', color: '#446327', icon: '<path d="M3 9h18l-2-6H5L3 9Zm2 0v12h14V9M9 21v-7h6v7M3 9c0 4 4 4 5 0 1 4 7 4 8 0 1 4 5 4 5 0"/>' },
-    { id: 'purchase', label: '플랫폼 구매리뷰', color: '#556b26', icon: '<path d="M4 4h2l2 11h10l3-8H7M9 21h.01M18 21h.01M11 10h5"/>' }
+    { id: 'blog', label: '네이버블로그', color: '#007c3f', brandIcon: 'naver', icon: '<path d="M5 4h14v13H9l-4 3V4Z"/><path d="M9 8h6m-6 4h4"/>' },
+    { id: 'instagram', label: '인스타', color: '#b52d69', brandIcon: 'instagram', icon: '<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17" cy="7" r="1" fill="currentColor" stroke="none"/>' },
+    { id: 'youtube', label: '유튜브', color: '#c60000', brandIcon: 'youtube', icon: '<rect x="2" y="5" width="20" height="14" rx="5"/><path d="m10 9 5 3-5 3V9Z" fill="currentColor" stroke="none"/>' },
+    { id: 'short', label: '숏폼', color: '#c62246', brandIcon: 'youtubeshorts', icon: '<rect x="6" y="2" width="12" height="20" rx="3"/><path d="m10 8 5 4-5 4V8Z" fill="currentColor" stroke="none"/>' },
+    { id: 'store', label: '스토어', color: '#175ab6', icon: '<path d="M3 9h18l-2-6H5L3 9Zm2 0v12h14V9M9 21v-7h6v7M3 9c0 4 4 4 5 0 1 4 7 4 8 0 1 4 5 4 5 0"/>' },
+    { id: 'purchase', label: '플랫폼 구매리뷰', color: '#6941af', icon: '<path d="M4 4h2l2 11h10l3-8H7M9 21h.01M18 21h.01M11 10h5"/>' }
   ];
   function channelKey(channel) {
     if (['블로그', '네이버블로그'].indexOf(channel) !== -1) return 'blog';
@@ -651,10 +654,10 @@ button, input, select, textarea, .leaflet-container, .leaflet-control, .leaflet-
   function renderChannels() {
     $('channel-options').innerHTML = CHANNEL_FILTERS.map(function (channel) {
       var checked = channel.id === 'all' ? state.channels === null : state.channels !== null && state.channels.indexOf(channel.id) !== -1;
-      return '<label class="channel-option"><input type="checkbox" value="' + channel.id + '"' + (checked ? ' checked' : '') + '><span class="channel-icon" style="--channel-color:' + channel.color + '">' + (channel.brandIcon ? '<img src="assets/icons/' + channel.brandIcon + '.svg" alt="" aria-hidden="true">' : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + channel.icon + '</svg>') + '</span><span>' + channel.label + '</span></label>';
+      return '<label class="channel-option"><input type="checkbox" value="' + channel.id + '"' + (checked ? ' checked' : '') + '><span class="channel-icon" style="--channel-color:' + channel.color + '">' + (channel.brandIcon ? '<span class="channel-brand" style="--channel-logo:url(assets/icons/' + channel.brandIcon + '.svg)" aria-hidden="true"></span>' : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + channel.icon + '</svg>') + '</span><span>' + channel.label + '</span></label>';
     }).join('');
   }
-  var CATEGORY_ICONS = {"전체": ["#405e21", "<rect x=\"3\" y=\"3\" width=\"7\" height=\"7\" rx=\"2\"/><rect x=\"14\" y=\"3\" width=\"7\" height=\"7\" rx=\"2\"/><rect x=\"3\" y=\"14\" width=\"7\" height=\"7\" rx=\"2\"/><rect x=\"14\" y=\"14\" width=\"7\" height=\"7\" rx=\"2\"/>"], "맛집": ["#567534", "<path d=\"M4 3v6a3 3 0 0 0 6 0V3M7 3v18M20 21V3c-4 2-5 7-4 10h4\"/>"], "카페": ["#526c3e", "<path d=\"M4 8h13v7a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V8Zm13 1h2a3 3 0 0 1 0 6h-2M7 3v2m5-2v2M2 22h18\"/>"], "뷰티": ["#527847", "<path d=\"M8 12h8v9H8zM9 12V5l6-3v10M7 21h10\"/>"], "숙박": ["#467242", "<path d=\"M3 21V3h14v18M2 21h20M7 7h1m4 0h1M7 11h1m4 0h1M8 21v-6h4v6M17 10h4v11\"/>"], "문화": ["#5d7435", "<path d=\"M3 5h18v5a2 2 0 0 0 0 4v5H3v-5a2 2 0 0 0 0-4V5Zm13 0v3m0 3v2m0 3v3\"/>"], "배달": ["#40682d", "<path d=\"M3 5h11v12H3zM14 9h4l3 4v4h-7M18 9v4h3M1 9h6M1 13h4\"/><circle cx=\"6\" cy=\"19\" r=\"2\"/><circle cx=\"18\" cy=\"19\" r=\"2\"/>"], "테이크아웃": ["#536c31", "<path d=\"M4 7h16l1 14H3L4 7Zm4 0V6a4 4 0 0 1 8 0v1M9 12h6\"/>"], "생활": ["#49663a", "<path d=\"m3 10 9-7 9 7v11h-7v-7h-4v7H3V10Z\"/>"], "유아동": ["#5c753d", "<circle cx=\"12\" cy=\"13\" r=\"8\"/><path d=\"M8 12h.01M16 12h.01M9 16q3 3 6 0M12 5c4-4-3-5-2-1\"/>"], "디지털": ["#4c6241", "<rect x=\"3\" y=\"3\" width=\"18\" height=\"13\" rx=\"2\"/><path d=\"M12 16v5m-5 0h10\"/>"], "패션": ["#587044", "<path d=\"m8 3-6 4 3 5 3-2v11h8V10l3 2 3-5-6-4a4 4 0 0 1-8 0Z\"/>"], "도서": ["#477240", "<path d=\"M12 5C8 2 4 3 2 4v16c3-1 7-1 10 1 3-2 7-2 10-1V4c-2-1-6-2-10 1Zm0 0v16\"/>"], "식품": ["#4d752b", "<path d=\"M12 7C3 2 0 12 7 20c2 2 3 0 5 0s3 2 5 0c7-8 4-18-5-13Zm0 0V3m0 1c2-3 5-3 6-2-1 3-3 4-6 2Z\"/>"], "반려동물": ["#5c6b36", "<path d=\"M6 16c-3 6 2 7 6 4 4 3 9 2 6-4l-3-4a4 4 0 0 0-6 0l-3 4Z\"/><ellipse cx=\"4\" cy=\"9\" rx=\"2\" ry=\"3\"/><ellipse cx=\"9\" cy=\"5\" rx=\"2\" ry=\"3\"/><ellipse cx=\"15\" cy=\"5\" rx=\"2\" ry=\"3\"/><ellipse cx=\"20\" cy=\"9\" rx=\"2\" ry=\"3\"/>"]};
+  var CATEGORY_ICONS = {"전체": ["#405e21", "<rect x=\"3\" y=\"3\" width=\"7\" height=\"7\" rx=\"2\"/><rect x=\"14\" y=\"3\" width=\"7\" height=\"7\" rx=\"2\"/><rect x=\"3\" y=\"14\" width=\"7\" height=\"7\" rx=\"2\"/><rect x=\"14\" y=\"14\" width=\"7\" height=\"7\" rx=\"2\"/>"], "맛집": ["#ad461c", "<path d=\"M4 3v6a3 3 0 0 0 6 0V3M7 3v18M20 21V3c-4 2-5 7-4 10h4\"/>"], "카페": ["#845034", "<path d=\"M4 8h13v7a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V8Zm13 1h2a3 3 0 0 1 0 6h-2M7 3v2m5-2v2M2 22h18\"/>"], "뷰티": ["#aa366d", "<path d=\"M8 12h8v9H8zM9 12V5l6-3v10M7 21h10\"/>"], "숙박": ["#205db4", "<path d=\"M3 21V3h14v18M2 21h20M7 7h1m4 0h1M7 11h1m4 0h1M8 21v-6h4v6M17 10h4v11\"/>"], "문화": ["#6941af", "<path d=\"M3 5h18v5a2 2 0 0 0 0 4v5H3v-5a2 2 0 0 0 0-4V5Zm13 0v3m0 3v2m0 3v3\"/>"], "배달": ["#08766a", "<path d=\"M3 5h11v12H3zM14 9h4l3 4v4h-7M18 9v4h3M1 9h6M1 13h4\"/><circle cx=\"6\" cy=\"19\" r=\"2\"/><circle cx=\"18\" cy=\"19\" r=\"2\"/>"], "테이크아웃": ["#9a560c", "<path d=\"M4 7h16l1 14H3L4 7Zm4 0V6a4 4 0 0 1 8 0v1M9 12h6\"/>"], "생활": ["#267037", "<path d=\"m3 10 9-7 9 7v11h-7v-7h-4v7H3V10Z\"/>"], "유아동": ["#9e4b1e", "<circle cx=\"12\" cy=\"13\" r=\"8\"/><path d=\"M8 12h.01M16 12h.01M9 16q3 3 6 0M12 5c4-4-3-5-2-1\"/>"], "디지털": ["#3857a7", "<rect x=\"3\" y=\"3\" width=\"18\" height=\"13\" rx=\"2\"/><path d=\"M12 16v5m-5 0h10\"/>"], "패션": ["#933c86", "<path d=\"m8 3-6 4 3 5 3-2v11h8V10l3 2 3-5-6-4a4 4 0 0 1-8 0Z\"/>"], "도서": ["#3d6793", "<path d=\"M12 5C8 2 4 3 2 4v16c3-1 7-1 10 1 3-2 7-2 10-1V4c-2-1-6-2-10 1Zm0 0v16\"/>"], "식품": ["#4e7018", "<path d=\"M12 7C3 2 0 12 7 20c2 2 3 0 5 0s3 2 5 0c7-8 4-18-5-13Zm0 0V3m0 1c2-3 5-3 6-2-1 3-3 4-6 2Z\"/>"], "반려동물": ["#885329", "<path d=\"M6 16c-3 6 2 7 6 4 4 3 9 2 6-4l-3-4a4 4 0 0 0-6 0l-3 4Z\"/><ellipse cx=\"4\" cy=\"9\" rx=\"2\" ry=\"3\"/><ellipse cx=\"9\" cy=\"5\" rx=\"2\" ry=\"3\"/><ellipse cx=\"15\" cy=\"5\" rx=\"2\" ry=\"3\"/><ellipse cx=\"20\" cy=\"9\" rx=\"2\" ry=\"3\"/>"]};
   function renderCategories(cats) {
     $('cats').innerHTML = cats.map(function (cat) {
       var icon = CATEGORY_ICONS[cat] || CATEGORY_ICONS['전체'];
@@ -727,7 +730,7 @@ button, input, select, textarea, .leaflet-container, .leaflet-control, .leaflet-
       return '<button type="button" class="gtab" data-view="' + v[1] + '" aria-pressed="' + (state.view === v[1]) + '">' + v[0] + '</button>';
     }).join('');
     renderSummary();
-    var titles = { campaigns: '이번 주엔 어디서 써볼까요', new: '따끈따끈, 새로 만나는 체험단', events: '스탬피 이벤트', exchange: '함께 나누는 물물교환' };
+    var titles = { campaigns: '이번 주엔 어디서 써볼까요', new: '따끈따끈, 새로 만나는 체험단', events: '스탬핑 이벤트', exchange: '함께 나누는 물물교환' };
     $('page-title').textContent = state.view === 'campaigns' ? '체험단 캠페인' : titles[state.view];
     $('page-title').classList.toggle('sr-only', state.view === 'campaigns' || state.view === 'new');
     $('hero-banner').hidden = state.view === 'events' || state.view === 'exchange';

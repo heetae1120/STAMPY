@@ -1,6 +1,6 @@
-# 스탬피
+# 스탬핑
 
-식당, 카페, 제품 체험단 플랫폼 스탬피의 웹사이트입니다.
+식당, 카페, 제품 체험단 플랫폼 스탬핑의 웹사이트입니다.
 
 **사이트 주소:** [https://heetae1120.github.io/STAMPY/](https://heetae1120.github.io/STAMPY/)
 

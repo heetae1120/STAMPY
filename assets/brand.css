@@ -1,0 +1,30 @@
+:root {
+  --brand-accent: #dcecc7;
+}
+
+.logo,
+.brand-lockup {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  white-space: nowrap;
+  font-weight: 800;
+}
+
+.logo {
+  flex: none;
+  color: inherit;
+  text-decoration: none;
+  font-size: 27px;
+  line-height: 1;
+}
+
+.brand-english {
+  padding: 3px 7px;
+  border-radius: 5px;
+  background: var(--brand-accent);
+  color: #222e17;
+  font-size: 10px;
+  line-height: 1.3;
+  letter-spacing: .075em;
+}
