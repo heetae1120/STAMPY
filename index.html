@@ -9,7 +9,8 @@
 <link rel="stylesheet" href="assets/brand.css?v=white">
 <meta name="description" content="식당, 카페, 제품을 블로그와 인스타그램 리뷰어에게 보내고 진짜 후기를 받아보세요.">
 <link rel="stylesheet" href="styles.css?v=stamping">
-<link rel="stylesheet" href="assets/review-tree/tree.css?v=stamping">
+<link rel="stylesheet" href="assets/review-tree/tree.css?v=review-tree-2">
+<script>try{if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&sessionStorage.getItem('stamping.tree.intro')!=='seen')document.documentElement.classList.add('rt-intro')}catch(e){}</script>
 </head>
 <body>
 
@@ -28,29 +29,63 @@
 
 <main id="top">
 
-  <section class="orchard" id="hero03" aria-labelledby="orchard-title">
-    <div class="orchard-layout">
-      <div class="orchard-copy">
-        <p class="orchard-eyebrow">스탬핑 · 경험이 후기로 쌓이는 곳</p>
-        <h1 id="orchard-title">손님이 먼저 써보고,<br>후기로 남겨요.</h1>
-        <p class="orchard-lead">가게의 공간부터 브랜드의 제품까지.<br>리뷰어의 새로운 경험이 사장님의 다음 이야기가 됩니다.</p>
-        <div class="orchard-actions"><a href="campaigns.html">캠페인 보러가기 <span aria-hidden="true">↗</span></a><a href="#contact">무료 상담 신청</a></div>
+  <section class="rt" aria-labelledby="rt-title">
+    <div class="rt-layout">
+      <div class="rt-copy">
+        <p class="rt-eyebrow rt-reveal"><span class="rt-seed" aria-hidden="true"></span><span lang="en">The Review Tree</span><span aria-hidden="true">·</span>스탬핑 체험단</p>
+        <h1 id="rt-title"><span class="rt-line"><span>작은 경험이 모여,</span></span><span class="rt-line"><span>리뷰가 <em>열리는<svg class="rt-underline" viewBox="0 0 120 14" preserveAspectRatio="none" aria-hidden="true"><path d="M3 9C24 3 48 12 70 6S106 4 117 7" pathLength="1" stroke-dasharray="1 1"/></svg></em> 순간.</span></span></h1>
+        <p class="rt-lead rt-reveal">가게의 공간부터 브랜드의 제품까지. 우리 가게를 경험한 리뷰어의 이야기가 새로운 손님을 만나는 힘이 됩니다.</p>
       </div>
-      <div class="orchard-view" aria-label="후기 나무">
-        <div class="orchard-frame">
-          <div class="orchard-sun" aria-hidden="true"></div>
-          <div class="orchard-ground" aria-hidden="true"></div>
-          <div class="orchard-layer wood" aria-hidden="true"><img class="orchard-tree" src="assets/review-tree/plum-tree-3d.webp" alt="" width="1250" height="1000" fetchpriority="high"></div>
-          <div class="orchard-layer foliage" aria-hidden="true"><img class="bough bough-left" src="assets/review-tree/plum-sprig-3d.webp" alt=""><img class="bough bough-right" src="assets/review-tree/plum-sprig-3d.webp" alt=""></div>
-          <div class="orchard-layer fruit-layer" role="group" aria-label="후기 열매"></div>
-          <div class="orchard-dust" aria-hidden="true"></div>
+      <div class="rt-cta">
+        <div class="rt-actions rt-reveal">
+          <a class="rt-btn rt-btn-primary" href="campaigns.html">캠페인 알아보기 <span aria-hidden="true">↗</span></a>
+          <a class="rt-btn" href="#contact">무료 상담 신청</a>
         </div>
-        <div class="orchard-panel" hidden></div>
-        <p class="orchard-caption" hidden><span aria-hidden="true">✧</span> 열매를 눌러 예시 후기를 만나보세요</p>
-        <noscript><details class="orchard-static"><summary>카페 예시 후기 읽기</summary>창가에서 즐기는 라테와 페이스트리 · 따뜻한 페이스트리와 우유의 고소함을 담은 예시 후기입니다.</details></noscript>
+        <ol class="rt-flow rt-reveal" aria-label="후기가 열리는 과정">
+          <li><b>가지</b>체험 캠페인을 열고</li>
+          <li><b>체험</b>리뷰어가 방문·사용하면</li>
+          <li><b>열매</b>후기가 하나씩 열려요</li>
+        </ol>
+      </div>
+      <div class="rt-tree">
+        <div class="rt-stage">
+          <div class="rt-bg" aria-hidden="true"><i class="rt-sun"></i><i class="rt-ring"></i><i class="rt-ring rt-ring-2"></i><i class="rt-mote" style="--x:12%;--y:22%;--d:0s"></i><i class="rt-mote rt-mote-g" style="--x:86%;--y:18%;--d:-2s"></i><i class="rt-mote" style="--x:92%;--y:62%;--d:-4s"></i><i class="rt-mote rt-mote-g" style="--x:7%;--y:66%;--d:-1s"></i><i class="rt-mote rt-mote-s" style="--x:24%;--y:9%;--d:-3s"></i><i class="rt-mote rt-mote-s" style="--x:74%;--y:8%;--d:-5s"></i></div>
+          <div class="rt-par">
+            <div class="rt-camera">
+              <div class="rt-sway">
+                <svg class="rt-svg" xmlns="http://www.w3.org/2000/svg" viewBox="80 40 840 880" aria-hidden="true" focusable="false"></svg>
+                <div class="rt-hits" role="group" aria-label="후기 열매. 방향키로 열매를 옮겨 다닐 수 있어요."></div>
+              </div>
+            </div>
+          </div>
+          <div class="rt-scrim" aria-hidden="true"></div>
+          <article class="rt-card" role="dialog" aria-modal="true" aria-labelledby="rt-card-title">
+            <div class="rt-card-skin" aria-hidden="true"></div>
+            <div class="rt-card-grip" aria-hidden="true"><i></i></div>
+            <div class="rt-card-media"></div>
+            <div class="rt-card-body">
+              <p class="rt-card-meta"><span class="rt-card-type"></span><span class="rt-card-sample">예시 후기</span></p>
+              <h2 class="rt-card-title" id="rt-card-title"></h2>
+              <p class="rt-card-excerpt"></p>
+              <details class="rt-card-more"><summary>자세히 읽기</summary><p></p></details>
+              <div class="rt-card-foot">
+                <a class="rt-card-link" href="#" target="_blank" rel="noopener" hidden>원문 리뷰 보기 <span aria-hidden="true">↗</span></a>
+                <span class="rt-card-nolink">예시라 원문 링크는 없어요</span>
+                <span class="rt-card-nav"><button type="button" class="rt-card-prev" aria-label="이전 후기">←</button><span class="rt-card-count" aria-hidden="true"></span><button type="button" class="rt-card-next" aria-label="다음 후기">→</button></span>
+              </div>
+            </div>
+            <button type="button" class="rt-card-close" aria-label="후기 닫기">×</button>
+          </article>
+          <noscript><p class="rt-noscript">후기 나무는 자바스크립트를 켜면 볼 수 있어요. <a href="campaigns.html">캠페인 보러가기</a></p></noscript>
+        </div>
+        <p class="rt-hint"><span class="rt-hint-icon" aria-hidden="true"></span><span class="rt-hint-text">열매를 눌러 후기를 만나보세요</span></p>
+        <div class="rt-legend" role="group" aria-label="후기 종류 강조">
+          <button type="button" data-type="visit" aria-pressed="false"><i aria-hidden="true"></i><span><span class="rt-wide">카페·식당 </span>방문형</span></button>
+          <button type="button" data-type="delivery" aria-pressed="false"><i aria-hidden="true"></i><span><span class="rt-wide">뷰티·제품 </span>배송형</span></button>
+          <button type="button" data-type="editorial" aria-pressed="false"><i aria-hidden="true"></i><span><span class="rt-wide">서비스·</span>기자단형</span></button>
+        </div>
       </div>
     </div>
-    <dialog class="orchard-detail" aria-labelledby="review-detail-title"><form method="dialog"><button aria-label="후기 닫기">×</button></form><img alt=""><div><small></small><h2 id="review-detail-title"></h2><p></p></div></dialog>
   </section>
 
   <section id="types" class="band-white">
@@ -195,6 +230,6 @@ document.querySelectorAll('.faq-item button').forEach(function (btn) {
   });
 });
 </script>
-<script type="module" src="assets/review-tree/tree.js?v=plum-3d"></script>
+<script type="module" src="assets/review-tree/tree.js?v=review-tree-2"></script>
 </body>
 </html>

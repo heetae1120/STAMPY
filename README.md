@@ -4,7 +4,7 @@
 
 **사이트 주소:** [https://heetae1120.github.io/STAMPY/](https://heetae1120.github.io/STAMPY/)
 
-- `index.html`: 업체소개 메인페이지. 열매를 선택해 예시 후기를 읽는 후기 나무와 캠페인 유형 안내.
+- `index.html`: 업체소개 메인페이지. 리뷰가 열리는 나무(The Review Tree) 히어로와 캠페인 유형 안내.
 - `campaigns.html`: 리뷰어 캠페인 페이지.
 - `styles.css`: 업체소개 페이지 스타일. 리뷰어 스타일은 해당 HTML 안에 있습니다.
 
@@ -19,9 +19,23 @@ npm run build
 python -m http.server 8000 --bind 127.0.0.1
 ```
 
-`npm run build`는 `src/review-tree.ts`와 `src/review-data.ts`를 `assets/review-tree/tree.js`로 묶습니다. GitHub Pages는 저장소에 포함된 빌드 결과와 로컬 WebP 이미지를 그대로 배포합니다.
+`npm run build`는 `src/review-tree.ts`, `src/tree-scene.ts`, `src/review-data.ts`를 GSAP 코어와 함께 `assets/review-tree/tree.js`로 묶습니다. GitHub Pages는 저장소에 포함된 빌드 결과를 그대로 배포합니다.
 
-실제 후기를 연결할 때는 데이터의 제목·본문·이미지·열매 위치와 `reviewUrl`, `sample`을 수정하세요. 링크를 생략하면 내장 상세 보기가 열립니다. 이전 터널 통합 기록은 `HERO_03_INTEGRATION.md`에 보관되어 있습니다.
+### 히어로: 리뷰가 열리는 나무
+
+- 나무·잎·열매는 모두 SVG로 그려집니다(`src/tree-scene.ts`). 첫 방문 시 약 6초 동안 새싹 → 나무 성장 → 열매 등장 → 대표 후기 카드 펼침 → 복귀 순서로 한 번 재생되고, 같은 세션에서 다시 오면 짧은 성장 연출만 나옵니다. 아무 곳이나 누르거나 ESC를 누르면 바로 완성된 나무로 넘어갑니다.
+- 열매를 누르면 열매가 카드로 펼쳐지고, 휴대폰(760px 이하)에서는 아래에서 올라오는 시트로 열립니다. 방향키로 열매 사이를 이동할 수 있고, ESC나 닫기 버튼으로 닫으면 원래 열매로 포커스가 돌아갑니다.
+- 움직임 줄이기 설정을 켠 사용자에게는 애니메이션 없이 완성된 나무가 보입니다.
+
+### 후기 데이터 바꾸기
+
+후기는 `src/review-data.ts`에서 관리합니다. 나무에는 열매 자리가 18개 있고, 데이터 순서대로 채워지며 `featured: true`인 후기가 가장 큰 열매(인트로에서 자동으로 열리는 열매)에 들어갑니다.
+
+- `type`: `visit`(카페·식당 방문형), `delivery`(뷰티·제품 배송형), `editorial`(서비스·기자단형). 종류마다 열매 색이 조금씩 다릅니다.
+- 실제 후기를 연결할 때는 제목·본문·`thumbnail`을 바꾸고 `reviewUrl`에 원문 링크를 넣은 뒤 `sample: false`로 바꾸세요. `sample: true`인 동안에는 카드에 '예시 후기'가 표시되고 원문 링크 대신 안내 문구가 나옵니다.
+- `thumbnail`이 없는 기자단 후기에는 그림 표지가 대신 들어갑니다. `face`로 열매 표정(`smile`, `joy`, `wink`, `calm`, `wow`, `cheeky`, `sparkle`)을 고를 수 있습니다.
+
+이전 터널 통합 기록은 `HERO_03_INTEGRATION.md`에 보관되어 있습니다.
 
 수정 후 `npm run build`를 실행하고 소스와 빌드 결과를 함께 커밋하세요. 지도 표시용 공개 Key ID는 설정 파일에 포함되며 Client Secret은 저장소에 넣지 않습니다.
 
