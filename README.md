@@ -1,31 +1,45 @@
-# 스탬핑
+# STAMPY 스탬피
 
-식당, 카페, 제품 체험단 플랫폼 스탬핑의 웹사이트입니다.
+**경험을 모으는 가장 즐거운 모험.** 브랜드 체험단에 참여하고, 리뷰 미션을 완료해 스탬프와 스티커를 모으고, 모은 스탬프를 브랜드 상품으로 교환하는 체험단 플랫폼입니다. 보물지도(Treasure Map)와 스티커북(Sticker Collection)을 하나로 묶은 세계관으로 사이트 전체를 새로 만들었습니다.
 
 **사이트 주소:** [https://heetae1120.github.io/STAMPY/](https://heetae1120.github.io/STAMPY/)
 
-- `index.html`: 업체소개 메인페이지. 열매를 선택해 예시 후기를 읽는 후기 나무와 캠페인 유형 안내.
-- `campaigns.html`: 리뷰어 캠페인 페이지.
-- `styles.css`: 업체소개 페이지 스타일. 리뷰어 스타일은 해당 HTML 안에 있습니다.
+> 현재는 **데모 버전**입니다. 브랜드·체험단·상품은 모두 예시이며, 신청·리뷰·스탬프·교환은 브라우저 localStorage에만 저장되고 실제로 처리되거나 발송되지 않습니다.
+
+## 구조
+
+- `app/` — 새 사이트 (React 19 + 자체 라우터, esbuild로 페이지별 코드 분할)
+  - `pages/` 홈, 소개, 이용 방법, 보물지도, 체험단 목록·상세, 리워드샵·상세, 브랜드 제휴, FAQ, 로그인, 마이페이지(`my/`), 운영 콘솔(`admin/`), 디자인 시스템(`/styleguide`)
+  - `art/` 직접 그린 SVG 일러스트: STAMPY 캐릭터, 보물지도, 카테고리 섬, 스티커 24종, 보물상자, 스탬프
+  - `api/` 데이터 모델(`types.ts`)과 데모 서버(`demo.ts`)
+  - `data/` 데모 카탈로그와 FAQ
+- `assets/app/` — 빌드 결과 (커밋 대상), 경로별 `*/index.html`과 `404.html`은 빌드가 생성
+- `tests/` — 스탬프 원장·교환·검수 규칙 테스트
+- `classic.html`, `campaigns.html` — 이전 업체 소개 페이지와 리뷰어 캠페인 페이지 (보존)
+
+설계, 데이터 모델, 비즈니스 규칙, 백엔드 연결 지점은 [docs/SERVICE_DESIGN.md](docs/SERVICE_DESIGN.md)에 정리했습니다.
 
 ## 개발과 빌드
 
-Node.js 24와 npm 기준:
+Node.js 22 이상과 npm 기준:
 
 ```sh
 npm ci
 npm run typecheck
+npm test
 npm run build
-python -m http.server 8000 --bind 127.0.0.1
+npm run serve
 ```
 
-`npm run build`는 `src/review-tree.ts`와 `src/review-data.ts`를 `assets/review-tree/tree.js`로 묶습니다. GitHub Pages는 저장소에 포함된 빌드 결과와 로컬 WebP 이미지를 그대로 배포합니다.
+`npm run serve`는 `http://127.0.0.1:8080/STAMPY/`에서 GitHub Pages와 같은 방식(하위 경로, 폴더의 index.html, 404.html 대체)으로 사이트를 띄웁니다. 수정 후 `npm run build`를 실행하고 소스와 빌드 결과를 함께 커밋하세요.
 
-실제 후기를 연결할 때는 데이터의 제목·본문·이미지·열매 위치와 `reviewUrl`, `sample`을 수정하세요. 링크를 생략하면 내장 상세 보기가 열립니다. 이전 터널 통합 기록은 `HERO_03_INTEGRATION.md`에 보관되어 있습니다.
+### 데모 데이터 바꾸기
 
-수정 후 `npm run build`를 실행하고 소스와 빌드 결과를 함께 커밋하세요. 지도 표시용 공개 Key ID는 설정 파일에 포함되며 Client Secret은 저장소에 넣지 않습니다.
+체험단·브랜드·스티커·리워드는 `app/data/catalog.ts`에서 관리합니다. 모집 날짜는 오늘 기준 상대 일수로 정의되어 있어 상태(모집 예정/중/마감)가 항상 의미 있게 보입니다. 사진이 없는 체험단은 "제품 사진 준비 중" 자리표시가 나옵니다. 데모 흐름은 로그인 화면에서 *새 탐험가*, *예시 탐험가*, *운영자*로 시작해 볼 수 있습니다.
 
-`[가격]`, `[회사명]` 등은 운영자가 채울 자리입니다. 캠페인은 예시 데이터이며 신청·프로필은 브라우저 localStorage에만 저장됩니다. 캠페인 지도는 네이버 지도를 사용하며 매장 핀은 실제 주소가 아닌 예시 위치입니다.
+### 이전 사이트
+
+이전 업체 소개 페이지(리뷰가 열리는 나무 히어로)는 `classic.html`로 옮겼고 `npm run build:classic`으로 빌드합니다. 후기 데이터는 `src/review-data.ts`에 있습니다. 이전 터널 통합 기록은 `HERO_03_INTEGRATION.md`에 보관되어 있습니다.
 
 ## 네이버 지도 활용 계획
 
