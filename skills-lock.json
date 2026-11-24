@@ -7,6 +7,13 @@
       "sourceType": "github",
       "skillPath": "skills/find-skills/SKILL.md",
       "computedHash": "7bc223e2aafbdbf6e50ea243ba6ef67fe432bb069ab439fea0390795dac0bf7f"
+    },
+    "same-feedback-once": {
+      "source": "figmatutor2/same-feedback-once",
+      "commit": "6ec43b46f7e3290666519cfb66d0e9ed7ae5c730",
+      "sourceType": "github",
+      "skillPath": "skills/same-feedback-once/SKILL.md",
+      "computedHash": "fed2665b2d7ac1b9ed62be6ebae539ef40db2d816d816769e722d0ad29e012c6"
     }
   }
 }
