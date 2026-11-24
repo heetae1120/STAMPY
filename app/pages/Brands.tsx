@@ -22,7 +22,7 @@ const PRODUCT: { id: BusinessType; label: string } = { id: 'product', label: '�
 const KINDS: [CampaignKind, string][] = [['visit', '방문형 (매장 방문)'], ['delivery', '배송형 (제품 배송)'], ['editorial', '기자단 (정보형 글)']];
 
 const BENEFITS = [
-  ['새로운 고객의 실제 방문', '아직 가게를 모르는 손님이 직접 방문해 메뉴와 공간을 경험해요.'],
+  ['처음 오는 손님의 실제 방문', '아직 가게를 모르는 손님이 직접 방문해 메뉴와 공간을 경험해요.'],
   ['지역 기반 체험단 탐색', '검증된 매장은 리뷰어의 ‘내 주변 지도’에 위치와 함께 표시돼요.'],
   ['리뷰어 모집과 선정', '신청서와 채널을 보고 매장에 맞는 리뷰어를 함께 고를 수 있어요.'],
   ['체험 일정과 미션 관리', '방문 기간·시간·예약 방법과 리뷰 미션을 한 페이지에 안내해요.'],
@@ -107,8 +107,8 @@ export default function Brands() {
         <div className="wrap brands-hero-grid">
           <div>
             <p className="eyebrow">For Store Owners & Brands</p>
-            <h1 className="h-display">우리 가게를 경험할<br />새로운 손님을 만나보세요.</h1>
-            <p className="lead">우리 매장의 매력을 직접 경험하고,<br />솔직한 리뷰로 기록할 체험단을 모집해 보세요.</p>
+            <h1 className="h-display">리뷰어가 매장에 와서<br />사진과 후기를 남겨요</h1>
+            <p className="lead">제공할 메뉴와 방문 기간을 정해 체험단을 모집하면,<br />선정된 블로그·인스타그램 리뷰어가 방문하고 리뷰 링크를 제출해요.</p>
             <div className="row-btns" style={{ marginTop: 24 }}>
               <a className="btn btn-primary" href="#inquiry" onClick={toForm}>우리 매장 체험단 문의하기</a>
               <a className="btn" href="#how" onClick={e => { e.preventDefault(); document.getElementById('how')?.scrollIntoView({ behavior: 'smooth' }); }}>진행 방식 보기</a>
@@ -128,36 +128,40 @@ export default function Brands() {
 
       <div className="wrap">
         <section className="section" aria-labelledby="ben-title">
-          <Reveal className="section-head"><p className="eyebrow">Service</p><h2 id="ben-title" className="h2">우리 매장에 맞는 체험단을 모집해 보세요</h2>
-            <p className="lead">매출 상승이나 검색 상위 노출을 약속하지 않아요. 실제 방문 경험과 솔직한 기록을 만드는 데 집중해요.</p></Reveal>
-          <ul className="benefit-grid b6">
-            {BENEFITS.map(([t, d], i) => <Reveal as="li" key={t} delay={i * 50} className="benefit card"><span className="benefit-no num">{String(i + 1).padStart(2, '0')}</span><b className="h3">{t}</b><p className="small muted">{d}</p></Reveal>)}
-          </ul>
+          <div className="ben-split">
+            <Reveal>
+              <h2 id="ben-title" className="h2">STAMPY로 할 수 있는 일</h2>
+              <p className="lead" style={{ marginTop: 12 }}>매출 상승이나 검색 상위 노출은 약속하지 않아요. 실제 방문과 솔직한 기록을 만드는 데 집중해요.</p>
+            </Reveal>
+            <dl className="ben-list">
+              {BENEFITS.map(([t, d]) => <div key={t}><dt>{t}</dt><dd>{d}</dd></div>)}
+            </dl>
+          </div>
         </section>
 
         <section id="how" className="section" aria-labelledby="ops-title">
-          <Reveal className="section-head"><p className="eyebrow">How It Works</p><h2 id="ops-title" className="h2">문의부터 결과 확인까지</h2></Reveal>
-          <ol className="ops-steps">
-            {STEPS.map(([t, d], i) => <Reveal as="li" key={t} delay={i * 50}><span className="num">{String(i + 1).padStart(2, '0')}</span><b>{t}</b><p className="small muted">{d}</p></Reveal>)}
+          <h2 id="ops-title" className="h2 ops-title">문의부터 결과 확인까지 6단계</h2>
+          <ol className="ops-line">
+            {STEPS.map(([t, d], i) => <li key={t}><span className="num" aria-hidden="true">{i + 1}</span><b>{t}</b><p>{d}</p></li>)}
           </ol>
         </section>
 
         <section className="section" aria-labelledby="biz-title">
-          <Reveal className="section-head"><p className="eyebrow">Suitable Businesses</p><h2 id="biz-title" className="h2">이런 매장에 잘 맞아요</h2>
-            <p className="lead">업종별 체험단 구성 예시예요. 실제 제휴 사례가 아니에요.</p></Reveal>
-          <ul className="biz-grid">
-            {BUSINESS.map(b => (
-              <li key={b.id} className="card biz"><Sticker art={b.art} size={52} /><div><b>{b.label}</b> <DemoBadge text="예시" /><p className="small muted">{b.example}</p></div></li>
-            ))}
-          </ul>
+          <div className="biz-head">
+            <h2 id="biz-title" className="h2">업종별 체험단 구성 예시</h2>
+            <p className="small muted">실제 제휴 사례가 아니라 구성을 가늠해 보는 예시예요. <DemoBadge text="예시" /></p>
+          </div>
+          <table className="biz-table">
+            <thead><tr><th scope="col">업종</th><th scope="col">제공 예시와 리뷰에 담기는 내용</th></tr></thead>
+            <tbody>{BUSINESS.map(b => <tr key={b.id}><th scope="row"><Sticker art={b.art} size={32} />{b.label}</th><td>{b.example}</td></tr>)}</tbody>
+          </table>
         </section>
 
         <section className="section loc-sec" aria-labelledby="loc-title">
           <div className="loc-grid">
             <Reveal>
-              <p className="eyebrow">Location-Based Discovery</p>
-              <h2 id="loc-title" className="h2">가까운 곳에서 새로운 경험을 찾는 리뷰어들에게</h2>
-              <p className="lead" style={{ marginTop: 12 }}>방문형 체험단은 리뷰어의 ‘내 주변 지도’(네이버 지도)에 매장 위치와 함께 표시돼요.</p>
+              <h2 id="loc-title" className="h2">근처 리뷰어의 지도에 매장이 표시돼요</h2>
+              <p className="lead" style={{ marginTop: 12 }}>방문형 체험단은 리뷰어가 보는 ‘내 주변 지도’(네이버 지도)에 매장 위치와 함께 나타나요.</p>
               <ul className="tick-list small" style={{ marginTop: 16 }}>
                 <li>매장 주소와 지도 위치가 일치하는지 운영팀이 확인한 뒤 노출해요.</li>
                 <li>마커를 누르면 매장명, 제공 혜택, 마감일, 상세 보기가 나타나요.</li>
@@ -170,8 +174,10 @@ export default function Brands() {
         </section>
 
         <section className="section" aria-labelledby="op-title">
-          <Reveal className="section-head"><p className="eyebrow">Campaign Operation</p><h2 id="op-title" className="h2">모집부터 리뷰 관리까지</h2>
-            <p className="lead">지금 쓸 수 있는 기능과 앞으로 연결할 기능을 나눠 안내해요.</p></Reveal>
+          <div className="biz-head">
+            <h2 id="op-title" className="h2">지금 되는 기능, 준비 중인 기능</h2>
+            <p className="small muted">데모로 체험할 수 있는 기능과 서버 연결 후 열리는 기능을 나눠 적었어요.</p>
+          </div>
           <div className="table-wrap"><table className="adm-table ops-table">
             <thead><tr><th>기능</th><th>상태</th><th>내용</th></tr></thead>
             <tbody>{OPS.map(([t, st, d]) => <tr key={t}><td><b>{t}</b></td><td><span className={'badge ' + (st === 'now' ? 'badge-open' : st === 'demo' ? 'badge-demo' : 'badge-closed')}>{st === 'now' ? '제공 중' : st === 'demo' ? '데모로 체험 가능' : '연동 예정'}</span></td><td className="small">{d}</td></tr>)}</tbody>
@@ -179,7 +185,7 @@ export default function Brands() {
         </section>
 
         <section className="section" aria-labelledby="bfaq-title">
-          <Reveal className="section-head"><p className="eyebrow">FAQ</p><h2 id="bfaq-title" className="h2">사장님들이 자주 묻는 질문</h2></Reveal>
+          <h2 id="bfaq-title" className="h2 faq-narrow-title">사장님들이 자주 묻는 질문</h2>
           <div className="faq-narrow">
             {FAQ.map(([q, a]) => <details key={q} className="faq-item"><summary>{q}<span aria-hidden="true" /></summary><p>{a}</p></details>)}
           </div>
@@ -188,7 +194,6 @@ export default function Brands() {
         <section id="inquiry" className="section inquiry" aria-labelledby="iq-title">
           <div className="inquiry-grid">
             <div>
-              <p className="eyebrow">Contact</p>
               <h2 id="iq-title" className="h2">우리 매장 체험단 문의</h2>
               <p className="lead" style={{ marginTop: 10 }}>매장 정보와 원하는 체험단을 남겨 주세요. 담당자가 구성과 일정을 제안드려요.</p>
               <p className="notice small" style={{ marginTop: 16 }}><span><b>데모 안내</b> · 지금은 문의가 이 브라우저에만 저장되고 담당자에게 전송되지 않아요. 실제 접수는 서버 연동 후 열려요.</span></p>

@@ -296,7 +296,7 @@ function Venues() {
             <li key={v.id} className="card adm-review">
               <div><b>{v.name}</b> <span className={'badge ' + VSTATUS[v.verificationStatus][1]}>{VSTATUS[v.verificationStatus][0]}</span> {isPublicVenue(v) && <span className="badge badge-grape">지도 노출 중</span>}
                 <p className="small muted" style={{ margin: '4px 0 0' }}>{venueCategoryLabel(v.category)} · {v.roadAddress} · 좌표 {v.latitude.toFixed(5)}, {v.longitude.toFixed(5)} · 연결된 체험단 {links[v.id] ?? 0}개</p>
-                {!v.demo && <a className="link small" href={naverMapLink(v)} target="_blank" rel="noopener noreferrer">네이버 지도에서 주소 대조 ↗</a>}
+                {!v.demo && <a className="link small link-solo" href={naverMapLink(v)} target="_blank" rel="noopener noreferrer">네이버 지도에서 주소 대조 ↗</a>}
               </div>
               {v.demo ? <p className="tiny muted">가상 매장이라 검증·노출 승인을 할 수 없어요.</p> : (
                 <>

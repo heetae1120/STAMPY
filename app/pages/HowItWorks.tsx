@@ -52,7 +52,7 @@ export default function HowItWorks() {
                 <li>스티커북에 획득 날짜와 리뷰 기록이 남아요</li>
                 <li><b>교환할 때 쓰이거나 사라지지 않아요</b></li>
               </ul>
-              <Link to="/my/stickerbook" className="link small">나의 스티커북 →</Link>
+              <Link to="/my/stickerbook" className="link small link-solo">나의 스티커북 →</Link>
             </Reveal>
             <Reveal className="diff-card card diff-stamp" delay={100}>
               <div className="diff-art"><StampImprint size={86} /><StampImprint size={70} /></div>
@@ -62,7 +62,7 @@ export default function HowItWorks() {
                 <li>리워드샵에서 상품으로 교환하면 차감돼요</li>
                 <li>모든 적립·차감·환급이 내역으로 남아요</li>
               </ul>
-              <Link to="/my/stamps" className="link small">스탬프 내역 →</Link>
+              <Link to="/my/stamps" className="link small link-solo">스탬프 내역 →</Link>
             </Reveal>
           </div>
         </section>
@@ -93,7 +93,7 @@ export default function HowItWorks() {
             </div>
           </Reveal>
         </section>
-        <p className="center"><Link to="/faq" className="link">더 궁금한 점은 FAQ에서 →</Link></p>
+        <p className="center"><Link to="/faq" className="link link-solo">더 궁금한 점은 FAQ에서 →</Link></p>
       </div>
     </>
   );

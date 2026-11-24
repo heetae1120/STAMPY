@@ -8,11 +8,11 @@ import { Chest, Sparkle, StampImprint, Star } from '../art/Deco';
 import { CATEGORIES } from '../data/catalog';
 
 const CHAPTERS: { no: string; title: string; sub: string; body: string; how: string; art: ReactNode; color: string }[] = [
-  { no: '01', title: '작은 발견', sub: '새로운 브랜드를 알아가는 즐거움', color: '#e3f1fb',
+  { no: '01', title: '작은 발견', sub: '몰랐던 브랜드와 동네 가게를 알게 되는 순간', color: '#e3f1fb',
     body: '지도 위에는 아직 가보지 않은 섬이 많아요. 동네 카페, 작은 공방, 처음 보는 스킨케어 브랜드까지. STAMPY는 낯선 브랜드를 만나는 일을 탐험처럼 즐겁게 만들고 싶었어요.',
     how: '보물지도와 체험단 목록에서 카테고리별로 브랜드를 둘러봐요.',
     art: <div className="ch-art ch1"><Island cat="food" top="#ffc9b8" side="#f08f74" size={200} /><Island cat="living" top="#c4e6cf" side="#7dbd94" size={150} /><Mascot pose="discover" size={96} /></div> },
-  { no: '02', title: '특별한 경험', sub: '직접 사용하고 체험하는 순간', color: '#fff3c9',
+  { no: '02', title: '직접 써 보기', sub: '제품을 쓰고 매장에 방문하는 순간', color: '#fff3c9',
     body: '광고 문구보다 손에 닿는 감촉, 매장의 공기, 첫 한 모금이 더 많은 걸 알려줘요. 체험단은 그 순간을 직접 만나는 초대장이에요.',
     how: '신청서에 체험 계획을 적어 보내면, 선정된 탐험가에게 제품이 가거나 방문 일정이 잡혀요.',
     art: <div className="ch-art ch2"><Sticker art="cup" size={110} tilt={-8} /><Sticker art="serum" size={90} tilt={10} /><Sticker art="bag" size={84} tilt={-4} /><Sparkle size={30} /></div> },
@@ -24,7 +24,7 @@ const CHAPTERS: { no: string; title: string; sub: string; body: string; how: str
     body: '승인된 경험마다 두 가지가 남아요. 그 브랜드를 경험했다는 기념 스티커, 그리고 선물로 바꿀 수 있는 스탬프. 스티커는 영원히 스티커북에 남고, 스탬프는 쓰면 줄어드는 재화예요.',
     how: '마이페이지의 스티커북과 스탬프 내역에서 모은 것들을 확인해요.',
     art: <div className="ch-art ch4"><Sticker art="cake" size={84} tilt={-10} /><Sticker art="vase" size={84} tilt={6} /><StampImprint size={90} /><StampImprint size={70} /><Mascot pose="stamp" size={96} /></div> },
-  { no: '05', title: '새로운 선물', sub: '모은 스탬프로 다음 경험을 얻는 순간', color: '#e2f3e7',
+  { no: '05', title: '고른 선물', sub: '모은 스탬프로 상품을 직접 골라 교환하는 순간', color: '#e2f3e7',
     body: '모은 스탬프로 리워드샵에서 브랜드 상품을 직접 골라요. 그 선물이 또 다른 브랜드와의 첫 만남이 되고, 탐험은 다시 시작돼요.',
     how: '리워드샵에서 상품을 고르고 배송 정보를 입력해 교환 신청해요.',
     art: <div className="ch-art ch5"><Chest size={190} open /><Mascot pose="chest" size={96} /><Star size={34} /></div> },
@@ -38,7 +38,7 @@ export default function About() {
         <div className="wrap about-hero-grid">
           <div>
             <p className="eyebrow">A Tiny World of Brand Adventures</p>
-            <h1 className="h-display">경험을 모으는<br />가장 즐거운 모험</h1>
+            <h1 className="h-display">리뷰 한 편마다<br />스탬프 하나씩</h1>
             <p className="lead">STAMPY는 브랜드를 탐험하고, 직접 경험하고, 솔직한 이야기를 남기는 작은 세계예요. 다섯 개의 챕터로 STAMPY를 소개할게요.</p>
           </div>
           <div className="about-world" aria-hidden="true">

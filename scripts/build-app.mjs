@@ -31,7 +31,7 @@ const routesBundle = await build({
 });
 const mod = await import('data:text/javascript;base64,' + Buffer.from(routesBundle.outputFiles[0].text).toString('base64'));
 const pages = [
-  ['', 'STAMPY 스탬피 | 경험을 모으는 가장 즐거운 모험'],
+  ['', 'STAMPY 스탬피 | 리뷰하고 스탬프 모으는 체험단'],
   ['about', 'STAMPY 소개'], ['how-it-works', '이용 방법'], ['explore', '보물지도 탐험'],
   ['experiences', '체험단 모집'], ['rewards', '리워드샵'], ['brands', '브랜드 제휴'], ['faq', 'FAQ'],
   ['login', '탐험 시작하기'], ['my', '마이페이지'], ['my/profile', '프로필'], ['my/stickerbook', '나의 스티커북'],

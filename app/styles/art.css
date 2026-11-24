@@ -1,14 +1,14 @@
 /* Treasure map */
 .tmap { display: block; width: 100%; height: auto; overflow: visible; }
 .tmap .map-island { cursor: pointer; outline: none; }
-.tmap .map-island-lift { transform-box: fill-box; transform-origin: 50% 100%; transition: transform .45s var(--ease-pop); }
-.tmap a.map-island:hover .map-island-lift, .tmap a.map-island:focus-visible .map-island-lift, .tmap .map-island.is-selected .map-island-lift { transform: translateY(-5px); }
+.tmap .map-island-lift { transform-box: fill-box; transform-origin: 50% 100%; transition: transform .25s var(--ease-out); }
+.tmap a.map-island:hover .map-island-lift, .tmap a.map-island:focus-visible .map-island-lift, .tmap .map-island.is-selected .map-island-lift { transform: translateY(-3px); }
 .tmap .map-label rect { transition: fill .2s; }
 .tmap a.map-island:hover .map-label rect, .tmap .map-island.is-selected .map-label rect { fill: #FFE39A; }
 .tmap .map-focus { stroke: var(--grape); stroke-width: 5; stroke-dasharray: 10 8; opacity: 0; }
 .tmap a.map-island:focus-visible .map-focus, .tmap .map-chest:focus-visible .map-focus { opacity: 1; }
-.tmap .map-chest { cursor: pointer; outline: none; transform-box: fill-box; transform-origin: 50% 80%; transition: transform .4s var(--ease-pop); }
-.tmap .map-chest[role=button]:hover { transform: scale(1.08); }
+.tmap .map-chest { cursor: pointer; outline: none; transform-box: fill-box; transform-origin: 50% 80%; transition: transform .25s var(--ease-out); }
+.tmap .map-chest[role=button]:hover { transform: translateY(-3px); }
 .tmap .map-chest:not([role]) { cursor: default; }
 .tmap .map-cloud { animation: cloud-drift 14s ease-in-out infinite alternate; }
 @keyframes cloud-drift { to { transform: translateX(26px); } }

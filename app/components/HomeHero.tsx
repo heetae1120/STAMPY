@@ -213,15 +213,15 @@ export function HomeHero({ counts }: { counts: Partial<Record<CategoryId, number
         <div className="hero-copy">
           <p className="eyebrow"><Sparkle size={18} /> Treasure Map × Sticker Collection</p>
           <h1 id="hero-title" className="h-display">리뷰로 떠나는<br /><span className="hl">작은 보물찾기</span></h1>
-          <p className="lead">새로운 브랜드를 발견하고,{' '}<br />직접 경험한 이야기를 남겨보세요.{' '}<br />차곡차곡 모은 스탬프가 진짜 선물이 됩니다.</p>
+          <p className="lead">제품을 써 보거나 매장에 방문하고,{' '}<br />블로그·인스타그램에 리뷰를 남겨요.{' '}<br />검수를 통과한 리뷰마다 스탬프가 쌓여요.</p>
           <div className="hero-cta">
             <Link className="btn btn-primary" to="/explore">보물지도 펼쳐보기 <span className="arrow" aria-hidden="true">→</span></Link>
             <Link className="btn" to="/experiences">체험단 둘러보기</Link>
           </div>
           <ol className="hero-how" aria-label="STAMPY 이용 순서">
-            <li><span className="hh-ico"><Sticker art="cup" size={40} /></span><b>체험단 참여</b><span>브랜드 제품과 공간을 직접 경험해요</span></li>
-            <li><span className="hh-ico"><StampIcon size={34} /></span><b>리뷰 승인 → 스탬프</b><span>미션을 검수받으면 적립돼요</span></li>
-            <li><span className="hh-ico"><Chest size={42} /></span><b>상품으로 교환</b><span>모은 스탬프로 직접 고른 선물</span></li>
+            <li><Sticker art="cup" size={28} />체험단 참여</li>
+            <li><StampIcon size={24} />리뷰 승인되면 스탬프</li>
+            <li><Chest size={28} />스탬프로 상품 교환</li>
           </ol>
         </div>
 

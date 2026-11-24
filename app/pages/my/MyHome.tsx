@@ -30,25 +30,25 @@ function Overview({ userId }: { userId: string }) {
       </div>
       <div className="my-grid">
         <section className="card my-box">
-          <div className="box-head"><h2 className="h3">진행 중인 미션</h2><Link to="/my/reviews" className="link small">리뷰 미션 →</Link></div>
+          <div className="box-head"><h2 className="h3">진행 중인 미션</h2><Link to="/my/reviews" className="link small link-solo">리뷰 미션 →</Link></div>
           {d.todoCamps.length ? <ul className="row-list">{d.todoCamps.map(({ a, c }) => (
             <li key={a.id}><b>{c.title}</b><span className="small muted">리뷰 마감 {fmtDate(c.reviewDeadline)}</span><Link to="/my/reviews" className="btn btn-sm btn-primary">리뷰 제출</Link></li>
           ))}</ul> : <p className="muted small">지금 해야 할 미션이 없어요. <Link to="/experiences?status=open" className="link">새 체험단 둘러보기</Link></p>}
         </section>
         <section className="card my-box">
-          <div className="box-head"><h2 className="h3">나의 탐험</h2><Link to="/my/experiences" className="link small">전체 보기 →</Link></div>
+          <div className="box-head"><h2 className="h3">나의 탐험</h2><Link to="/my/experiences" className="link small link-solo">전체 보기 →</Link></div>
           <ul className="status-counts">
             <li><b className="num">{d.counts.applied}</b>신청</li><li><b className="num">{d.counts.selected}</b>선정·진행</li>
             <li><b className="num">{d.counts.completed}</b>완료</li><li><b className="num">{d.counts.rejected}</b>미선정</li>
           </ul>
         </section>
         <section className="card my-box">
-          <div className="box-head"><h2 className="h3">나의 컬렉션</h2><Link to="/my/stickerbook" className="link small">스티커북 →</Link></div>
+          <div className="box-head"><h2 className="h3">나의 컬렉션</h2><Link to="/my/stickerbook" className="link small link-solo">스티커북 →</Link></div>
           {d.stickers.length ? <ul className="mini-stickers">{d.stickers.slice(0, 6).map((x, i) => <li key={x.id}><Sticker art={stickerById(x.stickerId).art} size={58} tilt={(i % 3 - 1) * 7} label={stickerById(x.stickerId).name} /></li>)}</ul>
             : <p className="muted small">첫 리뷰 미션이 승인되면 스티커가 생겨요.</p>}
         </section>
         <section className="card my-box">
-          <div className="box-head"><h2 className="h3">교환 내역</h2><Link to="/my/redemptions" className="link small">전체 보기 →</Link></div>
+          <div className="box-head"><h2 className="h3">교환 내역</h2><Link to="/my/redemptions" className="link small link-solo">전체 보기 →</Link></div>
           {d.reds.length ? <ul className="row-list">{d.reds.slice(0, 3).map(r => (
             <li key={r.id}><b>{rewardById(r.rewardId)?.name}</b><span className="small muted">{fmtDate(r.createdAt)} · 스탬프 {r.cost}개</span><span className="badge">{RED_STATUS[r.status]}</span></li>
           ))}</ul> : <p className="muted small">아직 교환한 상품이 없어요. <Link to="/rewards" className="link">리워드샵</Link></p>}

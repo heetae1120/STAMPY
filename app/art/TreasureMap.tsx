@@ -157,7 +157,7 @@ export function TreasureMap({ counts = {}, interactive = true, selected, onSelec
           </g>
           <path d="M44 18l14 14M58 18L44 32" stroke={C.coral} strokeWidth="5" strokeLinecap="round" />
           <g transform="translate(-52 -64) scale(.52)"><Chest size={200} /></g>
-          <rect className="map-focus" x="-82" y="-70" width="164" height="110" rx="30" fill="none" />
+          <rect className="map-focus" x="-82" y="-96" width="164" height="140" rx="30" fill="none" pointerEvents="all" />
         </g>
       </g>
 

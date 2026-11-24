@@ -9,7 +9,7 @@ const CAT_COLOR: Record<string, string> = { cafe: '#FFE39A', restaurant: '#FFAE9
 
 const esc = (t: string) => t.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]!));
 
-/** Small red stamp silhouette with a category dot. Kept under 40px so dense areas stay readable. */
+/** Small red stamp silhouette with a category dot. The drawing is 32px wide inside a 40×40 hit area. */
 export function markerHtml(item: { category: string; demo: boolean; selected: boolean; label: string; count?: number; decorative?: boolean }) {
   const role = item.decorative ? '' : ' role="button" tabindex="0"';
   if (item.count && item.count > 1) {
@@ -101,7 +101,7 @@ export function NaverExperienceMap({ items, selectedId, onSelect, onIdle, near, 
       const html = markerHtml({ category: one.venue.category, demo: one.venue.demo, selected, count: g.items.length, label: `${one.venue.name}, 체험단 ${one.campaigns.length}개` });
       const mk = new maps.Marker({
         map: m, position: new maps.LatLng(lat, lng), zIndex: selected ? 100 : 10,
-        icon: { content: html, size: new maps.Size(g.items.length > 1 ? 40 : 32, g.items.length > 1 ? 40 : 40), anchor: new maps.Point(g.items.length > 1 ? 20 : 16, g.items.length > 1 ? 20 : 40) },
+        icon: { content: html, size: new maps.Size(40, 40), anchor: new maps.Point(20, g.items.length > 1 ? 20 : 40) },
       });
       const activate = () => {
         if (g.items.length > 1) { m.morph ? m.morph(new maps.LatLng(lat, lng), Math.min(zoom + 2, 19)) : (m.setCenter(new maps.LatLng(lat, lng)), m.setZoom(Math.min(zoom + 2, 19))); }

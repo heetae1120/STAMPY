@@ -7,7 +7,7 @@ import { stickerById } from '../data/catalog';
 import { C, ink } from '../art/palette';
 
 export function useTitle(title: string) {
-  useEffect(() => { document.title = title ? `${title} | STAMPY 스탬피` : 'STAMPY 스탬피 | 경험을 모으는 가장 즐거운 모험'; }, [title]);
+  useEffect(() => { document.title = title ? `${title} | STAMPY 스탬피` : 'STAMPY 스탬피 | 리뷰하고 스탬프 모으는 체험단'; }, [title]);
 }
 
 export const reducedMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;

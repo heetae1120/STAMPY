@@ -6,15 +6,15 @@
 .xmap-filters { display: grid; gap: 10px; padding: 14px; border-radius: var(--r); background: var(--ivory); border: 1px solid var(--line); }
 .xmap-row { display: flex; gap: 8px; flex-wrap: wrap; }
 .select-sm { min-height: 40px; width: auto; padding: 6px 30px 6px 12px; border-radius: 999px; font-size: 14px; }
-.xmap-filters .chip { min-height: 34px; padding: 0 12px; font-size: 13px; }
+.xmap-filters .chip { min-height: 40px; padding: 0 12px; font-size: 13px; }
 .xmap-filters .chip-row { flex-wrap: wrap; margin: 0; padding: 0; overflow: visible; }
 .xmap-demo { padding-top: 6px; border-top: 1px dashed var(--line); }
-.chip-sm { min-height: 28px; padding: 0 10px; font-size: 12.5px; margin-left: 8px; }
+.chip-sm { min-height: 40px; padding: 0 10px; font-size: 12.5px; margin-left: 8px; }
 .xmap-result { font-size: 14px; color: var(--ink-2); display: flex; align-items: center; flex-wrap: wrap; gap: 4px; }
 .xmap-result b { color: var(--ink); font-size: 17px; }
 .xmap-list { list-style: none; margin: 0; padding: 0 4px 0 0; display: grid; gap: 10px; max-height: calc(100vh - 330px); min-height: 300px; overflow-y: auto; }
 .xmap-list li { position: relative; border-radius: var(--r); transition: box-shadow .2s, border-color .2s; }
-.xmap-list li.is-selected .xprev { border-color: var(--red, #D94F4B); box-shadow: 0 0 0 2px #d94f4b33; }
+.xmap-list li.is-selected .xprev { border-color: var(--grape); box-shadow: 0 0 0 2px var(--lav); }
 .xmap-pick { position: absolute; inset: 0 0 auto 0; height: 92px; z-index: 1; border: 0; background: transparent; cursor: pointer; border-radius: var(--r) var(--r) 0 0; }
 .xmap-pick:focus-visible { outline: 3px solid var(--grape); outline-offset: 2px; }
 .xmap-main { position: sticky; top: calc(var(--header-h) + 12px); height: calc(100vh - var(--header-h) - 40px); min-height: 460px; border-radius: var(--r-lg); overflow: hidden; border: 1px solid var(--line-strong); background: #eef3ee; }
@@ -25,16 +25,17 @@
 .xmap-fallback { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 8px; padding: 24px; text-align: center; background: repeating-linear-gradient(45deg, #f7efe2 0 12px, #fbf5ea 12px 24px); }
 .xmap-fallback b { font-size: 18px; }
 .xmap-fallback p { margin: 0; max-width: 32em; color: var(--ink-2); font-size: 14px; }
-.xmap-fallback details { max-width: 34em; font-size: 13px; color: var(--ink-2); text-align: left; background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 8px 12px; }
-.xmap-fallback summary { cursor: pointer; font-weight: 700; }
+.xmap-fallback details { max-width: 34em; font-size: 13px; color: var(--ink-2); text-align: left; background: var(--ivory); border: 1px dashed var(--line-strong); border-radius: 12px; padding: 8px 12px; }
+.xmap-fallback summary { padding: 8px 0; line-height: 24px; cursor: pointer; font-weight: 700; }
 .xmap-fallback code { font-size: 12px; background: var(--cream); padding: 1px 4px; border-radius: 4px; word-break: break-all; }
 .xmap-research { position: absolute; top: 14px; left: 50%; transform: translateX(-50%); z-index: 5; box-shadow: var(--shadow-up); }
 .xmap-sheet { position: absolute; left: 14px; bottom: 14px; z-index: 6; width: min(360px, calc(100% - 28px)); animation: sheet-in .3s var(--ease-out); }
 @keyframes sheet-in { from { opacity: 0; transform: translateY(12px); } }
 
 /* Markers (HTML content inside the NAVER map) */
-.xmap-pin { width: 32px; height: 40px; cursor: pointer; transform-origin: 50% 100%; transition: transform .2s var(--ease-out); filter: drop-shadow(0 2px 2px #4a3a4240); }
-.xmap-pin:hover, .xmap-pin:focus-visible { transform: scale(1.12); outline: none; }
+.xmap-pin { width: 40px; height: 40px; display: grid; place-items: end center; cursor: pointer; transform-origin: 50% 100%; transition: transform .2s var(--ease-out); filter: drop-shadow(0 2px 2px #4a3a4240); }
+.xmap-pin:hover { transform: translateY(-2px); }
+.xmap-pin:focus-visible { outline: 3px solid var(--grape); outline-offset: 2px; border-radius: 6px; }
 .xmap-pin.is-selected { transform: scale(1.3); filter: drop-shadow(0 0 0 #fff) drop-shadow(0 3px 4px #4a3a4255); }
 .xmap-pin.is-demo svg { opacity: .92; }
 .xmap-cluster { width: 40px; height: 40px; display: grid; place-items: center; border-radius: 50%; background: #D94F4B; color: #fff; font: 700 14px/1 Pretendard, sans-serif; border: 3px solid #fff; box-shadow: 0 2px 6px #4a3a4255; cursor: pointer; }
@@ -69,7 +70,7 @@
 /* Home: nearby CTA */
 .nearby-cta { display: grid; grid-template-columns: 1.1fr 1fr; gap: 28px; align-items: center; padding: 28px 30px; border-radius: var(--r-lg); background: #fff; border: 1px solid var(--line); box-shadow: var(--shadow); }
 .nearby-cta p { margin: 8px 0 16px; }
-.nearby-art { position: relative; height: 200px; border-radius: 18px; overflow: hidden; background: #eaf1ea; border: 1px solid var(--line); }
+.nearby-art { position: relative; height: 200px; border-radius: 16px; overflow: hidden; background: #eaf1ea; }
 .nearby-art svg.grid { position: absolute; inset: 0; width: 100%; height: 100%; }
 .nearby-art .xmap-pin { position: absolute; }
 .nearby-art .tag { position: absolute; left: 12px; bottom: 12px; font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 999px; background: #fff; border: 1px solid var(--line); color: var(--ink-2); }

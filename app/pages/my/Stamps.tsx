@@ -107,7 +107,7 @@ function StampsBody({ userId, seenAt }: { userId: string; seenAt?: string }) {
         </section>
       </div>
       <section className="section" style={{ paddingTop: 40 }}>
-        <div className="box-head"><h2 className="h2">지금 교환할 수 있는 상품</h2><Link to="/rewards" className="link">리워드샵 →</Link></div>
+        <div className="box-head"><h2 className="h2">지금 교환할 수 있는 상품</h2><Link to="/rewards" className="link link-solo">리워드샵 →</Link></div>
         {affordable.length ? <ul className="xgrid">{affordable.map(r => <li key={r.id}><RewardCard r={r} stock={d.stock[r.id] ?? 0} balance={d.bal.available} /></li>)}</ul>
           : <p className="muted">아직 교환할 수 있는 상품이 없어요. {next && <>가장 가까운 상품은 <b>{next.name}</b> (스탬프 {next.cost}개)이에요.</>}</p>}
       </section>

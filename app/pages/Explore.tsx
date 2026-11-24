@@ -91,7 +91,7 @@ export default function Explore() {
                   <li key={c.id}><button className="chip" onClick={() => pick(c.id as Cat)} style={{ background: c.color }}>{c.island} <b className="num">{data.counts[c.id] ?? 0}</b></button></li>
                 ))}
               </ul>
-              <Link to="/experiences?category=etc" className="link small">기타 체험단 (서비스·정보 글) 보기</Link>
+              <Link to="/experiences?category=etc" className="link small link-solo">기타 체험단 (서비스·정보 글) 보기</Link>
             </div>
           )}
         </div>

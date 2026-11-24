@@ -30,12 +30,12 @@ export function ExperienceMapPreview({ item, onClose, compact }: { item: MapItem
               <li key={c.id}>
                 <div><StatusBadge status={st} /> <b>{c.title}</b></div>
                 <span className="small">{c.benefit} · 마감 {fmtDate(c.recruitEnd)}{st === 'open' ? ` (${dday(c.recruitEnd)})` : ''}</span>
-                <div className="xprev-row"><StampCount n={c.stamps} /><Link className="btn btn-sm btn-primary" to={'/experiences/' + c.slug}>상세 보기</Link></div>
+                <div className="xprev-row"><StampCount n={c.stamps} /><Link className="btn btn-sm" to={'/experiences/' + c.slug}>상세 보기</Link></div>
               </li>
             );
           })}
         </ul>
-        {!compact && !v.demo && <a className="link small" href={naverMapLink(v)} target="_blank" rel="noopener noreferrer">네이버 지도에서 보기 ↗</a>}
+        {!compact && !v.demo && <a className="link small link-solo" href={naverMapLink(v)} target="_blank" rel="noopener noreferrer">네이버 지도에서 보기 ↗</a>}
       </div>
     </article>
   );

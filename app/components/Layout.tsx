@@ -34,7 +34,7 @@ function current(path: string, search: string, to: string) {
 const tabIcon = {
   home: <path d="M5 13l11-8 11 8v11a2 2 0 0 1-2 2h-5v-7h-8v7H7a2 2 0 0 1-2-2z" fill={C.butter} {...ink(2.2)} />,
   map: <g><path d="M4 8l7-3 10 3 7-3v19l-7 3-10-3-7 3z" fill={C.sky} {...ink(2.2)} /><path d="M11 5v19M21 8v19" {...ink(1.8)} /><path d="M14 15l3 3m0-3l-3 3" stroke={C.coral} strokeWidth="2.4" strokeLinecap="round" /></g>,
-  near: <g><path d="M16 29c-5-6-9-10-9-15a9 9 0 0 1 18 0c0 5-4 9-9 15z" fill={C.red} {...ink(2.2)} /><circle cx="16" cy="14" r="3.4" fill="#fff" {...ink(1.6)} /></g>,
+  near: <g><path d="M16 29c-5-6-9-10-9-15a9 9 0 0 1 18 0c0 5-4 9-9 15z" fill={C.mint} {...ink(2.2)} /><circle cx="16" cy="14" r="3.4" fill="#fff" {...ink(1.6)} /></g>,
   exp: <g><path d="M9 28V4" {...ink(2.4)} /><path d="M9 5c6-3 10 4 18 0v12c-8 4-12-3-18 0z" fill={C.coral} {...ink(2.2)} /></g>,
   gift: <g><rect x="5" y="12" width="22" height="15" rx="3" fill={C.peach} {...ink(2.2)} /><rect x="3" y="8" width="26" height="6" rx="2" fill={C.butter} {...ink(2.2)} /><path d="M16 8v19" {...ink(2.2)} /><path d="M16 8c-3-5-9-4-7-1s7 1 7 1zm0 0c3-5 9-4 7-1s-7 1-7 1z" fill={C.pink} {...ink(1.8)} /></g>,
   my: <g><circle cx="16" cy="12" r="6" fill={C.lav} {...ink(2.2)} /><path d="M5 27c1-6 5-9 11-9s10 3 11 9z" fill={C.lav} {...ink(2.2)} /></g>,
@@ -93,7 +93,7 @@ export function Layout({ children }: { children: ReactNode }) {
                 <Link to={user.role === 'admin' ? '/admin' : '/my'} className="btn btn-sm hide-sm">{user.role === 'admin' ? '운영' : '마이'}</Link>
               </>
             ) : (
-              <Link to="/login" className="btn btn-sm btn-primary hide-sm">탐험 시작</Link>
+              <Link to="/login" className="btn btn-sm hide-sm">탐험 시작</Link>
             )}
             <button className="menu-btn" aria-label="전체 메뉴" aria-expanded={menu} onClick={() => setMenu(true)}><span /><span /><span /></button>
           </div>
@@ -123,7 +123,7 @@ export function Layout({ children }: { children: ReactNode }) {
         <footer className="site-footer">
           <div className="wrap">
             <div>
-              <Link to="/" className="brand"><Mascot pose="joy" size={46} /><span className="brand-word"><b>STAMPY</b><small>경험을 모으는 가장 즐거운 모험</small></span></Link>
+              <Link to="/" className="brand"><Mascot pose="joy" size={46} /><span className="brand-word"><b>STAMPY</b><small>리뷰하고 스탬프 모으는 체험단</small></span></Link>
               <p className="footer-note">스탬피는 브랜드 체험 · 솔직한 리뷰 · 스탬프 적립 · 상품 교환을 잇는 체험단 플랫폼이에요. 리뷰 보상은 평가 내용이 아니라 체험과 미션 수행에 대해서만 지급돼요.</p>
               <p className="footer-note">[회사명] · 대표 [이름] · 사업자등록번호 [번호] · <Link to="/classic.html">이전 사이트 보기</Link></p>
             </div>

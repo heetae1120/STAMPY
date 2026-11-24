@@ -35,7 +35,7 @@ export default function Rewards() {
               <span className="muted small">교환 가능한 스탬프</span>
               <b className="num big"><StampIcon size={30} /> {bal.available}</b>
               {bal.pending > 0 && <span className="tiny muted">검수 중인 스탬프 {bal.pending}개는 승인 후 쓸 수 있어요</span>}
-              <Link to="/my/stamps" className="link small">적립 내역 보기</Link>
+              <Link to="/my/stamps" className="link small link-solo">적립 내역 보기</Link>
             </> : <>
               <span className="small"><b>로그인</b>하면 내 스탬프로 바로 교환할 수 있는지 알려드려요.</span>
               <Link to="/login?next=/rewards" className="btn btn-sm btn-primary">로그인</Link>

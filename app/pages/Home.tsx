@@ -173,7 +173,7 @@ function ShopSection({ balance }: { balance: number | null }) {
   return (
     <section className="section shop-sec" aria-labelledby="shop-title">
       <div className="wrap">
-        <SectionHead eyebrow="Treasure Reward Shop" title={<span id="shop-title">모험 끝에 기다리는<br />진짜 보물을 만나보세요</span>}
+        <SectionHead eyebrow="Treasure Reward Shop" title={<span id="shop-title">모은 스탬프로<br />상품을 직접 골라요</span>}
           lead="스탬프로 교환할 상품은 직접 골라요. 상자에서 무작위로 나오는 뽑기가 아니에요." />
         <div ref={ref} className={'shop-stage' + (open ? ' is-open' : '')}>
           <button type="button" className="shop-chest" onClick={() => setOpen(o => !o)} aria-expanded={open} aria-controls="shop-rewards" aria-label={open ? '보물상자 닫기' : '보물상자 열기'}>
@@ -214,7 +214,7 @@ export default function Home() {
           <Reveal className="nearby-cta">
             <div>
               <p className="eyebrow">Nearby Experiences</p>
-              <h2 id="nearby-title" className="h2">가까운 곳에서<br />새로운 경험을 찾아보세요</h2>
+              <h2 id="nearby-title" className="h2">지금 있는 곳 근처의<br />방문형 체험단을 지도에서 찾아요</h2>
               <p className="lead">카페, 식당, 미용실, 공방처럼 직접 방문하는 체험단을 네이버 지도에서 위치로 찾아요. 주소와 위치를 확인한 매장만 표시돼요.</p>
               <div className="row-btns">
                 <Link className="btn btn-primary" to="/experiences?view=map">내 주변 체험단 찾기 <span className="arrow" aria-hidden="true">→</span></Link>
@@ -256,7 +256,7 @@ export default function Home() {
           <div className="featured-head">
             <Reveal>
               <p className="eyebrow">Featured Adventures</p>
-              <h2 id="featured-title" className="h2">지금 떠날 수 있는 새로운 모험</h2>
+              <h2 id="featured-title" className="h2">지금 신청할 수 있는 체험단</h2>
               <p className="lead">마감이 가까운 순서로 모았어요. 모든 체험단과 상품은 데모 예시예요.</p>
             </Reveal>
             <Link className="btn btn-sm" to="/experiences">전체 체험단 보기 →</Link>
@@ -306,7 +306,7 @@ export default function Home() {
             </div>
             <h2 id="final-title" className="h1">당신의 첫 번째 보물은<br />무엇일까요?</h2>
             <p className="lead">지도를 펼치고, 마음이 가는 섬부터 들러보세요.</p>
-            <Link className="btn btn-primary" to={user ? '/explore' : '/login?next=/explore'}>지금 탐험 시작하기 <span className="arrow">→</span></Link>
+            <Link className="btn btn-primary" to={user ? '/explore' : '/login?next=/explore'}>보물지도에서 체험단 고르기 <span className="arrow">→</span></Link>
             <p className="tiny muted" style={{ marginTop: 12 }}>스티커 {STICKERS.length}종 · 데모 체험단과 상품으로 전체 과정을 체험해 볼 수 있어요</p>
           </Reveal>
         </div>
