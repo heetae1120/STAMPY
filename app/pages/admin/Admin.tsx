@@ -1,16 +1,17 @@
 // Demo operations console. Every action goes through the same demo-server rules
 // (role check, quota, one grant per review, refunds as reverse ledger rows).
 import { useState } from 'react';
-import type { Campaign, RedemptionStatus } from '../../api/types';
-import { CAMPAIGNS, CHANNEL_LABEL, REWARDS, campaignStatus } from '../../data/catalog';
-import { adjustStock, campaignById, campaignsOf, decideReview, editCampaign, rewardById, setApplicationStatus, setRedemptionStatus } from '../../api/demo';
+import type { BrandInquiry, Campaign, RedemptionStatus, VenueCategory } from '../../api/types';
+import { BRANDS, CAMPAIGNS, CHANNEL_LABEL, REWARDS, VENUE_CATEGORIES, campaignStatus, venueCategoryLabel } from '../../data/catalog';
+import { adjustStock, campaignById, campaignsOf, decideReview, editCampaign, isPublicVenue, registerVenue, rewardById, setApplicationStatus, setInquiryStatus, setRedemptionStatus, setVenueMapApproval, venuesOf, verifyVenue, type VenueForm } from '../../api/demo';
+import { naverMapLink } from '../../map/naverSdk';
 import { useAction, useDemo, useSession } from '../../api/hooks';
 import { Link } from '../../router';
 import { DemoBadge, fmtDate, fmtFull, useTitle, useToast } from '../../components/ui';
 import { Mascot } from '../../art/Mascot';
 import { APP_STATUS, RED_STATUS, REVIEW_STATUS, maskPhone } from '../my/shared';
 
-const TABS = [['dash', '대시보드'], ['apps', '신청자 관리'], ['reviews', '리뷰 검수'], ['ledger', '스탬프 지급'], ['reds', '교환 관리'], ['stock', '상품 재고'], ['camps', '체험단 수정'], ['log', '운영 기록']] as const;
+const TABS = [['dash', '대시보드'], ['apps', '신청자 관리'], ['reviews', '리뷰 검수'], ['ledger', '스탬프 지급'], ['reds', '교환 관리'], ['stock', '상품 재고'], ['camps', '체험단 수정'], ['venues', '매장 관리'], ['inquiries', '제휴 문의'], ['log', '운영 기록']] as const;
 type Tab = typeof TABS[number][0];
 
 function useUsers() { return useDemo(s => Object.fromEntries(s.users.map(u => [u.id, u.nickname]))); }
@@ -171,7 +172,7 @@ function Camps() {
         <tbody>{list.map(c => <tr key={c.id}><td>{c.title}</td><td>{campaignStatus(c)}</td><td className="small">{fmtDate(c.recruitEnd)}</td><td className="num">{c.quota}</td><td className="num">{c.stamps}</td><td><button className="btn btn-sm btn-ghost" onClick={() => { act.setError(null); setEdit(c); }}>수정</button></td></tr>)}</tbody>
       </table></div>
       {edit && (
-        <form className="card form adm-edit" noValidate onSubmit={async e => { e.preventDefault(); if (await act.run(edit.id, { title: edit.title, quota: Number(edit.quota), stamps: Number(edit.stamps), benefit: edit.benefit })) { toast('체험단을 수정했어요'); setEdit(null); } }}>
+        <form className="card form adm-edit" noValidate onSubmit={async e => { e.preventDefault(); if (await act.run(edit.id, { title: edit.title, quota: Number(edit.quota), stamps: Number(edit.stamps), benefit: edit.benefit, ...(edit.kind === 'visit' ? { venueId: edit.venueId ?? '' } : {}) })) { toast('체험단을 수정했어요'); setEdit(null); } }}>
           <h3 className="h3">{edit.title} 수정</h3>
           <label className="field"><span className="label">제목</span><input className="input" value={edit.title} onChange={e => setEdit({ ...edit, title: e.target.value })} /></label>
           <div className="form-2">
@@ -179,6 +180,7 @@ function Camps() {
             <label className="field"><span className="label">지급 스탬프 (1~10)</span><input className="input" type="number" min={1} max={10} value={edit.stamps} onChange={e => setEdit({ ...edit, stamps: Number(e.target.value) })} /></label>
           </div>
           <label className="field"><span className="label">제공 혜택</span><input className="input" value={edit.benefit} onChange={e => setEdit({ ...edit, benefit: e.target.value })} /></label>
+          {edit.kind === 'visit' && <VenueSelect value={edit.venueId ?? ''} onChange={v => setEdit({ ...edit, venueId: v })} />}
           <p className="tiny muted">스탬프 수를 바꿔도 이미 지급된 스탬프는 바뀌지 않아요.</p>
           {act.error && <p className="form-error">{act.error.message}</p>}
           <div className="row-btns"><button type="button" className="btn btn-sm btn-ghost" onClick={() => setEdit(null)}>닫기</button><button className="btn btn-sm btn-primary" disabled={act.pending}>저장</button></div>
@@ -221,9 +223,121 @@ export default function Admin() {
           {tab === 'reds' && <Reds />}
           {tab === 'stock' && <Stock />}
           {tab === 'camps' && <Camps />}
+          {tab === 'venues' && <Venues />}
+          {tab === 'inquiries' && <Inquiries />}
           {tab === 'log' && <Log />}
         </section>
       </div>
     </div>
+  );
+}
+
+function VenueSelect({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+  const venues = useDemo(s => venuesOf(s));
+  return (
+    <label className="field"><span className="label">방문 매장 (한 매장에 여러 체험단을 연결할 수 있어요)</span>
+      <select className="select" value={value} onChange={e => onChange(e.target.value)}>
+        <option value="">연결 안 함</option>
+        {venues.map(v => <option key={v.id} value={v.id}>{v.name} · {v.demo ? '가상 데모' : v.verificationStatus}</option>)}
+      </select>
+    </label>
+  );
+}
+
+const VSTATUS: Record<string, [string, string]> = { verified: ['검증 완료', 'badge-open'], pending: ['검증 대기', 'badge-warn'], rejected: ['확인 불가', 'badge-bad'], demo: ['가상 데모', 'badge-demo'] };
+const emptyVenue: VenueForm = { name: '', brandId: '', category: 'cafe', roadAddress: '', address: '', sido: '', sigungu: '', latitude: '', longitude: '', naverPlaceUrl: '', phone: '' };
+
+function Venues() {
+  const venues = useDemo(s => venuesOf(s));
+  const links = useDemo(s => { const m: Record<string, number> = {}; for (const c of campaignsOf(s)) if (c.venueId) m[c.venueId] = (m[c.venueId] ?? 0) + 1; return m; });
+  const [form, setForm] = useState<VenueForm>(emptyVenue);
+  const [adding, setAdding] = useState(false);
+  const [checks, setChecks] = useState<Record<string, { address: boolean; coordinates: boolean; business: boolean }>>({});
+  const reg = useAction(registerVenue);
+  const ver = useAction(verifyVenue);
+  const appr = useAction(setVenueMapApproval);
+  const toast = useToast();
+  const f = reg.error?.fields ?? {};
+  const set = (k: keyof VenueForm) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => setForm({ ...form, [k]: e.target.value });
+  const err = ver.error ?? appr.error;
+  return (
+    <>
+      <p className="notice info small"><span><b>지도 노출 원칙</b> · 주소, 좌표, 실제 영업 여부를 모두 확인하고 ‘검증 완료’한 뒤 노출을 승인한 매장만 사용자 지도에 표시돼요. 가상 데모 매장은 검증할 수 없고 데모 미리보기에서만 보여요. 주소→좌표 자동 변환(Geocoding)은 서버 연동이 필요해서, 지금은 좌표를 직접 입력하고 네이버 지도 링크로 대조해요.</span></p>
+      {err && <p className="form-error" role="alert">{err.message}</p>}
+      <div className="adm-toolbar"><button className="btn btn-sm btn-primary" onClick={() => { setAdding(a => !a); reg.setError(null); }}>{adding ? '등록 닫기' : '매장 등록'}</button></div>
+      {adding && (
+        <form className="card form adm-edit" noValidate onSubmit={async e => { e.preventDefault(); if (await reg.run(form)) { toast('매장을 등록했어요. 검증 대기 상태예요'); setForm(emptyVenue); setAdding(false); } }}>
+          <h3 className="h3">매장 등록 (검증 대기로 저장)</h3>
+          <div className="form-2">
+            <label className={'field' + (f.name ? ' has-err' : '')}><span className="label">매장명</span><input className="input" value={form.name} onChange={set('name')} />{f.name && <span className="err">{f.name}</span>}</label>
+            <label className={'field' + (f.brandId ? ' has-err' : '')}><span className="label">브랜드</span><select className="select" value={form.brandId} onChange={set('brandId')}><option value="">선택</option>{BRANDS.map(b => <option key={b.id} value={b.id}>{b.name}</option>)}</select>{f.brandId && <span className="err">{f.brandId}</span>}</label>
+          </div>
+          <label className="field"><span className="label">매장 종류</span><select className="select" value={form.category} onChange={e => setForm({ ...form, category: e.target.value as VenueCategory })}>{VENUE_CATEGORIES.map(c => <option key={c.id} value={c.id}>{c.label}</option>)}</select></label>
+          <label className={'field' + (f.roadAddress ? ' has-err' : '')}><span className="label">도로명 주소</span><input className="input" value={form.roadAddress} onChange={set('roadAddress')} />{f.roadAddress && <span className="err">{f.roadAddress}</span>}</label>
+          <div className="form-2">
+            <label className={'field' + (f.sido ? ' has-err' : '')}><span className="label">시·도</span><input className="input" value={form.sido} onChange={set('sido')} placeholder="서울" />{f.sido && <span className="err">{f.sido}</span>}</label>
+            <label className="field"><span className="label">시·군·구</span><input className="input" value={form.sigungu} onChange={set('sigungu')} placeholder="마포구" /></label>
+          </div>
+          <div className="form-2">
+            <label className={'field' + (f.latitude ? ' has-err' : '')}><span className="label">위도</span><input className="input" inputMode="decimal" value={form.latitude} onChange={set('latitude')} />{f.latitude && <span className="err">{f.latitude}</span>}</label>
+            <label className={'field' + (f.longitude ? ' has-err' : '')}><span className="label">경도</span><input className="input" inputMode="decimal" value={form.longitude} onChange={set('longitude')} />{f.longitude && <span className="err">{f.longitude}</span>}</label>
+          </div>
+          <div className="form-2">
+            <label className={'field' + (f.naverPlaceUrl ? ' has-err' : '')}><span className="label">네이버 플레이스 링크 (선택)</span><input className="input" value={form.naverPlaceUrl} onChange={set('naverPlaceUrl')} />{f.naverPlaceUrl && <span className="err">{f.naverPlaceUrl}</span>}</label>
+            <label className="field"><span className="label">전화 (선택)</span><input className="input" value={form.phone} onChange={set('phone')} /></label>
+          </div>
+          <button className="btn btn-sm btn-primary" disabled={reg.pending}>등록</button>
+        </form>
+      )}
+      <ul className="adm-reviews">
+        {venues.map(v => {
+          const ck = checks[v.id] ?? v.checks ?? { address: false, coordinates: false, business: false };
+          return (
+            <li key={v.id} className="card adm-review">
+              <div><b>{v.name}</b> <span className={'badge ' + VSTATUS[v.verificationStatus][1]}>{VSTATUS[v.verificationStatus][0]}</span> {isPublicVenue(v) && <span className="badge badge-grape">지도 노출 중</span>}
+                <p className="small muted" style={{ margin: '4px 0 0' }}>{venueCategoryLabel(v.category)} · {v.roadAddress} · 좌표 {v.latitude.toFixed(5)}, {v.longitude.toFixed(5)} · 연결된 체험단 {links[v.id] ?? 0}개</p>
+                {!v.demo && <a className="link small" href={naverMapLink(v)} target="_blank" rel="noopener noreferrer">네이버 지도에서 주소 대조 ↗</a>}
+              </div>
+              {v.demo ? <p className="tiny muted">가상 매장이라 검증·노출 승인을 할 수 없어요.</p> : (
+                <>
+                  <fieldset className="adm-checks"><legend className="small"><b>검증 체크리스트</b></legend>
+                    {([['address', '도로명 주소가 실제 매장 주소와 같아요'], ['coordinates', '좌표가 지도에서 매장 입구 위치와 일치해요'], ['business', '실제로 영업 중이고 제휴 의사를 확인했어요']] as const).map(([k, l]) =>
+                      <label key={k} className="check small"><input type="checkbox" checked={ck[k]} onChange={e => setChecks({ ...checks, [v.id]: { ...ck, [k]: e.target.checked } })} />{l}</label>)}
+                  </fieldset>
+                  <div className="adm-actions">
+                    <button className="btn btn-sm btn-primary" disabled={ver.pending || !(ck.address && ck.coordinates && ck.business)} onClick={async () => { if (await ver.run(v.id, 'verified', ck)) toast('검증 완료로 바꿨어요'); }}>검증 완료</button>
+                    <button className="btn btn-sm btn-ghost" disabled={ver.pending} onClick={() => ver.run(v.id, 'rejected', ck)}>확인 불가</button>
+                    <button className="btn btn-sm" disabled={appr.pending || !v.isVerified} onClick={async () => { if (await appr.run(v.id, !v.mapApproved)) toast(v.mapApproved ? '지도 노출을 껐어요' : '지도 노출을 승인했어요'); }}>{v.mapApproved ? '지도 노출 끄기' : '지도 노출 승인'}</button>
+                  </div>
+                </>
+              )}
+            </li>
+          );
+        })}
+      </ul>
+    </>
+  );
+}
+
+const IQ_STATUS: Record<BrandInquiry['status'], string> = { received: '접수', reviewing: '검토 중', converted: '매장 등록', closed: '종료' };
+const BIZ: Record<string, string> = { cafe: '카페', restaurant: '식당', bakery: '베이커리', beauty: '뷰티·미용', workshop: '공방', local: '지역 서비스', product: '제품 브랜드' };
+
+function Inquiries() {
+  const rows = useDemo(s => [...s.inquiries].reverse());
+  const act = useAction(setInquiryStatus);
+  if (!rows.length) return <p className="muted">저장된 제휴 문의가 없어요. 사장님·브랜드 제휴 페이지에서 데모 문의를 남겨 보세요.</p>;
+  return (
+    <div className="table-wrap"><table className="adm-table">
+      <thead><tr><th>매장·브랜드</th><th>업종 · 유형</th><th>위치</th><th>담당자</th><th>상태</th></tr></thead>
+      <tbody>{rows.map(q => (
+        <tr key={q.id}>
+          <td><b>{q.company}</b><br /><span className="tiny muted">{fmtFull(q.createdAt)}</span><p className="small" style={{ margin: '4px 0 0' }}>{q.message}</p>{q.offerMenu && <span className="tiny muted">제공 희망: {q.offerMenu}</span>}</td>
+          <td className="small">{BIZ[q.businessType] ?? q.category ?? '—'}<br />{q.campaignKind ?? ''}{q.headcount ? ` · ${q.headcount}명` : ''}{q.period ? ` · ${q.period}` : ''}</td>
+          <td className="small">{q.location ?? '—'}{q.naverPlaceUrl && <><br /><a className="link" href={q.naverPlaceUrl} target="_blank" rel="noopener noreferrer">플레이스 ↗</a></>}</td>
+          <td className="small">{q.contact}<br />{q.phone ? maskPhone(q.phone) : ''}</td>
+          <td><select className="select select-sm" value={q.status ?? 'received'} disabled={act.pending} onChange={e => act.run(q.id, e.target.value as BrandInquiry['status'])} aria-label={q.company + ' 문의 상태'}>{Object.entries(IQ_STATUS).map(([k, l]) => <option key={k} value={k}>{l}</option>)}</select></td>
+        </tr>
+      ))}</tbody>
+    </table></div>
   );
 }

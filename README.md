@@ -19,6 +19,8 @@
 
 설계, 데이터 모델, 비즈니스 규칙, 백엔드 연결 지점은 [docs/SERVICE_DESIGN.md](docs/SERVICE_DESIGN.md)에 정리했습니다.
 
+방문형 체험단의 **내 주변 지도**(네이버 지도, `/experiences?view=map`)는 유효한 NAVER Cloud Maps Key ID가 있어야 지도가 표시됩니다. 현재 설정된 키는 인증에 실패하며, 이때는 안내 화면과 매장 목록으로 대체됩니다. 설정 방법은 [docs/NAVER_MAPS_SETUP.md](docs/NAVER_MAPS_SETUP.md)를 보세요.
+
 ## 개발과 빌드
 
 Node.js 22 이상과 npm 기준:

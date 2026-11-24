@@ -6,6 +6,41 @@ export type Channel = 'blog' | 'instagram' | 'youtube' | 'shortform';
 export type CampaignKind = 'delivery' | 'visit' | 'editorial';
 export type CampaignStatus = 'upcoming' | 'open' | 'closed';
 
+/** Physical store categories used by the real-map search. */
+export type VenueCategory = 'cafe' | 'restaurant' | 'beauty' | 'workshop' | 'other';
+
+/**
+ * verified — address and coordinates checked against the real store by an operator
+ * pending  — submitted, waiting for checks
+ * rejected — could not be confirmed
+ * demo     — fictional sample venue with an approximate neighbourhood position; never shown as real
+ */
+export type VerificationStatus = 'verified' | 'pending' | 'rejected' | 'demo';
+
+export interface Venue {
+  id: string;
+  brandId: string;
+  name: string;
+  category: VenueCategory;
+  address: string;
+  roadAddress: string;
+  region: { sido: string; sigungu: string };
+  latitude: number;
+  longitude: number;
+  naverPlaceId?: string;
+  naverPlaceUrl?: string;
+  phone?: string;
+  representativeImage?: string;
+  isVerified: boolean;
+  verificationStatus: VerificationStatus;
+  /** Operator approved showing this venue on the public map. */
+  mapApproved: boolean;
+  verifiedAt?: string;
+  /** Checks an operator ticked before verifying. */
+  checks?: { address: boolean; coordinates: boolean; business: boolean };
+  demo: boolean;
+}
+
 export interface Brand {
   id: string;
   name: string;
@@ -40,6 +75,16 @@ export interface Campaign {
   eligibility: string[];
   notices: string[];
   location?: string;
+  // Visit campaigns only. One venue can host many campaigns.
+  venueId?: string;
+  menu?: string;
+  visitStart?: string;
+  visitEnd?: string;
+  visitHours?: string;
+  reservationMethod?: string;
+  reservationNotice?: string;
+  companions?: string;
+  visitConditions?: string[];
   demo: boolean;
 }
 
@@ -169,13 +214,26 @@ export interface AdminAction {
   at: string;
 }
 
+export type BusinessType = 'cafe' | 'restaurant' | 'bakery' | 'beauty' | 'workshop' | 'local' | 'product';
+
 export interface BrandInquiry {
   id: string;
   company: string;
   contact: string;
+  phone: string;
   email: string;
-  category: CategoryId;
+  businessType: BusinessType;
+  location: string;
+  campaignKind: CampaignKind;
   message: string;
+  naverPlaceUrl?: string;
+  instagramUrl?: string;
+  offerMenu?: string;
+  headcount?: number;
+  period?: string;
+  /** Legacy field from the first form. */
+  category?: CategoryId;
+  status: 'received' | 'reviewing' | 'converted' | 'closed';
   createdAt: string;
 }
 

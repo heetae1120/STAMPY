@@ -1,3 +1,5 @@
+> **2026-11 업데이트:** 새 React 앱의 내 주변 지도는 `app/map/naverSdk.ts`로 이 문서의 어댑터 로직을 옮겨 쓰고, 같은 `assets/map-config.js`를 읽어요. 현재 설정된 Key ID는 인증에 실패하는 것으로 확인했어요. 최신 상태는 [docs/NAVER_MAPS_SETUP.md](docs/NAVER_MAPS_SETUP.md)를 보세요. 아래 내용은 레거시 `campaigns.html` 기준의 기록이에요.
+
 # 폰트·아이콘과 네이버 지도 연동 준비
 
 ## 적용한 리소스

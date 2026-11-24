@@ -14,6 +14,7 @@ import { Island } from '../art/Island';
 import { Sticker } from '../art/Sticker';
 import { Chest, Sparkle, StampImprint, Star } from '../art/Deco';
 import { TreasureMap } from '../art/TreasureMap';
+import { markerHtml } from '../components/map/NaverExperienceMap';
 
 function SectionHead({ eyebrow, title, lead }: { eyebrow: string; title: ReactNode; lead?: ReactNode }) {
   return (
@@ -207,6 +208,28 @@ export default function Home() {
   return (
     <>
       <HomeHero counts={data.counts} />
+
+      <section className="section nearby-sec" aria-labelledby="nearby-title">
+        <div className="wrap">
+          <Reveal className="nearby-cta">
+            <div>
+              <p className="eyebrow">Nearby Experiences</p>
+              <h2 id="nearby-title" className="h2">가까운 곳에서<br />새로운 경험을 찾아보세요</h2>
+              <p className="lead">카페, 식당, 미용실, 공방처럼 직접 방문하는 체험단을 네이버 지도에서 위치로 찾아요. 주소와 위치를 확인한 매장만 표시돼요.</p>
+              <div className="row-btns">
+                <Link className="btn btn-primary" to="/experiences?view=map">내 주변 체험단 찾기 <span className="arrow" aria-hidden="true">→</span></Link>
+                <Link className="btn btn-ghost" to="/explore">일러스트 보물지도 보기</Link>
+              </div>
+            </div>
+            <div className="nearby-art" aria-hidden="true">
+              <svg className="grid" viewBox="0 0 400 200" preserveAspectRatio="none"><rect width="400" height="200" fill="#edf2ea" /><path d="M0 130C90 110 150 150 240 120S350 90 400 100" fill="none" stroke="#fff" strokeWidth="14" /><path d="M110 0C120 70 90 140 130 200M300 0C280 80 310 140 290 200" fill="none" stroke="#fff" strokeWidth="9" /><path d="M0 180C70 170 140 190 190 200" fill="none" stroke="#cfe3f3" strokeWidth="20" /></svg>
+              {([[18, 30, 'cafe'], [46, 48, 'restaurant'], [70, 28, 'beauty'], [60, 74, 'workshop']] as const).map(([x, y, c], i) =>
+                <span key={i} className="mock-pin" style={{ left: x + '%', top: y + '%' }} dangerouslySetInnerHTML={{ __html: markerHtml({ category: c, demo: false, selected: i === 1, label: '', decorative: true }) }} />)}
+              <span className="tag">실제 지도 화면의 모습</span>
+            </div>
+          </Reveal>
+        </div>
+      </section>
       <AdventureTrail />
 
       <section className="section islands-sec" aria-labelledby="islands-title">

@@ -1,0 +1,93 @@
+/* Real-map (NAVER) experience search */
+.view-toggle { flex: none; }
+.xmap-head .wrap { align-items: center; }
+.xmap-page { display: grid; grid-template-columns: 400px minmax(0, 1fr); gap: 20px; align-items: start; }
+.xmap-side { display: grid; gap: 12px; align-content: start; }
+.xmap-filters { display: grid; gap: 10px; padding: 14px; border-radius: var(--r); background: var(--ivory); border: 1px solid var(--line); }
+.xmap-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.select-sm { min-height: 40px; width: auto; padding: 6px 30px 6px 12px; border-radius: 999px; font-size: 14px; }
+.xmap-filters .chip { min-height: 34px; padding: 0 12px; font-size: 13px; }
+.xmap-filters .chip-row { flex-wrap: wrap; margin: 0; padding: 0; overflow: visible; }
+.xmap-demo { padding-top: 6px; border-top: 1px dashed var(--line); }
+.chip-sm { min-height: 28px; padding: 0 10px; font-size: 12.5px; margin-left: 8px; }
+.xmap-result { font-size: 14px; color: var(--ink-2); display: flex; align-items: center; flex-wrap: wrap; gap: 4px; }
+.xmap-result b { color: var(--ink); font-size: 17px; }
+.xmap-list { list-style: none; margin: 0; padding: 0 4px 0 0; display: grid; gap: 10px; max-height: calc(100vh - 330px); min-height: 300px; overflow-y: auto; }
+.xmap-list li { position: relative; border-radius: var(--r); transition: box-shadow .2s, border-color .2s; }
+.xmap-list li.is-selected .xprev { border-color: var(--red, #D94F4B); box-shadow: 0 0 0 2px #d94f4b33; }
+.xmap-pick { position: absolute; inset: 0 0 auto 0; height: 92px; z-index: 1; border: 0; background: transparent; cursor: pointer; border-radius: var(--r) var(--r) 0 0; }
+.xmap-pick:focus-visible { outline: 3px solid var(--grape); outline-offset: 2px; }
+.xmap-main { position: sticky; top: calc(var(--header-h) + 12px); height: calc(100vh - var(--header-h) - 40px); min-height: 460px; border-radius: var(--r-lg); overflow: hidden; border: 1px solid var(--line-strong); background: #eef3ee; }
+.xmap { position: relative; width: 100%; height: 100%; }
+.xmap-canvas { position: absolute; inset: 0; }
+.xmap-loading { position: absolute; inset: 0; display: grid; place-items: center; color: var(--ink-2); font-size: 14px; }
+.xmap-fallback { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 8px; padding: 24px; text-align: center; background: repeating-linear-gradient(45deg, #f7efe2 0 12px, #fbf5ea 12px 24px); }
+.xmap-fallback b { font-size: 18px; }
+.xmap-fallback p { margin: 0; max-width: 32em; color: var(--ink-2); font-size: 14px; }
+.xmap-fallback details { max-width: 34em; font-size: 13px; color: var(--ink-2); text-align: left; background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 8px 12px; }
+.xmap-fallback summary { cursor: pointer; font-weight: 700; }
+.xmap-fallback code { font-size: 12px; background: var(--cream); padding: 1px 4px; border-radius: 4px; word-break: break-all; }
+.xmap-research { position: absolute; top: 14px; left: 50%; transform: translateX(-50%); z-index: 5; box-shadow: var(--shadow-up); }
+.xmap-sheet { position: absolute; left: 14px; bottom: 14px; z-index: 6; width: min(360px, calc(100% - 28px)); animation: sheet-in .3s var(--ease-out); }
+@keyframes sheet-in { from { opacity: 0; transform: translateY(12px); } }
+
+/* Markers (HTML content inside the NAVER map) */
+.xmap-pin { width: 32px; height: 40px; cursor: pointer; transform-origin: 50% 100%; transition: transform .2s var(--ease-out); filter: drop-shadow(0 2px 2px #4a3a4240); }
+.xmap-pin:hover, .xmap-pin:focus-visible { transform: scale(1.12); outline: none; }
+.xmap-pin.is-selected { transform: scale(1.3); filter: drop-shadow(0 0 0 #fff) drop-shadow(0 3px 4px #4a3a4255); }
+.xmap-pin.is-demo svg { opacity: .92; }
+.xmap-cluster { width: 40px; height: 40px; display: grid; place-items: center; border-radius: 50%; background: #D94F4B; color: #fff; font: 700 14px/1 Pretendard, sans-serif; border: 3px solid #fff; box-shadow: 0 2px 6px #4a3a4255; cursor: pointer; }
+.xmap-me { width: 18px; height: 18px; border-radius: 50%; background: #7652BA; border: 3px solid #fff; box-shadow: 0 0 0 6px #7652ba33; }
+
+/* Venue preview card */
+.xprev { position: relative; display: grid; grid-template-columns: 92px 1fr; gap: 12px; padding: 12px; border-radius: var(--r); background: #fff; border: 1px solid var(--line); box-shadow: var(--shadow); }
+.xprev-close { position: absolute; top: 6px; right: 6px; z-index: 2; width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--line); background: #fff; font-size: 18px; cursor: pointer; }
+.xprev-photo { width: 92px; height: 92px; border-radius: 12px; overflow: hidden; background: var(--cream); }
+.xprev-photo img, .xprev-photo .photo { width: 100%; height: 100%; object-fit: cover; }
+.xprev-photo .photo-ph span { display: none; }
+.xprev-photo .photo-ph .sticker { width: 48px; height: 48px; }
+.xprev-body { display: grid; gap: 4px; min-width: 0; }
+.xprev-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; margin: 0; }
+.xprev-name { font-size: 17px; margin: 0; }
+.xprev-addr { margin: 0; }
+.xprev-camps { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 8px; grid-column: 1 / -1; }
+.xprev:not(.is-compact) .xprev-camps { grid-column: auto; }
+.xprev-camps li { display: grid; gap: 3px; padding-top: 8px; border-top: 1px dashed var(--line); }
+.xprev-camps b { font-size: 14.5px; }
+.xprev-row { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-top: 2px; position: relative; z-index: 2; }
+.xprev.is-compact .xprev-camps { grid-column: 1 / -1; }
+
+/* Visit section on the detail page */
+.visit-sec { display: grid; gap: 14px; }
+.visit-venue { display: grid; gap: 12px; }
+.visit-name { font-size: 18px; display: block; margin: 4px 0 2px; }
+.visit-map { display: grid; gap: 8px; justify-items: start; }
+.visit-map .xmap { height: 240px; border-radius: 16px; overflow: hidden; border: 1px solid var(--line-strong); }
+.visit-facts div { grid-template-columns: 84px 1fr; }
+
+/* Home: nearby CTA */
+.nearby-cta { display: grid; grid-template-columns: 1.1fr 1fr; gap: 28px; align-items: center; padding: 28px 30px; border-radius: var(--r-lg); background: #fff; border: 1px solid var(--line); box-shadow: var(--shadow); }
+.nearby-cta p { margin: 8px 0 16px; }
+.nearby-art { position: relative; height: 200px; border-radius: 18px; overflow: hidden; background: #eaf1ea; border: 1px solid var(--line); }
+.nearby-art svg.grid { position: absolute; inset: 0; width: 100%; height: 100%; }
+.nearby-art .xmap-pin { position: absolute; }
+.nearby-art .tag { position: absolute; left: 12px; bottom: 12px; font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 999px; background: #fff; border: 1px solid var(--line); color: var(--ink-2); }
+
+@media (max-width: 1000px) {
+  .xmap-page { grid-template-columns: 1fr; }
+  .xmap-main { position: relative; top: 0; order: -1; height: 58vh; min-height: 360px; }
+  .xmap-list { max-height: none; min-height: 0; }
+  .nearby-cta { grid-template-columns: 1fr; }
+}
+@media (max-width: 760px) {
+  .xmap-page { width: 100%; gap: 12px; }
+  .xmap-main { border-radius: 0; border-left: 0; border-right: 0; height: 56vh; }
+  .xmap-side { padding: 0 16px; }
+  .xmap-sheet { left: 8px; right: 8px; bottom: 8px; width: auto; }
+  .xmap-sheet .xprev { grid-template-columns: 64px 1fr; max-height: 42vh; overflow-y: auto; }
+  .xmap-sheet .xprev-photo { width: 64px; height: 64px; }
+  .xmap-head .wrap { gap: 12px; }
+  .view-toggle { width: 100%; }
+  .nearby-cta { padding: 20px 18px; }
+}
+.nearby-sec { padding-top: 24px; padding-bottom: 24px; } .nearby-art .mock-pin { position: absolute; transform: translate(-50%, -100%); }

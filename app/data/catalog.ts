@@ -1,6 +1,6 @@
 // Demo catalog. Every brand, campaign and reward here is sample data (demo: true)
 // and is shown with a 데모 label. Dates are relative to today so statuses stay meaningful.
-import type { Brand, Campaign, CategoryId, Channel, Reward, StickerDef } from '../api/types';
+import type { Brand, Campaign, CategoryId, Channel, Reward, StickerDef, Venue, VenueCategory } from '../api/types';
 
 export interface Category {
   id: CategoryId;
@@ -39,6 +39,9 @@ export const BRANDS: Brand[] = [
   { id: 'bippi', name: '삐삐랩', tagline: '귀여운 기기 액세서리', intro: '작은 전자기기 액세서리를 만드는 데모 브랜드예요.', demo: true },
   { id: 'gungguk', name: '국수한그릇', tagline: '맑은 국물 국숫집', intro: '맑은 국물 국수를 내는 데모 식당이에요.', demo: true },
   { id: 'malgeun', name: '맑은치과', tagline: '동네 치과', intro: '정보형 기자단 예시에 쓰는 데모 병원이에요.', demo: true },
+  { id: 'mulgyeol', name: '물결헤어', tagline: '자연스러운 컷과 펌', intro: '방문형 뷰티 체험 예시에 쓰는 데모 미용실이에요.', demo: true },
+  { id: 'heuk', name: '흙공방', tagline: '손으로 빚는 그릇', intro: '원데이 클래스 예시에 쓰는 데모 도자기 공방이에요.', demo: true },
+  { id: 'pado', name: '파도베이커리', tagline: '바닷가 동네 빵집', intro: '지방 매장 예시에 쓰는 데모 베이커리예요.', demo: true },
 ];
 export const brandById = (id: string) => BRANDS.find(b => b.id === id)!;
 
@@ -63,6 +66,9 @@ export const STICKERS: StickerDef[] = [
   { id: 'st-headphones', name: '말랑 헤드폰', category: 'tech', art: 'headphones', series: 'Fashion & Tech', rule: '이어폰 케이스 체험 리뷰 승인' },
   { id: 'st-camera', name: '여행 카메라', category: 'tech', art: 'camera', series: 'Fashion & Tech', rule: '카메라 스트랩 체험 리뷰 승인' },
   { id: 'st-keyboard', name: '딸깍 키보드', category: 'tech', art: 'keyboard', series: 'Fashion & Tech', rule: '키캡 체험 리뷰 승인' },
+  { id: 'st-scissors', name: '찰칵 가위', category: 'beauty', art: 'scissors', series: 'Beauty Collection', rule: '미용실 방문 리뷰 승인' },
+  { id: 'st-bowl', name: '물레 그릇', category: 'living', art: 'bowl', series: 'Lifestyle Collection', rule: '공방 클래스 리뷰 승인' },
+  { id: 'st-bread', name: '아침 빵', category: 'food', art: 'bread', series: 'Food Collection', rule: '베이커리 방문 리뷰 승인' },
   { id: 'st-letter', name: '정보 편지', category: 'etc', art: 'letter', series: 'Special Collection', rule: '기자단 리뷰 승인' },
   { id: 'st-first', name: '첫 번째 모험', category: 'special', art: 'medal', series: 'Special Collection', rule: '첫 리뷰 미션 승인' },
   { id: 'st-explorer', name: '꾸준한 탐험가', category: 'special', art: 'compass', series: 'Special Collection', rule: '리뷰 미션 3회 승인' },
@@ -84,8 +90,28 @@ const COMMON_NOTICES = [
 ];
 const BASIC_MISSION = ['제품을 직접 사용한 사진 3장 이상', '사용 기간과 느낀 점을 구체적으로 기록', '광고(제공) 표기 포함'];
 
+export const VENUE_CATEGORIES: { id: VenueCategory; label: string }[] = [
+  { id: 'cafe', label: '카페·베이커리' },
+  { id: 'restaurant', label: '식당' },
+  { id: 'beauty', label: '뷰티' },
+  { id: 'workshop', label: '공방' },
+  { id: 'other', label: '기타 방문형' },
+];
+export const venueCategoryLabel = (id: VenueCategory) => VENUE_CATEGORIES.find(c => c.id === id)?.label ?? '기타 방문형';
+
+// DEMO VENUES — fictional stores. Coordinates are rough neighbourhood centres, not the
+// position of any real business, so they are only shown in the labelled demo preview.
+// Real partner venues are added through the operator console after verification.
+export const VENUES: Venue[] = [
+  { id: 'v-dalcom-mangwon', brandId: 'dalcom', name: '달콤정류장 망원점', category: 'cafe', address: '서울 마포구 망원동 (가상 주소)', roadAddress: '서울 마포구 (가상 매장)', region: { sido: '서울', sigungu: '마포구' }, latitude: 37.556, longitude: 126.902, isVerified: false, verificationStatus: 'demo', mapApproved: false, representativeImage: 'assets/hero-03/cafe.jpg', demo: true },
+  { id: 'v-gungguk-ikseon', brandId: 'gungguk', name: '국수한그릇 익선점', category: 'restaurant', address: '서울 종로구 익선동 (가상 주소)', roadAddress: '서울 종로구 (가상 매장)', region: { sido: '서울', sigungu: '종로구' }, latitude: 37.574, longitude: 126.9895, isVerified: false, verificationStatus: 'demo', mapApproved: false, representativeImage: 'assets/hero-03/food.jpg', demo: true },
+  { id: 'v-mulgyeol-seongsu', brandId: 'mulgyeol', name: '물결헤어 성수', category: 'beauty', address: '서울 성동구 성수동 (가상 주소)', roadAddress: '서울 성동구 (가상 매장)', region: { sido: '서울', sigungu: '성동구' }, latitude: 37.5445, longitude: 127.056, isVerified: false, verificationStatus: 'demo', mapApproved: false, demo: true },
+  { id: 'v-heuk-suwon', brandId: 'heuk', name: '흙공방 행궁', category: 'workshop', address: '경기 수원시 팔달구 행궁동 (가상 주소)', roadAddress: '경기 수원시 (가상 매장)', region: { sido: '경기', sigungu: '수원시' }, latitude: 37.2845, longitude: 127.014, isVerified: false, verificationStatus: 'demo', mapApproved: false, demo: true },
+  { id: 'v-pado-haeundae', brandId: 'pado', name: '파도베이커리 해운대', category: 'cafe', address: '부산 해운대구 중동 (가상 주소)', roadAddress: '부산 해운대구 (가상 매장)', region: { sido: '부산', sigungu: '해운대구' }, latitude: 35.163, longitude: 129.163, isVerified: false, verificationStatus: 'demo', mapApproved: false, demo: true },
+];
+
 type Seed = Omit<Campaign, 'id' | 'notices' | 'demo' | 'announceAt' | 'reviewDeadline' | 'recruitStart' | 'recruitEnd'> & {
-  start: number; end: number; notices?: string[];
+  start: number; end: number; notices?: string[]; visit?: [number, number];
 };
 
 const seeds: Seed[] = [
@@ -93,10 +119,13 @@ const seeds: Seed[] = [
   { slug: 'cloud-cream-two-weeks', brandId: 'malang', category: 'beauty', kind: 'delivery', title: '구름 크림 2주 보습 기록', summary: '아침저녁으로 바르며 피부 변화를 사진으로 남겨요.', image: 'assets/review-tree/review-7.webp', channels: ['blog'], quota: 8, start: -3, end: 9, stamps: 3, stickerId: 'st-mirror', benefit: '크림 50ml 본품', conditions: ['블로그 이웃 100명 이상'], mission: BASIC_MISSION, eligibility: ['만 19세 이상'] },
   { slug: 'morning-mist', brandId: 'malang', category: 'beauty', kind: 'delivery', title: '아침 미스트 출근길 체험', summary: '가방 속 미스트를 하루 세 번 써보고 느낌을 남겨요.', image: 'assets/review-tree/review-15.webp', channels: ['instagram', 'shortform'], quota: 15, start: 4, end: 14, stamps: 2, stickerId: 'st-perfume', benefit: '미스트 100ml', conditions: ['인스타그램 공개 계정'], mission: ['사용 장면이 담긴 릴스 또는 사진 3장', '광고(제공) 표기 포함'], eligibility: ['만 19세 이상'] },
   { slug: 'pocket-hand-cream', brandId: 'malang', category: 'beauty', kind: 'delivery', title: '가방 속 핸드크림', summary: '외출할 때 들고 다니며 손에 닿는 느낌을 기록해요.', image: 'assets/review-tree/review-11.webp', channels: ['blog', 'instagram'], quota: 12, start: -20, end: -6, stamps: 2, stickerId: 'st-lipstick', benefit: '핸드크림 3종 세트', conditions: ['공개 계정'], mission: BASIC_MISSION, eligibility: ['만 19세 이상'] },
-  { slug: 'latte-and-pastry', brandId: 'dalcom', category: 'food', kind: 'visit', title: '창가 자리 라테와 페이스트리', summary: '카페에 방문해 음료와 디저트를 맛보고 공간을 소개해요.', image: 'assets/hero-03/cafe.jpg', channels: ['blog', 'instagram'], quota: 6, start: -4, end: 3, stamps: 3, stickerId: 'st-cup', benefit: '2인 음료 + 디저트 1개', conditions: ['방문 가능한 날짜 2개 이상 제시'], mission: ['매장 외관과 메뉴 사진 포함', '위치·영업시간 정보', '광고(제공) 표기 포함'], eligibility: ['서울 마포구 방문 가능'], location: '서울 마포구 (데모 위치)' },
-  { slug: 'strawberry-tart-table', brandId: 'dalcom', category: 'food', kind: 'visit', title: '딸기 타르트 테이블', summary: '제철 딸기 타르트를 맛보고 단면과 맛을 기록해요.', image: 'assets/review-tree/review-5.webp', channels: ['instagram'], quota: 5, start: -1, end: 6, stamps: 2, stickerId: 'st-strawberry', benefit: '타르트 1조각 + 음료 1잔', conditions: ['인스타그램 공개 계정'], mission: ['디저트 사진 3장 이상', '광고(제공) 표기 포함'], eligibility: ['서울 마포구 방문 가능'], location: '서울 마포구 (데모 위치)' },
+  { slug: 'latte-and-pastry', brandId: 'dalcom', category: 'food', kind: 'visit', title: '창가 자리 라테와 페이스트리', summary: '카페에 방문해 음료와 디저트를 맛보고 공간을 소개해요.', image: 'assets/hero-03/cafe.jpg', channels: ['blog', 'instagram'], quota: 6, start: -4, end: 3, stamps: 3, stickerId: 'st-cup', benefit: '2인 음료 + 디저트 1개', conditions: ['방문 가능한 날짜 2개 이상 제시'], mission: ['매장 외관과 메뉴 사진 포함', '위치·영업시간 정보', '광고(제공) 표기 포함'], eligibility: ['서울 마포구 방문 가능'], location: '서울 마포구 (데모 위치)',
+    venueId: 'v-dalcom-mangwon', menu: '시그니처 라테 2잔 + 페이스트리 1개', visit: [4, 14], visitHours: '평일 12:00–18:00', reservationMethod: '선정 후 카카오톡 채널로 날짜 예약', reservationNotice: '방문 하루 전까지 예약이 필요해요.', companions: '1명까지 동반 가능', visitConditions: ['선정 후 2주 안에 방문', '주말 방문은 사전 협의'] },
+  { slug: 'strawberry-tart-table', brandId: 'dalcom', category: 'food', kind: 'visit', title: '딸기 타르트 테이블', summary: '제철 딸기 타르트를 맛보고 단면과 맛을 기록해요.', image: 'assets/review-tree/review-5.webp', channels: ['instagram'], quota: 5, start: -1, end: 6, stamps: 2, stickerId: 'st-strawberry', benefit: '타르트 1조각 + 음료 1잔', conditions: ['인스타그램 공개 계정'], mission: ['디저트 사진 3장 이상', '광고(제공) 표기 포함'], eligibility: ['서울 마포구 방문 가능'], location: '서울 마포구 (데모 위치)',
+    venueId: 'v-dalcom-mangwon', menu: '딸기 타르트 1조각 + 음료 1잔', visit: [7, 17], visitHours: '매일 11:00–20:00', reservationMethod: '예약 없이 방문', reservationNotice: '선정 문자를 직원에게 보여주세요.', companions: '혼자 방문', visitConditions: ['딸기 소진 시 다른 디저트로 대체될 수 있어요'] },
   { slug: 'basque-cheesecake', brandId: 'dalcom', category: 'food', kind: 'delivery', title: '바스크 치즈케이크 택배 체험', summary: '집으로 배송된 케이크를 맛보고 보관과 맛을 소개해요.', image: 'assets/review-tree/review-13.webp', channels: ['blog'], quota: 10, start: -25, end: -12, stamps: 3, stickerId: 'st-cake', benefit: '치즈케이크 1호', conditions: ['냉장 수령 가능'], mission: BASIC_MISSION, eligibility: ['수도권 배송지'] },
-  { slug: 'clear-noodle-soup', brandId: 'gungguk', category: 'food', kind: 'visit', title: '맑은 국물 국수 한 그릇', summary: '점심에 방문해 국수와 곁들임 메뉴를 소개해요.', image: 'assets/hero-03/food.jpg', channels: ['blog'], quota: 4, start: 2, end: 10, stamps: 2, stickerId: 'st-noodle', benefit: '국수 2인분', conditions: ['평일 점심 방문 가능'], mission: ['메뉴판과 음식 사진', '위치·주차 정보', '광고(제공) 표기 포함'], eligibility: ['서울 종로구 방문 가능'], location: '서울 종로구 (데모 위치)' },
+  { slug: 'clear-noodle-soup', brandId: 'gungguk', category: 'food', kind: 'visit', title: '맑은 국물 국수 한 그릇', summary: '점심에 방문해 국수와 곁들임 메뉴를 소개해요.', image: 'assets/hero-03/food.jpg', channels: ['blog'], quota: 4, start: 2, end: 10, stamps: 2, stickerId: 'st-noodle', benefit: '국수 2인분', conditions: ['평일 점심 방문 가능'], mission: ['메뉴판과 음식 사진', '위치·주차 정보', '광고(제공) 표기 포함'], eligibility: ['서울 종로구 방문 가능'], location: '서울 종로구 (데모 위치)',
+    venueId: 'v-gungguk-ikseon', menu: '맑은 국수 2인분 + 곁들임 1종', visit: [12, 24], visitHours: '평일 11:30–14:00', reservationMethod: '선정 후 전화 예약', reservationNotice: '점심 시간 대기 줄이 있을 수 있어요.', companions: '1명까지 동반 가능', visitConditions: ['평일 점심에만 방문 가능'] },
   { slug: 'linen-kitchen-towel', brandId: 'sooprim', category: 'living', kind: 'delivery', title: '린넨 키친타월 한 달 사용기', summary: '주방에서 매일 써보며 흡수력과 건조 속도를 기록해요.', image: 'assets/review-tree/review-4.webp', channels: ['blog'], quota: 10, start: -30, end: -16, stamps: 2, stickerId: 'st-candle', benefit: '키친타월 2장', conditions: ['리빙 글 작성 경험'], mission: BASIC_MISSION, eligibility: ['국내 배송 가능 주소'] },
   { slug: 'hand-drip-set', brandId: 'sooprim', category: 'living', kind: 'delivery', title: '집에서 내리는 핸드드립 세트', summary: '드리퍼와 서버로 커피를 내려보는 과정을 소개해요.', image: 'assets/review-tree/review-17.webp', channels: ['blog', 'youtube'], quota: 6, start: -2, end: 12, stamps: 4, stickerId: 'st-plant', benefit: '드립 세트 (드리퍼, 서버, 필터)', conditions: ['사진 또는 영상 촬영 가능'], mission: ['추출 과정 사진 또는 영상', '광고(제공) 표기 포함'], eligibility: ['국내 배송 가능 주소'] },
   { slug: 'single-flower-vase', brandId: 'jibkkumi', category: 'home', kind: 'delivery', title: '꽃 한 송이 유리 화병', summary: '창가에 화병을 두고 빛이 닿는 모습을 담아요.', image: 'assets/review-tree/review-20.webp', channels: ['instagram'], quota: 8, start: -5, end: 8, stamps: 2, stickerId: 'st-vase', benefit: '유리 화병 1개', conditions: ['인스타그램 공개 계정'], mission: ['공간 연출 사진 3장', '광고(제공) 표기 포함'], eligibility: ['국내 배송 가능 주소'] },
@@ -107,10 +136,17 @@ const seeds: Seed[] = [
   { slug: 'earbud-case', brandId: 'bippi', category: 'tech', kind: 'delivery', title: '말랑 이어폰 케이스', summary: '실리콘 케이스를 씌워 그립감과 보호력을 살펴봐요.', channels: ['instagram', 'youtube'], quota: 10, start: -3, end: 7, stamps: 2, stickerId: 'st-headphones', benefit: '이어폰 케이스 1개 (기종 선택)', conditions: ['호환 기기 보유'], mission: ['장착 전후 사진', '광고(제공) 표기 포함'], eligibility: ['국내 배송 가능 주소'] },
   { slug: 'camera-strap', brandId: 'bippi', category: 'tech', kind: 'delivery', title: '여행용 카메라 스트랩', summary: '여행길에 들고 다니며 길이와 착용감을 기록해요.', channels: ['blog'], quota: 6, start: -18, end: -4, stamps: 3, stickerId: 'st-camera', benefit: '카메라 스트랩 1개', conditions: ['카메라 보유'], mission: BASIC_MISSION, eligibility: ['국내 배송 가능 주소'] },
   { slug: 'dental-clinic-guide', brandId: 'malgeun', category: 'etc', kind: 'editorial', title: '처음 가는 동네 치과 안내 글', summary: '병원이 제공한 자료로 예약과 진료 안내를 정리해요.', channels: ['blog'], quota: 5, start: -2, end: 9, stamps: 2, stickerId: 'st-letter', benefit: '원고료 (데모 금액 미정)', conditions: ['정보형 글 작성 경험'], mission: ['제공 자료 기반 안내 글', '의료광고 심의 기준 준수', '광고(제공) 표기 포함'], eligibility: ['블로그 운영 6개월 이상'] },
+  { slug: 'natural-layered-cut', brandId: 'mulgyeol', category: 'beauty', kind: 'visit', title: '자연스러운 레이어드 컷 체험', summary: '디자이너 상담부터 커트까지 경험하고 스타일 변화를 기록해요.', channels: ['instagram', 'blog'], quota: 4, start: -3, end: 8, stamps: 4, stickerId: 'st-scissors', benefit: '커트 + 드라이 1회', conditions: ['시술 전후 사진 촬영 동의'], mission: ['시술 전후 사진', '상담 과정 소개', '광고(제공) 표기 포함'], eligibility: ['서울 성동구 방문 가능'], location: '서울 성동구 (데모 위치)',
+    venueId: 'v-mulgyeol-seongsu', menu: '레이어드 컷 + 드라이', visit: [10, 25], visitHours: '화–토 11:00–19:00', reservationMethod: '선정 후 예약 링크로 시간 선택', reservationNotice: '시술 시간은 약 1시간 30분이에요.', companions: '동반 불가', visitConditions: ['펌·염색은 포함되지 않아요'] },
+  { slug: 'pottery-one-day-class', brandId: 'heuk', category: 'living', kind: 'visit', title: '물레 원데이 클래스', summary: '물레로 그릇을 빚어보고 완성까지의 과정을 기록해요.', channels: ['blog', 'youtube'], quota: 6, start: -1, end: 12, stamps: 4, stickerId: 'st-bowl', benefit: '원데이 클래스 1인 + 완성품 배송', conditions: ['2시간 수업 참여 가능'], mission: ['수업 과정 사진 또는 영상', '완성품 사진(배송 후)', '광고(제공) 표기 포함'], eligibility: ['경기 수원시 방문 가능'], location: '경기 수원시 (데모 위치)',
+    venueId: 'v-heuk-suwon', menu: '물레 체험 + 그릇 2점 소성', visit: [14, 35], visitHours: '토·일 10:00, 14:00 수업', reservationMethod: '선정 후 수업 회차 선택', reservationNotice: '앞치마는 공방에서 준비해요.', companions: '동반 1명 추가 시 별도 비용', visitConditions: ['완성품은 약 3주 뒤 배송돼요'] },
+  { slug: 'haeundae-morning-bread', brandId: 'pado', category: 'food', kind: 'visit', title: '해운대 아침 빵 바구니', summary: '아침에 갓 구운 빵을 맛보고 동네 산책 코스와 함께 소개해요.', channels: ['instagram'], quota: 5, start: 3, end: 13, stamps: 3, stickerId: 'st-bread', benefit: '빵 바구니(4종) + 음료 1잔', conditions: ['오전 방문 가능'], mission: ['빵과 매장 사진 3장 이상', '위치 정보', '광고(제공) 표기 포함'], eligibility: ['부산 해운대구 방문 가능'], location: '부산 해운대구 (데모 위치)',
+    venueId: 'v-pado-haeundae', menu: '오늘의 빵 4종 + 커피', visit: [15, 28], visitHours: '매일 08:00–11:00', reservationMethod: '예약 없이 방문', reservationNotice: '빵이 소진되면 일찍 마감될 수 있어요.', companions: '1명까지 동반 가능', visitConditions: ['오전 11시 이전 방문'] },
 ];
 
-export const CAMPAIGNS: Campaign[] = seeds.map(({ start, end, notices, ...s }, i) => ({
+export const CAMPAIGNS: Campaign[] = seeds.map(({ start, end, notices, visit, ...s }, i) => ({
   ...s,
+  ...(visit ? { visitStart: day(visit[0]), visitEnd: day(visit[1]) } : {}),
   id: 'cmp-' + String(i + 1).padStart(2, '0'),
   recruitStart: day(start),
   recruitEnd: day(end),
@@ -139,3 +175,5 @@ export function campaignStatus(c: Campaign, now = Date.now()): import('../api/ty
 }
 
 export const STATUS_LABEL = { upcoming: '모집 예정', open: '모집 중', closed: '모집 마감' } as const;
+
+export const venueById = (id?: string) => (id ? VENUES.find(v => v.id === id) : undefined);

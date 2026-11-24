@@ -116,12 +116,11 @@ export function TreasureMap({ counts = {}, interactive = true, selected, onSelec
           <SvgFlag x={92} y={752} s={1.1} color={C.coral} />
           <text x="62" y="790" fontFamily="Fredoka, sans-serif" fontWeight="700" fontSize="18" fill={C.ink} opacity=".7">START</text>
         </g>
-        {[[340, 86, .9], [770, 66, 1], [1090, 600, .8], [60, 380, .7]].map(([x, y, s], i) =>
+        {[[340, 86, .9], [1090, 600, .8]].map(([x, y, s], i) =>
           <g key={i} className="map-cloud" style={{ animationDelay: `${-i * 3}s` }}><SvgCloud x={x} y={y} s={s} /></g>)}
-        {[[380, 420], [740, 440], [1130, 170], [430, 720], [800, 760 - 30], [60, 220]].map(([x, y], i) =>
+        {[[740, 440], [1130, 170], [430, 720]].map(([x, y], i) =>
           <g key={i} className="map-star"><SvgStar x={x} y={y} s={.8} fill={i % 2 ? C.pink : C.butter} /></g>)}
         <g className="map-star"><SvgSparkle x={690} y={312} s={1.3} /></g>
-        <g className="map-star"><SvgSparkle x={330} y={330} s={1} fill={C.ivory} /></g>
       </g>
 
       {(Object.keys(ISLAND_POS) as IslandCat[]).map(cat => {
