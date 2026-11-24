@@ -28,9 +28,10 @@
 | `/how-it-works` | `pages/HowItWorks.tsx` | 8단계 흐름, 스티커/스탬프 차이, 공정 리뷰 정책 |
 | `/explore` | `pages/Explore.tsx` | 인터랙티브 보물지도 + 섬 패널 (모바일: 좌우로 미는 지도) |
 | `/experiences` | `pages/Experiences.tsx` | 검색·카테고리·상태·정렬 (URL 쿼리와 동기화), 로딩·오류·빈 상태 |
+| `/experiences?view=map` | `pages/ExperienceMap.tsx`, `components/map/*`, `map/naverSdk.ts` | 내 주변 지도: 방문형 체험단을 네이버 지도에서 찾기 (지역·매장 종류·상태·검색·내 주변·지도 영역 재검색). 목록과 `q`·`status`를 공유 |
 | `/experiences/:slug` | `pages/ExperienceDetail.tsx` | 상세 13개 항목 + 신청 모달과 상태 흐름 |
 | `/rewards`, `/rewards/:slug` | `pages/Rewards.tsx`, `RewardDetail.tsx` | 리워드샵, 4단계 교환 흐름 |
-| `/brands` | `pages/Brands.tsx` | 브랜드 제휴 소개와 문의 폼 |
+| `/brands` | `pages/Brands.tsx` | 사장님·브랜드 제휴: 서비스 장점, 진행 방식, 업종별 예시, 지도 노출 안내, 기능 현황, FAQ, 매장 정보가 포함된 문의 폼 |
 | `/faq` | `pages/Faq.tsx` | 검색 가능한 FAQ |
 | `/login` | `pages/Login.tsx` | 데모 로그인 (새 탐험가 / 예시 탐험가 / 운영자), 계정 전환, 데모 초기화 |
 | `/my`, `/my/*` | `pages/my/*` | 개요, 스티커북, 스탬프, 체험단, 리뷰 미션, 교환 내역, 프로필 |
@@ -116,3 +117,36 @@ npm run serve      # http://127.0.0.1:8080/STAMPY/ (GitHub Pages처럼 동작)
 - `scripts/build-app.mjs`가 `assets/app/`에 코드 분할된 번들을 만들고, 모든 경로(체험단·리워드 슬러그 포함)에 HTML 셸과 `404.html`을 써서 GitHub Pages에서 새로고침·직접 접속이 되도록 합니다.
 - 저장소 이름이 바뀌면 `BASE=/새이름/ npm run build:app`으로 다시 빌드합니다 (셸의 `<base href>`와 라우터가 이 값을 씁니다).
 - GitHub Pages는 정적 호스팅이라 인증·데이터 저장·지급·차감을 안전하게 처리할 수 없습니다. 운영 전환 시 위 API를 제공하는 서버(BACKEND_PLAN.md의 Node + SQLite/PostgreSQL 안)를 별도로 배포해야 합니다.
+
+## 8. 2차 개편 (2026-11)
+
+### 디자인
+- 색상은 그대로 두고 표현 방식을 다듬었어요.
+  - 헤드라인은 Pretendard 굵은 글씨로 바꿨어요. Jua(`--f-deco`)는 지도 섬 이름 같은 장식 라벨에만 써요.
+  - 아이브로는 대문자 레이블로, 버튼과 카드는 얇은 테두리·약한 그림자·작은 둥근 모서리로 바꿨어요.
+  - hover 회전과 과한 바운스를 없앴어요.
+- STAMPY 마스코트는 빨간 고무도장 캐릭터예요.
+  - 손잡이 → 목 → 몸통 → 잉크 패드 실루엣이고 8개 포즈를 유지했어요.
+  - 색상 토큰 `C.red/redD/redL/redH`와 CSS `--red*`는 마스코트·브랜드 도장 전용이에요.
+  - 재화 스탬프(보라색 도장 코인과 자국)는 그대로예요. 도장이 찍히는 순간에만 빨간 잉크 번짐이 짧게 나타나요.
+- 홈 인트로는 약 4초(첫 방문)로 줄였어요. 히어로 바로 아래에 '내 주변 체험단 찾기' CTA를 넣었어요.
+- 내비게이션은 체험단 찾기 · 내 주변 지도 · 보물지도 · 스티커북 · 리워드샵 · 사장님·브랜드 제휴로 바꿨어요. 소개·이용 방법·FAQ는 메뉴와 푸터로 옮겼어요.
+
+### 매장(Venue) 모델
+- `Venue`: id, brandId, name, category(cafe/restaurant/beauty/workshop/other), address, roadAddress, region{sido, sigungu}, latitude, longitude, naverPlaceId/Url, phone, representativeImage, isVerified, verificationStatus(verified/pending/rejected/demo), mapApproved, checks, demo
+- `Campaign`(방문형): venueId, menu, visitStart/End, visitHours, reservationMethod/Notice, companions, visitConditions
+  - 한 매장에 여러 체험단을 연결해요. 예시: 달콤정류장 망원점에 체험단 2개.
+- 공개 지도 노출 조건은 `isPublicVenue`예요: 데모가 아니고, verified이면서 mapApproved인 매장만 노출돼요.
+  - 운영 콘솔에서 검증하려면 체크리스트 3개(주소, 좌표, 영업 여부)를 모두 확인해야 해요.
+  - 가상 데모 매장은 검증할 수 없어요 (`DEMO_VENUE`).
+- 지역 필터는 데이터에 있는 시·도에서 자동으로 만들어요.
+
+### 제휴 문의
+- `BrandInquiry`에 연락처, 업종, 위치, 체험단 유형과 선택 항목(플레이스·인스타그램 링크, 제공 메뉴, 인원, 시기), 처리 상태를 추가했어요.
+- 같은 제출 키로 다시 보내면 첫 결과를 돌려줘요. 같은 이메일과 매장명으로 10분 안에 다시 보내면 `DUPLICATE`예요.
+- 운영 콘솔 '제휴 문의'에서 상태를 관리해요.
+
+### 데이터 이전
+- 저장된 데모 데이터(`stampy.demo.v1`)는 지우지 않고, 새 필드(`venues`, `venueEdits`, 새 리워드 재고)만 채워요 (`migrate`).
+
+지도 키와 설정 방법은 [NAVER_MAPS_SETUP.md](NAVER_MAPS_SETUP.md)에 있어요.

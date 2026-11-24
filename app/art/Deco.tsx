@@ -69,11 +69,21 @@ export function StampImprint({ size = 56, label = 'STAMPY', className = '', colo
 export function StampTool({ size = 70, className = '' }: { size?: number; className?: string }) {
   return (
     <svg className={'stamp-tool ' + className} viewBox="0 0 80 100" width={size} height={size * 1.25} aria-hidden="true">
-      <circle cx="40" cy="20" r="15" fill={C.butter} {...ink(3)} />
-      <path d="M34 14q4-4 9-4" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round" />
-      <rect x="31" y="32" width="18" height="22" rx="5" fill={C.butterD} {...ink(3)} />
-      <rect x="12" y="52" width="56" height="26" rx="9" fill={C.lav} {...ink(3)} />
-      <rect x="10" y="76" width="60" height="12" rx="5" fill={C.grape} {...ink(3)} />
+      <ellipse cx="40" cy="19" rx="14" ry="12" fill={C.redL} {...ink(2.6)} />
+      <path d="M34 13q3-3 7-3.5" fill="none" stroke="#fff" strokeWidth="2.6" strokeLinecap="round" />
+      <rect x="33" y="29" width="14" height="22" rx="4" fill={C.redD} {...ink(2.6)} />
+      <path d="M16 50h48q5 0 5 5v18H11V55q0-5 5-5z" fill={C.red} {...ink(2.6)} />
+      <rect x="9" y="72" width="62" height="13" rx="4" fill={C.redD} {...ink(2.6)} />
+    </svg>
+  );
+}
+
+/** Short red ink burst shown the instant a stamp lands. */
+export function InkBurst({ size = 90, className = '' }: { size?: number; className?: string }) {
+  return (
+    <svg className={'ink-burst ' + className} viewBox="-50 -50 100 100" width={size} height={size} aria-hidden="true">
+      <circle r="34" fill="none" stroke={C.red} strokeWidth="3" opacity=".7" />
+      {[0, 60, 120, 180, 240, 300].map(a => <circle key={a} cx={Math.cos(a * Math.PI / 180) * 42} cy={Math.sin(a * Math.PI / 180) * 42} r="3" fill={C.red} />)}
     </svg>
   );
 }

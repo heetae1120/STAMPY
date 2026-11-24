@@ -22,6 +22,11 @@ export const C = {
   pinkD: '#ef93b4',
   wood: '#d9a77c',
   water: '#d4eaf8',
+  // Mascot-only reds. The purple stamp currency and the rest of the UI keep their colours.
+  red: '#D94F4B',
+  redD: '#B73E3A',
+  redL: '#F6D5D2',
+  redH: '#FBE8E5',
 } as const;
 
 /** Stroke props for the hand-drawn ink outline. */

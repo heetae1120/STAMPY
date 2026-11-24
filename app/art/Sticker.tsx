@@ -196,6 +196,25 @@ export const STICKER_ART: Record<string, ReactNode> = {
     <path d="M47 57c0-2 3-2 3 0 0-2 3-2 3 0 0 3-3 4-3 4s-3-1-3-4z" fill="#fff" />
     {tube('M70 18 86 34', C.butter, 5)}<path d="M84 36l6 4-2-7z" fill={C.ink} />
   </g>,
+  scissors: <g>
+    <path d="M44 52 70 14M56 52 30 14" {...ink(6.4)} />
+    <path d="M44 52 70 14M56 52 30 14" stroke={C.skyL} strokeWidth="3" strokeLinecap="round" />
+    <circle cx="50" cy="50" r="3" fill={C.ink} />
+    <circle cx="36" cy="72" r="13" fill={C.pink} {...k} /><circle cx="36" cy="72" r="6" fill={C.ivory} {...k2} />
+    <circle cx="64" cy="72" r="13" fill={C.pink} {...k} /><circle cx="64" cy="72" r="6" fill={C.ivory} {...k2} />
+  </g>,
+  bowl: <g>
+    <ellipse cx="50" cy="84" rx="20" ry="5" fill={C.wood} {...k2} />
+    <path d="M16 46h68c0 22-15 36-34 36S16 68 16 46z" fill={C.sky} {...k} />
+    <path d="M20 58q30 10 60 0" fill="none" stroke={C.skyD} strokeWidth="5" strokeLinecap="round" />
+    <ellipse cx="50" cy="46" rx="34" ry="8" fill={C.ivory} {...k} />
+    <path d="M26 54c2 6 6 10 10 12" {...shine} />
+  </g>,
+  bread: <g>
+    <path d="M14 66c0-22 16-36 36-36s36 14 36 36c0 10-8 16-18 16H32c-10 0-18-6-18-16z" fill="#f2c27a" {...k} />
+    <path d="M34 46l8 10M48 42l8 10M62 46l8 10" {...ink(2.8)} stroke="#c9873e" />
+    <path d="M24 62c0-6 2-10 6-14" {...shine} />
+  </g>,
   medal: <g>
     <path d="M32 8h14l10 32H42z" fill={C.sky} {...k} />
     <path d="M68 8H54L44 40h14z" fill={C.pink} {...k} />

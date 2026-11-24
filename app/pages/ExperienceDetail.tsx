@@ -1,7 +1,9 @@
 import { useId, useState } from 'react';
-import type { Application, Campaign, Channel } from '../api/types';
-import { CHANNEL_LABEL, KIND_LABEL, brandById, campaignStatus, categoryById, stickerById } from '../data/catalog';
-import { apply, cancelApplication, getCampaign, type ApplyForm } from '../api/demo';
+import type { Application, Campaign, Channel, Venue } from '../api/types';
+import { CHANNEL_LABEL, KIND_LABEL, brandById, campaignStatus, categoryById, stickerById, venueCategoryLabel } from '../data/catalog';
+import { apply, cancelApplication, getCampaign, isPublicVenue, venueOf, type ApplyForm } from '../api/demo';
+import { NaverExperienceMap } from '../components/map/NaverExperienceMap';
+import { naverMapLink } from '../map/naverSdk';
 import { useAction, useAsync, useDemo, useSession } from '../api/hooks';
 import { Link, useLocation } from '../router';
 import { CategoryTag, StampCount } from '../components/Cards';
@@ -133,6 +135,41 @@ function ApplyPanel({ c, applied, mine }: { c: Campaign; applied: number; mine?:
   );
 }
 
+/** Store and visit details for visit campaigns. The real map is shown only for verified venues. */
+function VisitInfo({ c, venue }: { c: Campaign; venue?: Venue }) {
+  const showMap = !!venue && isPublicVenue(venue);
+  return (
+    <section className="detail-sec visit-sec" aria-labelledby="visit-title">
+      <h2 id="visit-title" className="h3">매장과 방문 안내</h2>
+      {venue ? (
+        <div className="visit-venue">
+          <div>
+            <p className="xprev-meta"><span className="badge">{venueCategoryLabel(venue.category)}</span>{venue.demo ? <DemoBadge text="가상 매장" /> : venue.isVerified ? <span className="badge badge-open">검증된 매장</span> : <span className="badge badge-warn">위치 확인 중</span>}</p>
+            <b className="visit-name">{venue.name}</b>
+            <p className="small muted" style={{ margin: 0 }}>{venue.demo ? `${venue.region.sido} ${venue.region.sigungu} 근처 · 예시용 가상 매장이라 실제 주소와 위치가 없어요` : venue.roadAddress}</p>
+          </div>
+          {showMap ? (
+            <div className="visit-map">
+              <NaverExperienceMap items={[{ venue, campaigns: [c] }]} selectedId={venue.id} onSelect={() => {}} fitKey={venue.id} interactive={false} label={venue.name + ' 위치'} />
+              <a className="btn btn-sm" href={naverMapLink(venue)} target="_blank" rel="noopener noreferrer">네이버 지도에서 보기 ↗</a>
+            </div>
+          ) : (
+            <p className="notice small"><span>{venue.demo ? '가상 매장은 지도에 표시하지 않아요. 실제 제휴 매장은 주소와 위치를 검증한 뒤 지도와 함께 안내돼요.' : '운영팀이 주소와 위치를 확인하고 있어요. 확인이 끝나면 지도가 표시돼요.'}</span></p>
+          )}
+        </div>
+      ) : <p className="small muted">매장 정보가 아직 등록되지 않았어요.</p>}
+      <dl className="facts visit-facts">
+        {c.menu && <div><dt>체험 메뉴</dt><dd>{c.menu}</dd></div>}
+        {c.visitStart && c.visitEnd && <div><dt>방문 기간</dt><dd>{fmtFull(c.visitStart)} – {fmtFull(c.visitEnd)}</dd></div>}
+        {c.visitHours && <div><dt>방문 시간</dt><dd>{c.visitHours}</dd></div>}
+        {c.reservationMethod && <div><dt>예약</dt><dd>{c.reservationMethod}{c.reservationNotice && <span className="small muted"> · {c.reservationNotice}</span>}</dd></div>}
+        {c.companions && <div><dt>동반인</dt><dd>{c.companions}</dd></div>}
+      </dl>
+      {c.visitConditions && c.visitConditions.length > 0 && <ul className="dot-list small">{c.visitConditions.map(v => <li key={v}>{v}</li>)}</ul>}
+    </section>
+  );
+}
+
 export default function ExperienceDetail({ params }: { params: Record<string, string> }) {
   const res = useAsync(() => getCampaign(params.slug), [params.slug]);
   useTitle(res.data?.campaign.title ?? '체험단 상세');
@@ -145,6 +182,13 @@ export default function ExperienceDetail({ params }: { params: Record<string, st
   const brand = brandById(c.brandId);
   const sticker = stickerById(c.stickerId);
   const status = campaignStatus(c);
+  return (
+    <DetailBody c={c} applied={applied} mine={mine} status={status} cat={cat} brand={brand} sticker={sticker} />
+  );
+}
+
+function DetailBody({ c, applied, mine, status, cat, brand, sticker }: { c: Campaign; applied: number; mine?: Application; status: ReturnType<typeof campaignStatus>; cat: ReturnType<typeof categoryById>; brand: ReturnType<typeof brandById>; sticker: ReturnType<typeof stickerById> }) {
+  const venue = useDemo(s => venueOf(s, c.venueId));
   return (
     <div className="wrap detail">
       <nav className="crumbs" aria-label="현재 위치"><Link to="/experiences">체험단</Link><span aria-hidden="true">›</span><Link to={'/experiences?category=' + c.category}>{cat.island}</Link></nav>
@@ -160,8 +204,9 @@ export default function ExperienceDetail({ params }: { params: Record<string, st
           </section>
           <section className="detail-sec">
             <h2 className="h3">제공 혜택</h2>
-            <p><b>{c.benefit}</b>{c.location && <> · 방문 지역 {c.location}</>}</p>
+            <p><b>{c.benefit}</b>{c.location && c.kind !== 'visit' && <> · 방문 지역 {c.location}</>}</p>
           </section>
+          {c.kind === 'visit' && <VisitInfo c={c} venue={venue} />}
           <section className="detail-sec">
             <h2 className="h3">리뷰 미션</h2>
             <ul className="tick-list">{c.mission.map(m => <li key={m}>{m}</li>)}</ul>

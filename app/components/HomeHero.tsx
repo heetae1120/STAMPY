@@ -7,7 +7,7 @@ import { useDemo } from '../api/hooks';
 import { TreasureMap, MAP_W, MAP_H, MASCOT_REST } from '../art/TreasureMap';
 import { Mascot } from '../art/Mascot';
 import { Sticker } from '../art/Sticker';
-import { Chest, Sparkle, StampImprint, StampTool } from '../art/Deco';
+import { Chest, InkBurst, Sparkle, StampImprint, StampTool } from '../art/Deco';
 import { Island } from '../art/Island';
 import { StampIcon, reducedMotion } from './ui';
 
@@ -172,16 +172,19 @@ export function HomeHero({ counts }: { counts: Partial<Record<CategoryId, number
         .fromTo(stamp, { autoAlpha: 0, y: -50 }, { autoAlpha: 1, y: -34, duration: .25, ease: 'power2.out' }, 5.15)
         .to(stamp, { y: 6, scaleY: .9, duration: .14, ease: 'power3.in' }, 5.42)
         .set(imprint, { autoAlpha: 1 }, 5.55)
-        .fromTo(imprint, { scale: 1.35, rotation: -14 }, { scale: 1, rotation: -8, duration: .35, ease: 'back.out(3)' }, 5.55)
+        .fromTo(imprint, { scale: 1.2, rotation: -12 }, { scale: 1, rotation: -8, duration: .25, ease: 'power2.out' }, 5.55)
+        .call(() => { const t = center($('.tray-stamp.is-target')); gsap.set($('.ink-press'), { left: t.x, top: t.y, xPercent: -50, yPercent: -50 }); }, [], 5.5)
+        .fromTo($('.ink-press'), { autoAlpha: .9, scale: .5 }, { autoAlpha: 0, scale: 1.25, duration: .45, ease: 'power2.out' }, 5.55)
         .to(stamp, { y: -60, scaleY: 1, autoAlpha: 0, duration: .35, ease: 'power2.out' }, 5.62)
         .fromTo($('.tray-plus'), { autoAlpha: 0, y: 8 }, { autoAlpha: 1, y: 0, duration: .3 }, 5.65);
     }
-    if (seen) tl.timeScale(2.4);
+    // First visit runs about four seconds; repeat visits are quicker still.
+    tl.timeScale(seen ? 2.6 : 1.4);
 
     const skip = () => {
       if (tl.progress() === 1) return;
       tl.progress(1);
-      $$('.fly-sticker, .burst, .stamp-press').forEach(el => gsap.set(el, { autoAlpha: 0 }));
+      $$('.fly-sticker, .burst, .stamp-press, .ink-press').forEach(el => gsap.set(el, { autoAlpha: 0 }));
       mascot.classList.remove('is-walking');
       finish();
     };
@@ -204,7 +207,7 @@ export function HomeHero({ counts }: { counts: Partial<Record<CategoryId, number
   return (
     <section className="hero" aria-labelledby="hero-title">
       <div className="hero-bg" aria-hidden="true">
-        <Sparkle className="hb hb1" size={30} /><Sparkle className="hb hb2" size={20} color="#F7BBD0" /><Sparkle className="hb hb3" size={24} color="#B7DBF3" />
+        <Sparkle className="hb hb3" size={20} color="#B7DBF3" />
       </div>
       <div className="wrap hero-grid">
         <div className="hero-copy">
@@ -254,6 +257,7 @@ export function HomeHero({ counts }: { counts: Partial<Record<CategoryId, number
           <div className="fly-sticker" aria-hidden="true"><Sticker art="vase" size={70} /></div>
           <div className="burst" aria-hidden="true">{Array.from({ length: 6 }, (_, i) => <Sparkle key={i} size={18} color={['#FFE39A', '#F7BBD0', '#B7DBF3'][i % 3]} />)}</div>
           <div className="stamp-press" aria-hidden="true"><StampTool size={50} /></div>
+          <div className="ink-press" aria-hidden="true"><InkBurst size={70} /></div>
           {pop && <HeroPop kind={pop} onClose={() => setPop(null)} />}
           <p className="hero-hint" aria-hidden="true">섬을 눌러 탐험을 시작해 보세요</p>
         </div>

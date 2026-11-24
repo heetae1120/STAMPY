@@ -5,9 +5,10 @@
 import {
   ApiError, type AdminAction, type Application, type BrandInquiry, type Campaign, type Channel,
   type LedgerEntry, type Redemption, type RedemptionStatus, type Review, type ReviewStatus,
-  type Reward, type Shipping, type User, type UserSticker,
+  type Reward, type Shipping, type User, type UserSticker, type Venue, type VenueCategory, type VerificationStatus,
+  type BusinessType, type CampaignKind,
 } from './types';
-import { CAMPAIGNS, REWARDS, STICKERS, campaignStatus } from '../data/catalog';
+import { BRANDS, CAMPAIGNS, REWARDS, STICKERS, VENUES, campaignStatus } from '../data/catalog';
 
 const KEY = 'stampy.demo.v1';
 
@@ -25,12 +26,15 @@ export interface DemoState {
   stock: Record<string, number>;
   inquiries: BrandInquiry[];
   adminActions: AdminAction[];
+  /** Venues registered by operators in this browser (added in the map release). */
+  venues: Venue[];
+  venueEdits: Record<string, Partial<Venue>>;
 }
 
 function fresh(): DemoState {
   return {
     v: 1, seq: 1, users: [], sessionUserId: null, campaignEdits: {}, applications: [], reviews: [],
-    ledger: [], userStickers: [], redemptions: [], inquiries: [], adminActions: [],
+    ledger: [], userStickers: [], redemptions: [], inquiries: [], adminActions: [], venues: [], venueEdits: {},
     stock: Object.fromEntries(REWARDS.map(r => [r.id, r.initialStock])),
   };
 }
@@ -43,13 +47,21 @@ function read(): DemoState {
     const raw = localStorage.getItem(KEY);
     if (raw) {
       const parsed = JSON.parse(raw) as DemoState;
-      if (parsed && parsed.v === 1) return parsed;
+      if (parsed && parsed.v === 1) return migrate(parsed);
     }
   } catch {
     // Storage blocked (private mode, disabled cookies): keep working in memory.
     if (cache) return cache;
   }
   return fresh();
+}
+
+/** Adds fields introduced after v1 without touching existing demo data. */
+function migrate(s: DemoState): DemoState {
+  s.venues ??= [];
+  s.venueEdits ??= {};
+  for (const r of REWARDS) if (s.stock[r.id] === undefined) s.stock[r.id] = r.initialStock;
+  return s;
 }
 
 export function snapshot(): DemoState {
@@ -443,20 +455,186 @@ export function cancelRedemption(id: string) {
 
 // ---- Brand inquiry -------------------------------------------------------------
 
-export function submitInquiry(form: Omit<BrandInquiry, 'id' | 'createdAt'> & { agree: boolean }) {
+export interface InquiryForm {
+  company: string; contact: string; phone: string; email: string; businessType: BusinessType | '';
+  location: string; campaignKind: CampaignKind | ''; message: string; agree: boolean;
+  naverPlaceUrl: string; instagramUrl: string; offerMenu: string; headcount: string; period: string;
+}
+
+export function validateInquiry(form: InquiryForm) {
+  const f: Record<string, string> = {};
+  if (form.company.trim().length < 2) f.company = '매장명 또는 브랜드명을 입력해 주세요.';
+  if (form.contact.trim().length < 2) f.contact = '담당자 이름을 입력해 주세요.';
+  if (!/^(01[016789]|0[2-6][0-9]?|070)-?\d{3,4}-?\d{4}$/.test(form.phone.trim())) f.phone = '연락처를 010-0000-0000 형식으로 입력해 주세요.';
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(form.email.trim())) f.email = '이메일 형식을 확인해 주세요.';
+  if (!form.businessType) f.businessType = '업종을 골라 주세요.';
+  if (form.location.trim().length < 2) f.location = '매장 위치나 주소를 입력해 주세요. 온라인 브랜드는 "온라인"이라고 적어 주세요.';
+  if (!form.campaignKind) f.campaignKind = '체험단 유형을 골라 주세요.';
+  if (form.message.trim().length < 10) f.message = '문의 내용을 10자 이상 적어 주세요.';
+  if (form.message.length > 1000) f.message = '1000자 안으로 적어 주세요.';
+  if (form.naverPlaceUrl && !/^https:\/\/(m\.)?(map|place|naver)\.(naver\.com|me)\//.test(form.naverPlaceUrl.trim())) f.naverPlaceUrl = '네이버 지도·플레이스 주소(https://map.naver.com/... 또는 https://naver.me/...)를 입력해 주세요.';
+  if (form.instagramUrl && !/^https:\/\/(www\.)?instagram\.com\//.test(form.instagramUrl.trim())) f.instagramUrl = 'https://www.instagram.com/ 으로 시작하는 주소를 입력해 주세요.';
+  if (form.headcount && !(/^\d+$/.test(form.headcount) && +form.headcount >= 1 && +form.headcount <= 200)) f.headcount = '1~200 사이 숫자로 입력해 주세요.';
+  if (!form.agree) f.agree = '개인정보 수집·이용에 동의해 주세요.';
+  return f;
+}
+
+export function submitInquiry(form: InquiryForm, idempotencyKey: string) {
   return tx(s => {
-    const fields: Record<string, string> = {};
-    if (form.company.trim().length < 2) fields.company = '브랜드명을 입력해 주세요.';
-    if (form.contact.trim().length < 2) fields.contact = '담당자 이름을 입력해 주세요.';
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) fields.email = '이메일 형식을 확인해 주세요.';
-    if (form.message.trim().length < 10) fields.message = '문의 내용을 10자 이상 적어 주세요.';
-    if (!form.agree) fields.agree = '개인정보 수집에 동의해 주세요.';
+    const fields = validateInquiry(form);
     if (Object.keys(fields).length) throw new ApiError('VALIDATION', '입력한 내용을 확인해 주세요.', fields);
-    const { agree: _agree, ...rest } = form;
-    void _agree;
-    const inquiry: BrandInquiry = { ...rest, id: nextId(s, 'iq'), createdAt: now() };
+    const repeat = s.inquiries.find(q => (q as BrandInquiry & { key?: string }).key === idempotencyKey);
+    if (repeat) return repeat;
+    const email = form.email.trim().toLowerCase();
+    const recent = s.inquiries.find(q => q.email === email && q.company === form.company.trim() && Date.now() - Date.parse(q.createdAt) < 10 * 60000);
+    if (recent) throw new ApiError('DUPLICATE', '같은 매장으로 방금 접수된 문의가 있어요. 내용을 바꾸려면 잠시 뒤 다시 보내 주세요.');
+    const inquiry: BrandInquiry & { key: string } = {
+      id: nextId(s, 'iq'), key: idempotencyKey, company: form.company.trim(), contact: form.contact.trim(), phone: form.phone.trim(), email,
+      businessType: form.businessType as BusinessType, location: form.location.trim(), campaignKind: form.campaignKind as CampaignKind,
+      message: form.message.trim(), naverPlaceUrl: form.naverPlaceUrl.trim() || undefined, instagramUrl: form.instagramUrl.trim() || undefined,
+      offerMenu: form.offerMenu.trim() || undefined, headcount: form.headcount ? +form.headcount : undefined, period: form.period.trim() || undefined,
+      status: 'received', createdAt: now(),
+    };
     s.inquiries.push(inquiry);
     return inquiry;
+  });
+}
+
+// ---- Venues & real-map search ----------------------------------------------------
+
+export function venuesOf(s: DemoState): Venue[] {
+  return [...VENUES.map(v => ({ ...v, ...s.venueEdits[v.id] })), ...s.venues.map(v => ({ ...v, ...s.venueEdits[v.id] }))];
+}
+export function venueOf(s: DemoState, id?: string) {
+  return id ? venuesOf(s).find(v => v.id === id) : undefined;
+}
+/** A venue may appear on the public map only after verification and operator approval. */
+export const isPublicVenue = (v: Venue) => !v.demo && v.isVerified && v.verificationStatus === 'verified' && v.mapApproved;
+
+export interface MapQuery {
+  q?: string;
+  region?: string; // 'all' | 'near' | sido
+  category?: VenueCategory | 'all';
+  status?: string; // 'all' | 'open' | 'upcoming' | 'closed'
+  demo?: boolean; // include fictional demo venues (labelled)
+  bounds?: [number, number, number, number]; // south, west, north, east
+  near?: { lat: number; lng: number };
+}
+export interface MapItem { venue: Venue; campaigns: Campaign[]; distanceKm?: number }
+
+export function distanceKm(a: { lat: number; lng: number }, b: { lat: number; lng: number }) {
+  const R = 6371, rad = Math.PI / 180;
+  const dLat = (b.lat - a.lat) * rad, dLng = (b.lng - a.lng) * rad;
+  const h = Math.sin(dLat / 2) ** 2 + Math.cos(a.lat * rad) * Math.cos(b.lat * rad) * Math.sin(dLng / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(h));
+}
+export const NEAR_KM = 10;
+
+export function mapExperiences(s: DemoState, p: MapQuery) {
+  const brandName = (id: string) => BRANDS.find(b => b.id === id)?.name ?? '';
+  const visible = venuesOf(s).filter(v => isPublicVenue(v) || (p.demo && v.demo));
+  const camps = campaignsOf(s).filter(c => c.kind === 'visit' && c.venueId);
+  const q = (p.q ?? '').trim().toLowerCase();
+  const base: MapItem[] = [];
+  for (const venue of visible) {
+    let list = camps.filter(c => c.venueId === venue.id);
+    if (p.status && p.status !== 'all') list = list.filter(c => campaignStatus(c) === p.status);
+    if (!list.length) continue;
+    if (q) {
+      const venueHay = [venue.name, venue.address, venue.roadAddress, venue.region.sido, venue.region.sigungu, brandName(venue.brandId)].join(' ').toLowerCase();
+      if (!venueHay.includes(q)) list = list.filter(c => c.title.toLowerCase().includes(q));
+      if (!list.length) continue;
+    }
+    base.push({ venue, campaigns: list, distanceKm: p.near ? distanceKm(p.near, { lat: venue.latitude, lng: venue.longitude }) : undefined });
+  }
+  // Region choices come from the data, counted before the region filter is applied.
+  const regionCount = new Map<string, number>();
+  for (const it of base) if (!p.category || p.category === 'all' || it.venue.category === p.category) regionCount.set(it.venue.region.sido, (regionCount.get(it.venue.region.sido) ?? 0) + 1);
+  let items = base.filter(it => {
+    if (p.category && p.category !== 'all' && it.venue.category !== p.category) return false;
+    if (p.region === 'near') return it.distanceKm !== undefined && it.distanceKm <= NEAR_KM;
+    if (p.region && p.region !== 'all' && it.venue.region.sido !== p.region) return false;
+    if (p.bounds) {
+      const [south, west, north, east] = p.bounds;
+      if (it.venue.latitude < south || it.venue.latitude > north || it.venue.longitude < west || it.venue.longitude > east) return false;
+    }
+    return true;
+  });
+  if (p.near) items = items.sort((a, b) => (a.distanceKm ?? 0) - (b.distanceKm ?? 0));
+  const hiddenDemo = p.demo ? 0 : venuesOf(s).filter(v => v.demo).length;
+  return { items, regions: [...regionCount.entries()].sort((a, b) => b[1] - a[1]).map(([sido, count]) => ({ sido, count })), hiddenDemo };
+}
+
+export function listMapExperiences(p: MapQuery) {
+  return query(s => mapExperiences(s, p));
+}
+
+export interface VenueForm {
+  name: string; brandId: string; category: VenueCategory; roadAddress: string; address: string;
+  sido: string; sigungu: string; latitude: string; longitude: string; naverPlaceUrl: string; phone: string;
+}
+
+export function registerVenue(form: VenueForm) {
+  return tx(s => {
+    const actor = admin(s);
+    const f: Record<string, string> = {};
+    const lat = Number(form.latitude), lng = Number(form.longitude);
+    if (form.name.trim().length < 2) f.name = '매장명을 입력해 주세요.';
+    if (!BRANDS.some(b => b.id === form.brandId)) f.brandId = '브랜드를 골라 주세요.';
+    if (form.roadAddress.trim().length < 6) f.roadAddress = '도로명 주소를 입력해 주세요.';
+    if (!form.sido.trim()) f.sido = '시·도를 입력해 주세요.';
+    if (!(lat >= 33 && lat <= 38.7)) f.latitude = '한국 범위의 위도(33~38.7)를 입력해 주세요.';
+    if (!(lng >= 124.5 && lng <= 131.9)) f.longitude = '한국 범위의 경도(124.5~131.9)를 입력해 주세요.';
+    if (form.naverPlaceUrl && !/^https:\/\/(m\.)?(map|place)\.naver\.com\/|^https:\/\/naver\.me\//.test(form.naverPlaceUrl.trim())) f.naverPlaceUrl = '네이버 지도·플레이스 주소를 입력해 주세요.';
+    if (Object.keys(f).length) throw new ApiError('VALIDATION', '입력한 내용을 확인해 주세요.', f);
+    const venue: Venue = {
+      id: nextId(s, 'v'), brandId: form.brandId, name: form.name.trim(), category: form.category,
+      roadAddress: form.roadAddress.trim(), address: form.address.trim() || form.roadAddress.trim(),
+      region: { sido: form.sido.trim(), sigungu: form.sigungu.trim() }, latitude: lat, longitude: lng,
+      naverPlaceUrl: form.naverPlaceUrl.trim() || undefined, phone: form.phone.trim() || undefined,
+      isVerified: false, verificationStatus: 'pending', mapApproved: false, demo: false,
+    };
+    s.venues.push(venue);
+    log(s, actor, 'venue.register', venue.id, venue.name);
+    return venue;
+  });
+}
+
+export function verifyVenue(id: string, decision: Exclude<VerificationStatus, 'demo'>, checks: { address: boolean; coordinates: boolean; business: boolean }) {
+  return tx(s => {
+    const actor = admin(s);
+    const v = venueOf(s, id);
+    if (!v) throw new ApiError('NOT_FOUND', '매장을 찾을 수 없어요.');
+    if (v.demo) throw new ApiError('DEMO_VENUE', '가상 데모 매장은 실제 매장으로 승인할 수 없어요.');
+    if (decision === 'verified' && !(checks.address && checks.coordinates && checks.business)) throw new ApiError('VALIDATION', '주소, 좌표, 영업 여부를 모두 확인해야 승인할 수 있어요.');
+    const patch: Partial<Venue> = { verificationStatus: decision, isVerified: decision === 'verified', checks, verifiedAt: decision === 'verified' ? now() : undefined };
+    if (decision !== 'verified') patch.mapApproved = false;
+    s.venueEdits[id] = { ...s.venueEdits[id], ...patch };
+    log(s, actor, 'venue.' + decision, id);
+    return true;
+  });
+}
+
+export function setVenueMapApproval(id: string, approved: boolean) {
+  return tx(s => {
+    const actor = admin(s);
+    const v = venueOf(s, id);
+    if (!v) throw new ApiError('NOT_FOUND', '매장을 찾을 수 없어요.');
+    if (approved && (v.demo || !v.isVerified)) throw new ApiError('INVALID_STATE', '검증을 마친 매장만 지도에 노출할 수 있어요.');
+    s.venueEdits[id] = { ...s.venueEdits[id], mapApproved: approved };
+    log(s, actor, approved ? 'venue.map.on' : 'venue.map.off', id);
+    return true;
+  });
+}
+
+export function setInquiryStatus(id: string, status: BrandInquiry['status']) {
+  return tx(s => {
+    const actor = admin(s);
+    const q = s.inquiries.find(x => x.id === id);
+    if (!q) throw new ApiError('NOT_FOUND', '문의를 찾을 수 없어요.');
+    q.status = status;
+    log(s, actor, 'inquiry.' + status, id);
+    return true;
   });
 }
 
@@ -527,10 +705,15 @@ export function adjustStock(rewardId: string, delta: number) {
   });
 }
 
-export function editCampaign(id: string, patch: Partial<Pick<Campaign, 'title' | 'summary' | 'quota' | 'stamps' | 'benefit' | 'recruitEnd'>>) {
+export function editCampaign(id: string, patch: Partial<Pick<Campaign, 'title' | 'summary' | 'quota' | 'stamps' | 'benefit' | 'recruitEnd' | 'venueId'>>) {
   return tx(s => {
     const actor = admin(s);
-    if (!CAMPAIGNS.some(c => c.id === id)) throw new ApiError('NOT_FOUND', '체험단을 찾을 수 없어요.');
+    const base = CAMPAIGNS.find(c => c.id === id);
+    if (!base) throw new ApiError('NOT_FOUND', '체험단을 찾을 수 없어요.');
+    if (patch.venueId !== undefined && patch.venueId !== '') {
+      if (base.kind !== 'visit') throw new ApiError('VALIDATION', '방문형 체험단만 매장을 연결할 수 있어요.', { venueId: '방문형만 가능' });
+      if (!venueOf(s, patch.venueId)) throw new ApiError('VALIDATION', '매장을 찾을 수 없어요.', { venueId: '매장 확인' });
+    }
     if (patch.title !== undefined && patch.title.trim().length < 4) throw new ApiError('VALIDATION', '제목을 4자 이상 입력해 주세요.', { title: '4자 이상' });
     if (patch.quota !== undefined && (!Number.isInteger(patch.quota) || patch.quota < 1)) throw new ApiError('VALIDATION', '선정 인원을 확인해 주세요.', { quota: '1 이상' });
     if (patch.stamps !== undefined && (!Number.isInteger(patch.stamps) || patch.stamps < 1 || patch.stamps > 10)) throw new ApiError('VALIDATION', '스탬프는 1~10개로 정해 주세요.', { stamps: '1~10' });
